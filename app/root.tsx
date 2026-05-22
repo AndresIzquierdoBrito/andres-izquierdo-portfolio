@@ -19,8 +19,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="min-h-svh overflow-x-hidden">
+        <div className="relative z-10">{children}</div>
         <ScrollRestoration />
         <Scripts />
       </body>
