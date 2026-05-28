@@ -13,7 +13,7 @@ const DEFAULT_GREETINGS = [
 
 type RotatingGreetingProps = {
   className?: string
-  greetings?: string[]
+  greetings?: readonly string[]
   intervalMs?: number
   animationMs?: number
 }

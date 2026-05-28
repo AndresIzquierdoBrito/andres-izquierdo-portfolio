@@ -4,6 +4,8 @@ import {
   type CSSProperties,
   type PointerEvent,
 } from "react"
+import { MoonStar } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import ExperienceSection from "~/components/ExperienceSection"
 import Grainient from "~/components/Grainient"
@@ -13,6 +15,9 @@ import HomeSectionNav, {
 } from "~/components/HomeSectionNav"
 import RotatingGreeting from "~/components/RotatingGreeting"
 import { Badge } from "~/components/ui/badge"
+import { changeAppLanguage } from "~/i18n/language"
+import { languageOptions, resolveAppLanguage } from "~/i18n/settings"
+import { cn } from "~/lib/utils"
 
 const aboutFocusAreas = [
   "Fundraising SaaS",
@@ -65,6 +70,8 @@ const heroPalette = {
   color3: "#cdfaeb",
 }
 
+const heroGreetings = ["Hey there!", "Hola!", "Bonjour!", "Ciao!"] as const
+
 const resumePatternStyle = {
   "--resume-dot-color-1": heroPalette.color1,
   "--resume-dot-color-2": heroPalette.color2,
@@ -114,6 +121,7 @@ function handleResumePatternPointerLeave(event: PointerEvent<HTMLElement>) {
 
 export default function Home() {
   const [activeSection, setActiveSection] = useState<HomeSectionId>("home")
+  const { i18n, t } = useTranslation("common", { keyPrefix: "hero" })
 
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") {
@@ -173,6 +181,10 @@ export default function Home() {
     return () => observer.disconnect()
   }, [])
 
+  const activeLanguage = resolveAppLanguage(
+    i18n.resolvedLanguage ?? i18n.language
+  )
+
   return (
     <div className="relative h-full w-full">
       <HomeSectionNav activeSection={activeSection} />
@@ -208,22 +220,80 @@ export default function Home() {
 
           <section
             id="home"
-            className="mx-auto min-h-screen max-w-7xl scroll-mt-6 px-6 sm:px-12 lg:pr-28 lg:pl-44"
+            className="relative mx-auto min-h-screen max-w-7xl scroll-mt-6 px-6 sm:px-12 lg:pr-28 lg:pl-44"
           >
+            <div className="absolute top-6 right-6 z-10 flex flex-wrap items-center justify-end gap-2 sm:top-8 sm:right-12 lg:right-28">
+              <div
+                className="inline-flex items-center gap-2 rounded-full border border-black/10 bg-white/55 p-1 pl-3 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md"
+                role="group"
+                aria-label={t("toolbar.languageHint")}
+              >
+                <span className="text-[0.68rem] font-semibold tracking-[0.28em] text-black/45 uppercase">
+                  {t("toolbar.languageLabel")}
+                </span>
+                <div className="inline-flex items-center gap-1">
+                  {languageOptions.map((option) => {
+                    const isActive = option.value === activeLanguage
+
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        className={cn(
+                          "rounded-full px-3 py-1.5 text-[0.68rem] font-semibold tracking-[0.28em] uppercase transition-colors duration-200",
+                          isActive
+                            ? "bg-slate-950 text-white"
+                            : "text-black/55 hover:text-black"
+                        )}
+                        aria-pressed={isActive}
+                        aria-label={option.description}
+                        onClick={() => {
+                          void changeAppLanguage(i18n, option.value)
+                        }}
+                      >
+                        {option.label}
+                      </button>
+                    )
+                  })}
+                </div>
+              </div>
+
+              <button
+                type="button"
+                disabled
+                className="inline-flex cursor-not-allowed items-center gap-3 rounded-full border border-black/10 bg-white/45 px-4 py-2 text-black/60 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md disabled:opacity-100"
+                aria-label={t("toolbar.themeHint")}
+                title={t("toolbar.themeHint")}
+              >
+                <MoonStar className="size-4" />
+                <span className="text-[0.68rem] font-semibold tracking-[0.28em] uppercase">
+                  {t("toolbar.themeLabel")}
+                </span>
+                <span className="relative h-5 w-9 rounded-full bg-black/10">
+                  <span className="absolute top-0.5 left-0.5 size-4 rounded-full bg-white shadow-sm" />
+                </span>
+                <span className="rounded-full bg-black/6 px-2 py-1 text-[0.62rem] font-semibold tracking-[0.24em] text-black/45 uppercase">
+                  {t("toolbar.themeStatus")}
+                </span>
+              </button>
+            </div>
+
             <div className="flex min-h-screen flex-col justify-center gap-6 py-20">
-              <div className="flex max-w-5xl flex-col gap-4">
+              <div
+                className="flex max-w-5xl flex-col gap-4"
+                lang={activeLanguage}
+              >
                 <h2 className="text-4xl font-light text-black/75 sm:text-5xl lg:text-6xl">
-                  <RotatingGreeting />
+                  <RotatingGreeting greetings={heroGreetings} />
                 </h2>
                 <h1
                   className="font-heading text-6xl font-normal tracking-tight text-slate-950 sm:text-7xl lg:text-8xl"
                   style={{ fontFamily: "Kinetic, sans-serif" }}
                 >
-                  I'm Andres Izquierdo
+                  {t("title")}
                 </h1>
                 <p className="max-w-2xl text-lg leading-8 text-black/60 sm:text-xl">
-                  Software engineer, designer, and creator shaping
-                  product-minded interfaces and systems.
+                  {t("description")}
                 </p>
               </div>
             </div>
