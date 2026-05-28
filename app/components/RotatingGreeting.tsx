@@ -25,8 +25,10 @@ export default function RotatingGreeting({
   animationMs = 650,
 }: RotatingGreetingProps) {
   const items = greetings.length > 0 ? greetings : DEFAULT_GREETINGS
+  const greetingsKey = items.join("\u0000")
   const [currentIndex, setCurrentIndex] = useState(0)
-  const [isAnimating, setIsAnimating] = useState(false)
+  const [nextIndex, setNextIndex] = useState<number | null>(null)
+  const [phase, setPhase] = useState<"idle" | "prepare" | "animate">("idle")
 
   const widestGreeting = useMemo(
     () =>
@@ -39,32 +41,82 @@ export default function RotatingGreeting({
   )
 
   useEffect(() => {
-    if (items.length < 2) {
-      return
-    }
-
-    const startDelay = Math.max(intervalMs - animationMs, 0)
-    const timer = window.setTimeout(() => {
-      setIsAnimating(true)
-    }, startDelay)
-
-    return () => window.clearTimeout(timer)
-  }, [animationMs, currentIndex, intervalMs, items.length])
+    setCurrentIndex(0)
+    setNextIndex(null)
+    setPhase("idle")
+  }, [greetingsKey])
 
   useEffect(() => {
-    if (!isAnimating) {
+    if (items.length < 2 || phase !== "idle") {
       return
     }
 
     const timer = window.setTimeout(() => {
-      setCurrentIndex((currentIndex + 1) % items.length)
-      setIsAnimating(false)
+      setNextIndex((currentIndex + 1) % items.length)
+      setPhase("prepare")
+    }, intervalMs)
+
+    return () => window.clearTimeout(timer)
+  }, [currentIndex, intervalMs, items.length, phase])
+
+  useEffect(() => {
+    if (phase !== "prepare" || nextIndex === null) {
+      return
+    }
+
+    const frame = window.requestAnimationFrame(() => {
+      setPhase("animate")
+    })
+
+    return () => window.cancelAnimationFrame(frame)
+  }, [nextIndex, phase])
+
+  useEffect(() => {
+    if (phase !== "animate" || nextIndex === null) {
+      return
+    }
+
+    const timer = window.setTimeout(() => {
+      setCurrentIndex(nextIndex)
+      setNextIndex(null)
+      setPhase("idle")
     }, animationMs)
 
     return () => window.clearTimeout(timer)
-  }, [animationMs, currentIndex, isAnimating, items.length])
+  }, [animationMs, nextIndex, phase])
 
-  const upcomingGreeting = items[(currentIndex + 1) % items.length]
+  const isAnimating = nextIndex !== null && phase !== "idle"
+  const transitionStyle = {
+    transitionDuration: `${animationMs}ms`,
+    transitionProperty: "transform, opacity, filter",
+    transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
+  } as const
+
+  const currentStyle =
+    phase === "animate"
+      ? {
+          transform: "translateY(-115%) scale(0.985)",
+          opacity: 0,
+          filter: "blur(6px)",
+        }
+      : {
+          transform: "translateY(0%) scale(1)",
+          opacity: 1,
+          filter: "blur(0px)",
+        }
+
+  const nextStyle =
+    phase === "animate"
+      ? {
+          transform: "translateY(0%) scale(1)",
+          opacity: 1,
+          filter: "blur(0px)",
+        }
+      : {
+          transform: "translateY(115%) scale(1.02)",
+          opacity: 0,
+          filter: "blur(6px)",
+        }
 
   return (
     <span
@@ -78,21 +130,26 @@ export default function RotatingGreeting({
         {items[currentIndex]}
       </span>
       <span
-        className="col-start-1 row-start-1 block h-[1.1em] overflow-hidden"
+        className="relative col-start-1 row-start-1 block h-[1.1em] overflow-hidden"
         aria-hidden="true"
       >
         <span
           className="block will-change-transform"
-          style={{
-            transform: isAnimating ? "translateY(0%)" : "translateY(-50%)",
-            transitionDuration: `${animationMs}ms`,
-            transitionProperty: "transform",
-            transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
-          }}
+          style={
+            isAnimating ? { ...transitionStyle, ...currentStyle } : undefined
+          }
         >
-          <span className="block h-[1.1em]">{upcomingGreeting}</span>
           <span className="block h-[1.1em]">{items[currentIndex]}</span>
         </span>
+
+        {nextIndex !== null ? (
+          <span
+            className="absolute inset-0 block will-change-transform"
+            style={{ ...transitionStyle, ...nextStyle }}
+          >
+            <span className="block h-[1.1em]">{items[nextIndex]}</span>
+          </span>
+        ) : null}
       </span>
     </span>
   )
