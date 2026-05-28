@@ -7,6 +7,8 @@ import {
   isRouteErrorResponse,
 } from "react-router"
 
+import AppI18nProvider from "~/i18n/provider"
+
 import type { Route } from "./+types/root"
 import "./app.css"
 
@@ -20,9 +22,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="min-h-svh overflow-x-hidden">
-        <div className="relative z-10">{children}</div>
-        <ScrollRestoration />
-        <Scripts />
+        <AppI18nProvider>
+          <div className="relative z-10">{children}</div>
+          <ScrollRestoration />
+          <Scripts />
+        </AppI18nProvider>
       </body>
     </html>
   )
