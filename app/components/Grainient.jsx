@@ -108,7 +108,7 @@ void main(){
 const ctxMap = new WeakMap()
 
 const Grainient = ({
-  timeSpeed = 0.25,
+  timeSpeed = 2.75,
   colorBalance = 0.0,
   warpStrength = 1.0,
   warpFrequency = 5.0,

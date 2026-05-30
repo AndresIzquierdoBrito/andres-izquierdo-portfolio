@@ -4,11 +4,8 @@ const esCommon = {
     description:
       "Ingeniero de software, diseñador y creador que da forma a interfaces y sistemas con mentalidad de producto.",
     toolbar: {
-      languageLabel: "Idioma",
-      languageHint: "Cambia la introducción entre inglés y español.",
-      themeLabel: "Modo oscuro",
-      themeHint: "El cambio de tema se implementará después.",
-      themeStatus: "Pronto",
+      languageHint: "Alterna entre inglés y español.",
+      themeHint: "Alterna el modo oscuro.",
     },
   },
 } as const
