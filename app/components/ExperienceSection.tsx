@@ -12,8 +12,9 @@ import {
 import { Avatar, AvatarFallback } from "~/components/ui/avatar"
 import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
-import { Tabs, TabsList, TabsTrigger } from "~/components/ui/tabs"
 import { cn } from "~/lib/utils"
+
+import SectionBadge from "~/components/home/SectionBadge"
 
 type PanelKey = "experience" | "education"
 
@@ -162,12 +163,7 @@ function PanelHeader({ panel }: { panel: PanelKey }) {
 
   return (
     <div className="relative z-10 flex flex-col gap-3">
-      <Badge
-        variant="secondary"
-        className="w-fit border border-white/55 bg-white/55 text-foreground/70 shadow-sm"
-      >
-        {meta.eyebrow}
-      </Badge>
+      <SectionBadge size="compact">{meta.eyebrow}</SectionBadge>
       <div className="flex items-center gap-3">
         <Icon className="text-foreground/55" />
         <h3 className="font-heading text-4xl font-light tracking-tight text-foreground">
@@ -224,7 +220,7 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
                 </div>
               </div>
 
-              <Separator className="w-16 bg-white/45" />
+              <Separator className="w-16 bg-black/8 dark:bg-white/10" />
 
               <ul className="flex list-disc flex-col gap-2 pl-5 text-base leading-7 text-foreground/75 marker:text-muted-foreground">
                 {entry.highlights.map((highlight) => (
@@ -237,7 +233,7 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
                   <Badge
                     key={technology}
                     variant="outline"
-                    className="bg-white/45"
+                    className="border-black/10 bg-white/45 dark:border-white/12 dark:bg-white/8"
                   >
                     {technology}
                   </Badge>
@@ -255,7 +251,7 @@ function ExperiencePanel() {
   return (
     <div className="relative z-10 flex h-full flex-col gap-8">
       <PanelHeader panel="experience" />
-      <Separator className="bg-white/45" />
+      <Separator className="bg-black/8 dark:bg-white/10" />
       <ExperienceTimeline entries={experienceEntries} />
     </div>
   )
@@ -265,7 +261,7 @@ function EducationPanel() {
   return (
     <div className="relative z-10 flex h-full flex-col gap-8">
       <PanelHeader panel="education" />
-      <Separator className="bg-white/45" />
+      <Separator className="bg-black/8 dark:bg-white/10" />
 
       <div className="grid flex-1 gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.92fr)]">
         <div className="grid gap-4">
@@ -275,10 +271,10 @@ function EducationPanel() {
             return (
               <article
                 key={card.title}
-                className="rounded-[1.5rem] border border-white/50 bg-white/40 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] backdrop-blur-xl"
+                className="rounded-[1.5rem] border border-white/50 bg-white/40 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] backdrop-blur-xl dark:border-white/12 dark:bg-white/6 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]"
               >
                 <div className="flex items-start gap-4">
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/55 bg-white/55 text-foreground/65 shadow-sm">
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl border border-white/55 bg-white/55 text-foreground/65 shadow-sm dark:border-white/12 dark:bg-white/8 dark:text-foreground/80">
                     <Icon />
                   </div>
                   <div className="flex flex-col gap-2">
@@ -295,7 +291,7 @@ function EducationPanel() {
           })}
         </div>
 
-        <div className="flex flex-col justify-between gap-6 rounded-[1.5rem] border border-white/50 bg-white/35 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] backdrop-blur-xl">
+        <div className="flex flex-col justify-between gap-6 rounded-[1.5rem] border border-white/50 bg-white/35 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] backdrop-blur-xl dark:border-white/12 dark:bg-white/6 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
           <div className="flex flex-col gap-4">
             <p className="text-xl font-semibold tracking-tight text-foreground">
               Ready for the academic timeline
@@ -309,7 +305,11 @@ function EducationPanel() {
 
           <div className="flex flex-wrap gap-2">
             {educationKeywords.map((keyword) => (
-              <Badge key={keyword} variant="outline" className="bg-white/45">
+              <Badge
+                key={keyword}
+                variant="outline"
+                className="border-black/10 bg-white/45 dark:border-white/12 dark:bg-white/8"
+              >
                 {keyword}
               </Badge>
             ))}
@@ -323,26 +323,14 @@ function EducationPanel() {
 export default function ExperienceSection() {
   const [activePanel, setActivePanel] = useState<PanelKey>("experience")
   const hasMountedRef = useRef(false)
-  const tabShellRef = useRef<HTMLDivElement>(null)
-  const indicatorRef = useRef<HTMLDivElement>(null)
   const experiencePanelRef = useRef<HTMLDivElement>(null)
   const educationPanelRef = useRef<HTMLDivElement>(null)
 
   useLayoutEffect(() => {
-    const tabShell = tabShellRef.current
-    const indicator = indicatorRef.current
     const experiencePanel = experiencePanelRef.current
     const educationPanel = educationPanelRef.current
 
-    if (!tabShell || !indicator || !experiencePanel || !educationPanel) {
-      return
-    }
-
-    const activeTrigger = tabShell.querySelector(
-      `[data-panel-trigger="${activePanel}"]`
-    ) as HTMLElement | null
-
-    if (!activeTrigger) {
+    if (!experiencePanel || !educationPanel) {
       return
     }
 
@@ -354,15 +342,7 @@ export default function ExperienceSection() {
     const inactiveRotation = activePanel === "experience" ? 1.8 : -1.8
 
     const applyLayout = (animate: boolean) => {
-      const shellRect = tabShell.getBoundingClientRect()
-      const triggerRect = activeTrigger.getBoundingClientRect()
-
-      gsap.killTweensOf([indicator, activeElement, inactiveElement])
-
-      const indicatorProps = {
-        x: triggerRect.left - shellRect.left,
-        width: triggerRect.width,
-      }
+      gsap.killTweensOf([activeElement, inactiveElement])
 
       const inactiveProps = {
         ...inactivePanelState,
@@ -377,11 +357,6 @@ export default function ExperienceSection() {
       }
 
       if (animate) {
-        gsap.to(indicator, {
-          ...indicatorProps,
-          duration: 0.5,
-          ease: "power3.out",
-        })
         gsap.to(inactiveElement, {
           ...inactiveProps,
           duration: 0.7,
@@ -393,7 +368,6 @@ export default function ExperienceSection() {
           ease: "power3.out",
         })
       } else {
-        gsap.set(indicator, indicatorProps)
         gsap.set(inactiveElement, inactiveProps)
         gsap.set(activeElement, activeProps)
       }
@@ -402,56 +376,47 @@ export default function ExperienceSection() {
     applyLayout(hasMountedRef.current)
     hasMountedRef.current = true
 
-    const handleResize = () => {
-      applyLayout(false)
-    }
-
-    window.addEventListener("resize", handleResize)
-
     return () => {
-      window.removeEventListener("resize", handleResize)
-      gsap.killTweensOf([indicator, activeElement, inactiveElement])
+      gsap.killTweensOf([activeElement, inactiveElement])
     }
   }, [activePanel])
 
   return (
-    <Tabs
-      value={activePanel}
-      onValueChange={(value) => setActivePanel(value as PanelKey)}
-      className="flex flex-col gap-8"
-    >
+    <div className="flex flex-col gap-8">
       <div className="flex justify-center sm:justify-start">
-        <div
-          ref={tabShellRef}
-          className="frosted-tab-toggle relative inline-flex rounded-full p-1.5"
-        >
-          <div
-            ref={indicatorRef}
-            aria-hidden="true"
-            className="glass-tab-indicator absolute inset-y-1.5 left-1.5 rounded-full"
-            style={{ width: 0 }}
-          />
-
-          <TabsList className="relative z-10 h-auto gap-1 rounded-full bg-transparent p-0 shadow-none">
-            <TabsTrigger
-              id="experience-tab"
-              value="experience"
-              data-panel-trigger="experience"
-              className="h-auto min-w-37 rounded-full border-transparent bg-transparent px-5 py-3 text-sm font-medium text-foreground/60 shadow-none after:hidden hover:text-foreground/80 data-active:bg-transparent data-active:text-foreground data-active:shadow-none dark:data-active:bg-transparent"
-            >
+        <div className="frosted-tab-toggle inline-grid grid-cols-2 gap-1 rounded-full p-1.5">
+          <button
+            id="experience-tab"
+            type="button"
+            className={cn(
+              "relative flex min-w-37 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300",
+              activePanel === "experience"
+                ? "bg-[linear-gradient(135deg,rgba(234,179,8,0.36),rgba(39,255,195,0.4))] text-slate-950 shadow-[0_18px_34px_-18px_rgba(39,255,195,0.55)] dark:bg-[linear-gradient(135deg,rgba(34,211,238,0.28),rgba(99,102,241,0.34))] dark:text-white"
+                : "text-foreground/60 hover:text-foreground/85 dark:text-white/68 dark:hover:text-white"
+            )}
+            onClick={() => setActivePanel("experience")}
+          >
+            <span className="pointer-events-none flex items-center gap-2">
               <BriefcaseBusiness data-icon="inline-start" />
               Experience
-            </TabsTrigger>
-            <TabsTrigger
-              id="education-tab"
-              value="education"
-              data-panel-trigger="education"
-              className="h-auto min-w-37 rounded-full border-transparent bg-transparent px-5 py-3 text-sm font-medium text-foreground/60 shadow-none after:hidden hover:text-foreground/80 data-active:bg-transparent data-active:text-foreground data-active:shadow-none dark:data-active:bg-transparent"
-            >
+            </span>
+          </button>
+          <button
+            id="education-tab"
+            type="button"
+            className={cn(
+              "relative flex min-w-37 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-all duration-300",
+              activePanel === "education"
+                ? "bg-[linear-gradient(135deg,rgba(234,179,8,0.36),rgba(39,255,195,0.4))] text-slate-950 shadow-[0_18px_34px_-18px_rgba(39,255,195,0.55)] dark:bg-[linear-gradient(135deg,rgba(34,211,238,0.28),rgba(99,102,241,0.34))] dark:text-white"
+                : "text-foreground/60 hover:text-foreground/85 dark:text-white/68 dark:hover:text-white"
+            )}
+            onClick={() => setActivePanel("education")}
+          >
+            <span className="pointer-events-none flex items-center gap-2">
               <GraduationCap data-icon="inline-start" />
               Education
-            </TabsTrigger>
-          </TabsList>
+            </span>
+          </button>
         </div>
       </div>
 
@@ -462,7 +427,7 @@ export default function ExperienceSection() {
           aria-hidden={activePanel !== "experience"}
           aria-labelledby="experience-tab"
           className={cn(
-            "glass-gradient-surface relative col-start-1 row-start-1 overflow-hidden rounded-[2rem] p-8 shadow-[0_28px_90px_-44px_rgba(15,23,42,0.35)] will-change-[transform,filter,opacity] sm:p-10 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:self-start",
+            "glass-gradient-surface relative col-start-1 row-start-1 overflow-hidden rounded-[2rem] p-8 shadow-[0_28px_90px_-44px_rgba(15,23,42,0.35)] will-change-[transform,filter,opacity] sm:p-10 lg:col-span-7 lg:col-start-1 lg:row-start-1 lg:self-start dark:shadow-[0_28px_90px_-44px_rgba(2,6,23,0.8)]",
             activePanel === "experience"
               ? "pointer-events-auto"
               : "pointer-events-none"
@@ -481,7 +446,7 @@ export default function ExperienceSection() {
           aria-hidden={activePanel !== "education"}
           aria-labelledby="education-tab"
           className={cn(
-            "glass-gradient-surface relative col-start-1 row-start-1 overflow-hidden rounded-[2rem] p-8 shadow-[0_28px_90px_-44px_rgba(15,23,42,0.35)] will-change-[transform,filter,opacity] sm:p-10 lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:mt-16 lg:self-start",
+            "glass-gradient-surface relative col-start-1 row-start-1 overflow-hidden rounded-[2rem] p-8 shadow-[0_28px_90px_-44px_rgba(15,23,42,0.35)] will-change-[transform,filter,opacity] sm:p-10 lg:col-span-7 lg:col-start-6 lg:row-start-1 lg:mt-16 lg:self-start dark:shadow-[0_28px_90px_-44px_rgba(2,6,23,0.8)]",
             activePanel === "education"
               ? "pointer-events-auto"
               : "pointer-events-none"
@@ -494,6 +459,6 @@ export default function ExperienceSection() {
           <EducationPanel />
         </section>
       </div>
-    </Tabs>
+    </div>
   )
 }
