@@ -43,7 +43,7 @@ export default function HomeAboutSection() {
 
   return (
     <section
-      id="about"
+      id="background"
       className="resume-dot-pattern relative scroll-mt-6 overflow-hidden bg-background px-6 pt-16 pb-24 sm:px-12 lg:pr-28 lg:pl-44"
       onPointerLeave={handleResumePatternPointerLeave}
       onPointerMove={handleResumePatternPointerMove}
@@ -63,7 +63,7 @@ export default function HomeAboutSection() {
       <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-14">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:items-start">
           <div className="flex flex-col gap-4">
-            <SectionBadge>About</SectionBadge>
+            <SectionBadge>Background</SectionBadge>
             <h2 className="font-heading text-5xl font-light tracking-tight text-foreground sm:text-6xl">
               Building software with a product and design lens.
             </h2>

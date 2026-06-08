@@ -20,10 +20,10 @@ export default function SectionBadge({
     <Badge
       variant="secondary"
       className={cn(
-        "w-fit rounded-full border border-black/8 bg-[linear-gradient(135deg,rgba(234,179,8,0.18),rgba(39,255,195,0.22))] font-semibold uppercase shadow-[0_16px_40px_-24px_rgba(15,23,42,0.32)] backdrop-blur-md dark:border-white/12 dark:bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(99,102,241,0.22))] dark:text-white",
+        "w-fit rounded-full border border-black/12 bg-[linear-gradient(135deg,rgba(234,179,8,0.28),rgba(39,255,195,0.34))] font-semibold uppercase shadow-[0_12px_32px_-12px_rgba(39,255,195,0.45)] backdrop-blur-md dark:border-white/16 dark:bg-[linear-gradient(135deg,rgba(34,211,238,0.28),rgba(99,102,241,0.32))] dark:text-white dark:shadow-[0_12px_32px_-12px_rgba(34,211,238,0.35)]",
         size === "default"
-          ? "h-10 gap-2 px-4 text-[0.72rem] tracking-[0.24em] text-slate-950"
-          : "h-8 gap-1.5 px-3 text-[0.62rem] tracking-[0.22em] text-slate-950",
+          ? "h-11 gap-2 px-5 text-[0.75rem] tracking-[0.28em] text-slate-950"
+          : "h-9 gap-1.5 px-3.5 text-[0.65rem] tracking-[0.24em] text-slate-950",
         className
       )}
     >
