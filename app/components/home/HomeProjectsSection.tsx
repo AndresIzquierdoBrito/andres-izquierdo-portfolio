@@ -1,5 +1,7 @@
-import { useRef, useState } from "react"
+import { useLayoutEffect, useRef, useState } from "react"
 import { ArrowLeft, ArrowRight } from "lucide-react"
+import gsap from "gsap"
+import { useTranslation } from "react-i18next"
 
 import { useThemeMode } from "~/lib/useThemeMode"
 
@@ -11,12 +13,26 @@ const CAROUSEL_ANIMATION_MS = 1700
 
 export default function HomeProjectsSection() {
   const { themeMode } = useThemeMode()
+  const { t } = useTranslation("common", { keyPrefix: "sections.projects" })
   const [activeIndex, setActiveIndex] = useState(() =>
     Math.floor(projectPreviewCards.length / 2)
   )
   const [animating, setAnimating] = useState(false)
   const animatingTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
+  const taglineRef = useRef<HTMLHeadingElement>(null)
   const palette = getHomeGradientPalette(themeMode)
+
+  useLayoutEffect(() => {
+    const el = taglineRef.current
+    if (!el) return
+
+    gsap.killTweensOf(el)
+    gsap.fromTo(
+      el,
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.45, ease: "power2.out" }
+    )
+  }, [activeIndex])
 
   const navigateCarousel = (direction: 1 | -1) => {
     if (animating) return
@@ -37,7 +53,7 @@ export default function HomeProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative scroll-mt-6 overflow-hidden px-6 pt-24 pb-24 sm:px-12 lg:pr-28 lg:pl-44"
+      className="relative z-0 scroll-mt-6 overflow-hidden px-6 pt-14 pb-10 sm:px-12 sm:pt-24 sm:pb-20 xl:pr-28 xl:pl-44"
       style={{
         backgroundImage: `linear-gradient(180deg, ${palette.projects.backgroundFrom}, ${palette.projects.backgroundTo})`,
       }}
@@ -69,7 +85,7 @@ export default function HomeProjectsSection() {
             disabled={animating}
             aria-label="Show previous project"
             onClick={() => navigateCarousel(-1)}
-            className="absolute top-1/2 left-0 flex size-14 -translate-y-1/2 items-center justify-center rounded-full text-slate-900 shadow-[0_4px_20px_-4px_rgba(39,255,195,0.55)] transition-[transform,box-shadow,filter] duration-200 hover:scale-[1.07] hover:shadow-[0_6px_28px_-4px_rgba(39,255,195,0.7)] hover:brightness-105 disabled:pointer-events-none disabled:opacity-40 sm:size-16 lg:size-20 dark:text-white dark:shadow-[0_4px_20px_-4px_rgba(34,211,238,0.4)] dark:hover:shadow-[0_6px_28px_-4px_rgba(34,211,238,0.55)]"
+            className="absolute top-1/2 -left-6 flex h-24 w-12 -translate-y-1/2 items-center justify-center rounded-r-full rounded-l-none text-slate-900 shadow-[0_4px_20px_-4px_rgba(39,255,195,0.55)] transition-[transform,box-shadow,filter] duration-200 hover:translate-x-0.5 hover:shadow-[0_6px_28px_-4px_rgba(39,255,195,0.7)] hover:brightness-105 disabled:pointer-events-none disabled:opacity-40 sm:left-0 sm:size-16 sm:translate-x-0 sm:rounded-full sm:hover:scale-[1.07] sm:hover:translate-x-0 lg:size-20 dark:text-white dark:shadow-[0_4px_20px_-4px_rgba(34,211,238,0.4)] dark:hover:shadow-[0_6px_28px_-4px_rgba(34,211,238,0.55)]"
             style={{
               background:
                 themeMode === "dark"
@@ -79,7 +95,7 @@ export default function HomeProjectsSection() {
               animation: "flow-gradient 4s ease-in-out infinite",
             }}
           >
-            <ArrowLeft className="size-5 sm:size-6 lg:size-8" />
+            <ArrowLeft className="size-6 -translate-x-1 sm:size-6 sm:translate-x-0 lg:size-8" />
           </button>
 
           <button
@@ -87,7 +103,7 @@ export default function HomeProjectsSection() {
             disabled={animating}
             aria-label="Show next project"
             onClick={() => navigateCarousel(1)}
-            className="absolute top-1/2 right-0 flex size-14 -translate-y-1/2 items-center justify-center rounded-full text-slate-900 shadow-[0_4px_20px_-4px_rgba(39,255,195,0.55)] transition-[transform,box-shadow,filter] duration-200 hover:scale-[1.07] hover:shadow-[0_6px_28px_-4px_rgba(39,255,195,0.7)] hover:brightness-105 disabled:pointer-events-none disabled:opacity-40 sm:size-16 lg:size-20 dark:text-white dark:shadow-[0_4px_20px_-4px_rgba(34,211,238,0.4)] dark:hover:shadow-[0_6px_28px_-4px_rgba(34,211,238,0.55)]"
+            className="absolute top-1/2 -right-6 flex h-24 w-12 -translate-y-1/2 items-center justify-center rounded-l-full rounded-r-none text-slate-900 shadow-[0_4px_20px_-4px_rgba(39,255,195,0.55)] transition-[transform,box-shadow,filter] duration-200 hover:-translate-x-0.5 hover:shadow-[0_6px_28px_-4px_rgba(39,255,195,0.7)] hover:brightness-105 disabled:pointer-events-none disabled:opacity-40 sm:right-0 sm:size-16 sm:translate-x-0 sm:rounded-full sm:hover:scale-[1.07] sm:hover:translate-x-0 lg:size-20 dark:text-white dark:shadow-[0_4px_20px_-4px_rgba(34,211,238,0.4)] dark:hover:shadow-[0_6px_28px_-4px_rgba(34,211,238,0.55)]"
             style={{
               background:
                 themeMode === "dark"
@@ -97,16 +113,19 @@ export default function HomeProjectsSection() {
               animation: "flow-gradient 4s ease-in-out infinite",
             }}
           >
-            <ArrowRight className="size-5 sm:size-6 lg:size-8" />
+            <ArrowRight className="size-6 translate-x-1 sm:size-6 sm:translate-x-0 lg:size-8" />
           </button>
 
-          <SectionBadge>Projects</SectionBadge>
-          <h2 className="font-heading text-5xl font-light tracking-tight text-slate-950 sm:text-6xl dark:text-white">
-            Case studies are the next layer to land here.
-          </h2>
+          <SectionBadge>{t("eyebrow")}</SectionBadge>
+          <div className="flex min-h-24 w-full items-center justify-center sm:min-h-40">
+            <h2
+              ref={taglineRef}
+              className="font-heading text-3xl leading-tight font-light tracking-tight text-slate-950 sm:text-6xl dark:text-white"
+            >
+              {projectPreviewCards[activeIndex].tagline}
+            </h2>
+          </div>
           <p className="max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-white/70">
-            This section is wired into the rail alread.
-            This section is wired into the rail alread.
             This section is wired into the rail alread.
           </p>
         </div>

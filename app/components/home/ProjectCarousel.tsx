@@ -42,8 +42,8 @@ type CardSlotState = {
 function getCardMetrics(stageWidth: number): CardSlotMetrics {
   if (stageWidth >= 1280) {
     return {
-      nearX: stageWidth * 0.255,
-      farX: stageWidth * 0.43,
+      nearX: stageWidth * 0.26,
+      farX: stageWidth * 0.48,
       offscreenX: stageWidth * 0.6,
       nearScale: 0.87,
       farScale: 0.73,
@@ -54,8 +54,8 @@ function getCardMetrics(stageWidth: number): CardSlotMetrics {
 
   if (stageWidth >= 1024) {
     return {
-      nearX: stageWidth * 0.22,
-      farX: stageWidth * 0.42,
+      nearX: stageWidth * 0.4,
+      farX: stageWidth * 0.39,
       offscreenX: stageWidth * 0.59,
       nearScale: 0.85,
       farScale: 0.71,
@@ -66,9 +66,9 @@ function getCardMetrics(stageWidth: number): CardSlotMetrics {
 
   if (stageWidth >= 640) {
     return {
-      nearX: stageWidth * 0.32,
-      farX: stageWidth * 0.55,
-      offscreenX: stageWidth * 0.72,
+      nearX: stageWidth * 0.44,
+      farX: stageWidth * 0.66,
+      offscreenX: stageWidth * 0.84,
       nearScale: 0.82,
       farScale: 0.65,
       nearY: 18,
@@ -77,9 +77,9 @@ function getCardMetrics(stageWidth: number): CardSlotMetrics {
   }
 
   return {
-    nearX: stageWidth * 0.60,
-    farX: stageWidth * 0.98,
-    offscreenX: stageWidth * 1.2,
+    nearX: stageWidth * 0.74,
+    farX: stageWidth * 1.08,
+    offscreenX: stageWidth * 1.3,
     nearScale: 0.76,
     farScale: 0.52,
     nearY: 20,
@@ -436,10 +436,10 @@ export default function ProjectCarousel({
 
   return (
     <div className="w-full">
-      <div className="relative left-1/2 lg:left-[calc(50%-2rem)] w-screen -translate-x-1/2 overflow-hidden">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden lg:left-[calc(50%-2rem)]">
         <div
           ref={stageRef}
-          className="relative h-120 sm:h-152 lg:h-176 xl:h-192"
+          className="relative h-136 sm:h-152 lg:h-176 xl:h-192"
         >
           <CarouselHalo activeIndex={activeIndex} />
           {virtualCards.map((card, vi) => {
@@ -451,7 +451,7 @@ export default function ProjectCarousel({
                 ref={(node) => {
                   cardRefs.current[vi] = node
                 }}
-                className="absolute top-1/2 left-1/2 h-96 w-72 cursor-pointer will-change-[transform,opacity,filter] sm:h-120 sm:w-88 lg:h-148 lg:w-104 xl:h-160 xl:w-md"
+                className="absolute top-1/2 left-1/2 h-116 w-84 cursor-pointer will-change-[transform,opacity,filter] sm:h-120 sm:w-88 lg:h-148 lg:w-104 xl:h-160 xl:w-md"
                 onClick={() => {
                   const offset = vi - virtualCenterRef.current
                   if (offset === 0 || !onNavigate) return

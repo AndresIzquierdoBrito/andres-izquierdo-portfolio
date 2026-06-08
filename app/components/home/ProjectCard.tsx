@@ -1,5 +1,6 @@
 import { useRef } from "react"
 import { BookOpen, ExternalLink } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 import { cn } from "~/lib/utils"
 
@@ -105,6 +106,7 @@ export default function ProjectCard({
   index: number
   className?: string
 }) {
+  const { t } = useTranslation("common", { keyPrefix: "sections.projects" })
   const toneClass = toneClasses[index % toneClasses.length]
 
   return (
@@ -145,6 +147,19 @@ export default function ProjectCard({
           <p className="text-[0.68rem] font-semibold tracking-[0.28em] text-slate-500 uppercase dark:text-white/45">
             {card.eyebrow}
           </p>
+
+          {card.stack?.length ? (
+            <div className="flex items-center gap-1.5">
+              {card.stack.slice(0, 3).map((Icon, si) => (
+                <span
+                  key={si}
+                  className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-white text-slate-500 shadow-sm dark:border-white/14 dark:bg-slate-900 dark:text-white/70"
+                >
+                  <Icon className="size-5" />
+                </span>
+              ))}
+            </div>
+          ) : null}
         </div>
 
         {/* Name + description */}
@@ -196,12 +211,12 @@ export default function ProjectCard({
               className="inline-flex items-center gap-1.5 rounded-full bg-[linear-gradient(135deg,#27ffc3,#EAB308)] px-4 py-2 text-[0.7rem] font-semibold text-slate-900 transition-all duration-200 hover:-translate-y-px hover:brightness-[1.06] hover:shadow-md dark:bg-[linear-gradient(135deg,#22d3ee,#6366f1)] dark:text-white"
             >
               <ExternalLink className="size-3" />
-              View project
+              {t("viewProject")}
             </a>
           ) : (
             <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-[0.7rem] font-semibold text-slate-400 dark:border-white/10 dark:text-white/30">
               <ExternalLink className="size-3" />
-              Coming soon
+              {t("comingSoon")}
             </span>
           )}
           {card.caseStudyUrl ? (
@@ -212,12 +227,12 @@ export default function ProjectCard({
               className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(39,255,195,0.42)] bg-[linear-gradient(135deg,rgba(39,255,195,0.10),rgba(234,179,8,0.08))] px-4 py-2 text-[0.7rem] font-semibold text-slate-800 transition-all duration-200 hover:-translate-y-px hover:brightness-105 dark:border-[rgba(99,102,241,0.44)] dark:bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(99,102,241,0.10))] dark:text-white/85"
             >
               <BookOpen className="size-3" />
-              Case study
+              {t("caseStudy")}
             </a>
           ) : (
             <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.7rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30">
               <BookOpen className="size-3" />
-              Case study
+              {t("caseStudy")}
             </span>
           )}
         </div>
