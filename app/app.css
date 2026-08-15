@@ -66,19 +66,21 @@
 }
 
 @layer utilities {
+  @keyframes flow-gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50%       { background-position: 100% 50%; }
+  }
+
   @keyframes glass-gradient-drift {
     0% {
-      background-position: 0% 50%;
       transform: translate3d(-1%, 0, 0) scale(1);
     }
 
     50% {
-      background-position: 100% 50%;
       transform: translate3d(2%, -3%, 0) scale(1.05);
     }
 
     100% {
-      background-position: 0% 50%;
       transform: translate3d(-1%, 0, 0) scale(1);
     }
   }
@@ -93,20 +95,51 @@
     border: 1px solid rgb(255 255 255 / 0.46);
     background: linear-gradient(
       180deg,
-      rgb(255 255 255 / 0.68),
-      rgb(255 255 255 / 0.44)
+      rgb(255 255 255 / 0.88),
+      rgb(255 255 255 / 0.78)
     );
-    backdrop-filter: blur(28px);
-    -webkit-backdrop-filter: blur(28px);
+  }
+
+  .glass-anim-paused.glass-gradient-surface::before,
+  .glass-anim-paused .glass-panel-orb {
+    animation-play-state: paused;
   }
 
   .dark .glass-gradient-surface {
     border: 1px solid rgb(255 255 255 / 0.12);
     background: linear-gradient(
       180deg,
-      rgb(15 23 42 / 0.78),
-      rgb(15 23 42 / 0.52)
+      rgb(15 23 42 / 0.92),
+      rgb(15 23 42 / 0.82)
     );
+  }
+
+  .glass-card-surface {
+    background: linear-gradient(
+      180deg,
+      rgb(255 255 255 / 0.86),
+      rgb(255 255 255 / 0.74)
+    );
+  }
+
+  .dark .glass-card-surface {
+    background: linear-gradient(
+      180deg,
+      rgb(30 41 59 / 0.82),
+      rgb(30 41 59 / 0.7)
+    );
+  }
+
+  .glass-card-surface::before {
+    opacity: 0.16;
+  }
+
+  .glass-card-surface .glass-panel-orb {
+    opacity: 0.32;
+  }
+
+  .dark .glass-card-surface .glass-panel-orb {
+    opacity: 0.55;
   }
 
   .glass-gradient-surface::before,
@@ -148,7 +181,7 @@
   .glass-gradient-surface::before {
     inset: -28%;
     opacity: 0.48;
-    filter: blur(58px);
+    filter: blur(34px);
     z-index: -2;
   }
 
@@ -175,7 +208,7 @@
 
   .glass-panel-orb {
     opacity: 0.4;
-    filter: blur(18px);
+    filter: blur(12px);
     z-index: 0;
   }
 

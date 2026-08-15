@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react"
-import { ArrowLeft, ArrowRight } from "lucide-react"
+import { ArrowLeft, ArrowRight, Layers } from "lucide-react"
 import gsap from "gsap"
 import { useTranslation } from "react-i18next"
 
@@ -116,7 +116,7 @@ export default function HomeProjectsSection() {
             <ArrowRight className="size-6 translate-x-1 sm:size-6 sm:translate-x-0 lg:size-8" />
           </button>
 
-          <SectionBadge>{t("eyebrow")}</SectionBadge>
+          <SectionBadge icon={Layers}>{t("eyebrow")}</SectionBadge>
           <div className="flex min-h-24 w-full items-center justify-center sm:min-h-40">
             <h2
               ref={taglineRef}

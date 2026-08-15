@@ -436,7 +436,7 @@ export default function ProjectCarousel({
 
   return (
     <div className="w-full">
-      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden lg:left-[calc(50%-2rem)]">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden xl:left-[calc(50%-2rem)]">
         <div
           ref={stageRef}
           className="relative h-136 sm:h-152 lg:h-176 xl:h-192"

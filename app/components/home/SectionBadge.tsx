@@ -1,21 +1,25 @@
 import type { ReactNode } from "react"
 
-import { Sparkles } from "lucide-react"
+import { type LucideIcon, Sparkles } from "lucide-react"
 
 import { Badge } from "~/components/ui/badge"
 import { cn } from "~/lib/utils"
 
 type SectionBadgeProps = {
   children: ReactNode
+  icon?: LucideIcon
   size?: "default" | "compact"
   className?: string
 }
 
 export default function SectionBadge({
   children,
+  icon,
   size = "default",
   className,
 }: SectionBadgeProps) {
+  const BadgeIcon = icon ?? Sparkles
+
   return (
     <Badge
       variant="secondary"
@@ -27,7 +31,7 @@ export default function SectionBadge({
         className
       )}
     >
-      <Sparkles
+      <BadgeIcon
         className={cn(
           "shrink-0 text-slate-950/75 dark:text-white/85",
           size === "default" ? "size-3.5" : "size-3"

@@ -1,0 +1,201 @@
+import type { ComponentType, CSSProperties, SVGProps } from "react"
+import { Boxes, Cloud, Terminal, Palette, type LucideIcon } from "lucide-react"
+
+import { FastAPIIcon, ReactIcon } from "~/components/icons"
+import type { ThemeMode } from "~/lib/theme"
+
+export type FocusToolIcon = LucideIcon | ComponentType<SVGProps<SVGSVGElement>>
+
+export type FocusTool = {
+  label: string
+  icon: FocusToolIcon
+}
+
+export const currentFocusTools = [
+  { label: "React", icon: ReactIcon },
+  { label: "FastAPI", icon: FastAPIIcon },
+  { label: "Design", icon: Palette },
+  { label: "Systems", icon: Boxes },
+  { label: "Cloud", icon: Cloud },
+  { label: "CLI", icon: Terminal },
+] as const satisfies readonly FocusTool[]
+
+export type ProjectCardData = {
+  eyebrow: string
+  name: string
+  /** Short phrase shown as the section heading when this card is active */
+  tagline: string
+  description: string
+  /** Path to the app icon image (e.g. "/icons/myapp.png") */
+  iconSrc?: string
+  /** 1-3 icons representing the project's stack, shown top-right of the card */
+  stack?: readonly FocusToolIcon[]
+  /** Up to 3 screenshot or gif paths shown scattered around the icon */
+  screenshots?: readonly string[]
+  /** Live project URL */
+  projectUrl?: string
+  /** Case study or demo site URL */
+  caseStudyUrl?: string
+}
+
+export const projectPreviewCards: readonly ProjectCardData[] = [
+  {
+    eyebrow: "Case study",
+    name: "Flagship builds",
+    tagline: "The work that best shows how I think and ship.",
+    description:
+      "Add the projects that best show product judgment, technical decisions, and the outcomes that mattered.",
+    stack: [ReactIcon, FastAPIIcon],
+  },
+  {
+    eyebrow: "Process",
+    name: "From brief to shipped UI",
+    tagline: "From a rough brief to a polished interface.",
+    description:
+      "Use this lane for screenshots, system thinking, iterations, and the tradeoffs behind each release.",
+    stack: [ReactIcon, FastAPIIcon],
+  },
+  {
+    eyebrow: "Signal",
+    name: "Results and metrics",
+    tagline: "The numbers behind the product decisions.",
+    description:
+      "Reserve space for adoption numbers, performance wins, or the business impact behind each project.",
+  },
+  {
+    eyebrow: "Systems",
+    name: "Scalable foundations",
+    tagline: "Architecture built to grow without breaking.",
+    description:
+      "Use this lane for architecture decisions, reusable primitives, and the systems work that supported faster product delivery.",
+    stack: [ReactIcon, FastAPIIcon],
+  },
+  {
+    eyebrow: "Iteration",
+    name: "After launch",
+    tagline: "What happens once real users show up.",
+    description:
+      "Keep one card for follow-up releases, product refinements, and the learning loop that happened once real users arrived.",
+  },
+  {
+    eyebrow: "Extra",
+    name: "Side project",
+    tagline: "Experiments built outside the day job.",
+    description:
+      "Reserve this lane for experiments, open-source contributions, or any work that lives outside the main product track.",
+  },
+]
+
+type HomeGradientPalette = {
+  hero: {
+    color1: string
+    color2: string
+    color3: string
+  }
+  about: {
+    dotColor1: string
+    dotColor2: string
+    dotColor3: string
+    washColor1: string
+    washColor2: string
+    washColor3: string
+  }
+  projects: {
+    backgroundFrom: string
+    backgroundTo: string
+    orbTopRight: string
+    orbBottomLeft: string
+  }
+  contact: {
+    backgroundBase: string
+    orbTopLeft: string
+    orbBottomRight: string
+  }
+}
+
+export const homeGradientPalettes: Record<ThemeMode, HomeGradientPalette> = {
+  light: {
+    hero: {
+      color1: "#EAB308",
+      color2: "#27ffc3",
+      color3: "#cdfaeb",
+    },
+    about: {
+      dotColor1: "#EAB308",
+      dotColor2: "#27ffc3",
+      dotColor3: "#cdfaeb",
+      washColor1: "rgb(234 179 8 / 0.10)",
+      washColor2: "rgb(39 255 195 / 0.10)",
+      washColor3: "rgb(205 250 235 / 0.35)",
+    },
+    projects: {
+      backgroundFrom: "rgba(255,255,255,0.98)",
+      backgroundTo: "rgba(248,250,252,0.95)",
+      orbTopRight: "rgba(39,255,195,0.18)",
+      orbBottomLeft: "rgba(234,179,8,0.16)",
+    },
+    contact: {
+      backgroundBase:
+        "linear-gradient(160deg, #0f3d3a 0%, #134e4a 45%, #1a5c4a 100%)",
+      orbTopLeft: "rgba(234,179,8,0.26)",
+      orbBottomRight: "rgba(39,255,195,0.28)",
+    },
+  },
+  dark: {
+    hero: {
+      color1: "#00CED1",
+      color2: "#6366f1",
+      color3: "#0f172a",
+    },
+    about: {
+      dotColor1: "#22d3ee",
+      dotColor2: "#818cf8",
+      dotColor3: "#0f172a",
+      washColor1: "rgb(34 211 238 / 0.13)",
+      washColor2: "rgb(129 140 248 / 0.13)",
+      washColor3: "rgb(15 23 42 / 0.64)",
+    },
+    projects: {
+      backgroundFrom: "rgba(10,15,20,0.98)",
+      backgroundTo: "rgba(6,10,14,0.95)",
+      orbTopRight: "rgba(129,140,248,0.22)",
+      orbBottomLeft: "rgba(34,211,238,0.20)",
+    },
+    contact: {
+      backgroundBase:
+        "linear-gradient(160deg, #0b1224 0%, #111d36 45%, #15203a 100%)",
+      orbTopLeft: "rgba(129,140,248,0.24)",
+      orbBottomRight: "rgba(34,211,238,0.22)",
+    },
+  },
+}
+
+export function getHomeGradientPalette(themeMode: ThemeMode) {
+  return homeGradientPalettes[themeMode]
+}
+
+export const heroGreetings = [
+  "Hey there!",
+  "Hola!",
+  "Bonjour!",
+  "Ciao!",
+] as const
+
+export function getResumePatternStyle(themeMode: ThemeMode): CSSProperties {
+  const palette = getHomeGradientPalette(themeMode)
+
+  return {
+    "--resume-dot-color-1": palette.about.dotColor1,
+    "--resume-dot-color-2": palette.about.dotColor2,
+    "--resume-dot-color-3": palette.about.dotColor3,
+    "--resume-wash-color-1": palette.about.washColor1,
+    "--resume-wash-color-2": palette.about.washColor2,
+    "--resume-wash-color-3": palette.about.washColor3,
+    "--resume-mouse-x": "50%",
+    "--resume-mouse-y": "12rem",
+    "--resume-trace-x": "50%",
+    "--resume-trace-y": "12rem",
+    "--resume-hover-opacity": "0",
+    "--resume-trace-opacity": "0",
+  } as CSSProperties
+}

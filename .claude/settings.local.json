@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s \"http://localhost:5173/@id/__x00__virtual:remix/browser-manifest\")",
+      "Bash(curl -s \"http://localhost:5173/app/app.css\")",
+      "Bash(curl -s \"http://localhost:5173/\")"
+    ]
+  }
+}

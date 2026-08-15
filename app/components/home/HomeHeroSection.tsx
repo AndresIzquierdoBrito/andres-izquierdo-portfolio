@@ -47,7 +47,7 @@ export default function HomeHeroSection() {
 
       <section
         id="home"
-        className="relative mx-auto min-h-screen max-w-7xl scroll-mt-6 px-6 sm:px-12 lg:pr-28 lg:pl-44"
+        className="relative mx-auto min-h-screen max-w-7xl scroll-mt-6 px-6 sm:px-12 xl:pr-28 xl:pl-44"
       >
         <HomeHeroToolbar />
 
