@@ -92,6 +92,12 @@ export default function RotatingGreeting({
     transitionTimingFunction: "cubic-bezier(0.22, 1, 0.36, 1)",
   } as const
 
+  const restingStyle = {
+    transform: "translate3d(0, 0, 0)",
+    opacity: 1,
+    filter: "blur(0px)",
+  } as const
+
   const currentStyle =
     phase === "animate"
       ? {
@@ -99,19 +105,10 @@ export default function RotatingGreeting({
           opacity: 0,
           filter: "blur(6px)",
         }
-      : {
-          transform: "translateY(0%) scale(1)",
-          opacity: 1,
-          filter: "blur(0px)",
-        }
-
+      : restingStyle
   const nextStyle =
     phase === "animate"
-      ? {
-          transform: "translateY(0%) scale(1)",
-          opacity: 1,
-          filter: "blur(0px)",
-        }
+      ? restingStyle
       : {
           transform: "translateY(115%) scale(1.02)",
           opacity: 0,

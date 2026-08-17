@@ -144,7 +144,7 @@ export default function ProjectCard({
       <div className="relative z-10 flex h-full flex-col p-6 sm:p-7 lg:p-8">
         {/* Header row */}
         <div className="flex items-start justify-between gap-4">
-          <p className="text-[0.68rem] font-semibold tracking-[0.28em] text-slate-500 uppercase dark:text-white/45">
+          <p className="font-mono text-[0.65rem] font-semibold tracking-[0.18em] text-slate-500 uppercase dark:text-white/45">
             {card.eyebrow}
           </p>
 
@@ -208,13 +208,13 @@ export default function ProjectCard({
               href={card.projectUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-[linear-gradient(135deg,#27ffc3,#EAB308)] px-4 py-2 text-[0.7rem] font-semibold text-slate-900 transition-all duration-200 hover:-translate-y-px hover:brightness-[1.06] hover:shadow-md dark:bg-[linear-gradient(135deg,#22d3ee,#6366f1)] dark:text-white"
+              className="inline-flex items-center gap-1.5 rounded-full bg-slate-950 px-4 py-2 text-[0.68rem] font-semibold text-white transition-colors duration-200 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-white/84"
             >
               <ExternalLink className="size-3" />
               {t("viewProject")}
             </a>
           ) : (
-            <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-[0.7rem] font-semibold text-slate-400 dark:border-white/10 dark:text-white/30">
+            <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/10 dark:text-white/30">
               <ExternalLink className="size-3" />
               {t("comingSoon")}
             </span>
@@ -224,13 +224,13 @@ export default function ProjectCard({
               href={card.caseStudyUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-[rgba(39,255,195,0.42)] bg-[linear-gradient(135deg,rgba(39,255,195,0.10),rgba(234,179,8,0.08))] px-4 py-2 text-[0.7rem] font-semibold text-slate-800 transition-all duration-200 hover:-translate-y-px hover:brightness-105 dark:border-[rgba(99,102,241,0.44)] dark:bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(99,102,241,0.10))] dark:text-white/85"
+              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/70 bg-white px-4 py-2 text-[0.68rem] font-semibold text-slate-800 transition-colors duration-200 hover:border-emerald-400 dark:border-cyan-400/35 dark:bg-slate-950 dark:text-white/85 dark:hover:border-cyan-300/60"
             >
               <BookOpen className="size-3" />
               {t("caseStudy")}
             </a>
           ) : (
-            <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.7rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30">
+            <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30">
               <BookOpen className="size-3" />
               {t("caseStudy")}
             </span>

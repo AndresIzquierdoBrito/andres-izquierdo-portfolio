@@ -12,12 +12,23 @@ import AppI18nProvider from "~/i18n/provider"
 import type { Route } from "./+types/root"
 import "./app.css"
 
+const initialThemeScript = `(() => {
+  try {
+    const stored = localStorage.getItem("portfolio-theme");
+    const dark = stored === "dark" || (stored !== "light" && matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.classList.toggle("dark", dark);
+    document.documentElement.style.colorScheme = dark ? "dark" : "light";
+  } catch {}
+})();`
+
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="color-scheme" content="light dark" />
+        <script dangerouslySetInnerHTML={{ __html: initialThemeScript }} />
         <Meta />
         <Links />
       </head>

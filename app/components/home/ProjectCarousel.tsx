@@ -428,7 +428,7 @@ export default function ProjectCarousel({
         <ProjectCard
           card={cards[0]}
           index={0}
-          className="min-h-128 lg:min-h-156"
+          className="min-h-128 lg:min-h-132"
         />
       </div>
     )
@@ -436,10 +436,10 @@ export default function ProjectCarousel({
 
   return (
     <div className="w-full">
-      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden xl:left-[calc(50%-2rem)]">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible xl:left-[calc(50%-2rem)]">
         <div
           ref={stageRef}
-          className="relative h-136 sm:h-152 lg:h-176 xl:h-192"
+          className="relative h-116 sm:h-120 lg:h-124 xl:h-136 2xl:h-144"
         >
           <CarouselHalo activeIndex={activeIndex} />
           {virtualCards.map((card, vi) => {
@@ -451,7 +451,7 @@ export default function ProjectCarousel({
                 ref={(node) => {
                   cardRefs.current[vi] = node
                 }}
-                className="absolute top-1/2 left-1/2 h-116 w-84 cursor-pointer will-change-[transform,opacity,filter] sm:h-120 sm:w-88 lg:h-148 lg:w-104 xl:h-160 xl:w-md"
+                className="absolute top-1/2 left-1/2 h-116 w-84 cursor-pointer will-change-[transform,opacity,filter] sm:h-120 sm:w-88 lg:h-124 lg:w-92 xl:h-136 xl:w-100 2xl:h-144 2xl:w-104"
                 onClick={() => {
                   const offset = vi - virtualCenterRef.current
                   if (offset === 0 || !onNavigate) return

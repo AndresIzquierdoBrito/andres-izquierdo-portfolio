@@ -20,7 +20,8 @@ const esCommon = {
       eyebrow: "Trayectoria",
       title: "Construyo software con mirada de producto y diseño.",
       body: "Ingeniero de software con mentalidad de producto y experiencia en desarrollo full-stack, productos SaaS y entornos orientados al diseño.",
-      body2: "La trayectoria de abajo es la columna vertebral — los proyectos y el contacto se construyen a su alrededor.",
+      body2:
+        "La trayectoria de abajo es la columna vertebral — los proyectos y el contacto se construyen a su alrededor.",
       currentFocus: "Enfoque actual",
     },
     projects: {
@@ -30,10 +31,25 @@ const esCommon = {
       comingSoon: "Próximamente",
       caseStudy: "Caso de estudio",
     },
+    projectDashboard: {
+      eyebrow: "¿Quieres verlo en vivo?",
+      title: "¿Quieres verlo un poco más a fondo?",
+      description:
+        "Mira mis apps en funcionamiento, consulta su uptime y echa un vistazo a los tiempos de respuesta, despliegues y detalles de cada proyecto.",
+      cta: "Ver qué está online",
+      monitor: "Apps en vivo",
+      online: "En línea",
+      metrics: {
+        uptime: "Uptime",
+        latency: "Latencia",
+        deployments: "Despliegues",
+      },
+    },
     contact: {
       eyebrow: "Contacto",
-      title: "Hagamos que el último paso sea el más sencillo.",
-      lead: "¿Tienes un proyecto en mente o solo quieres saludar? Déjame un mensaje aquí abajo — leo y respondo todos.",
+      status: "Disponible para el proyecto adecuado",
+      title: "¿Tienes algo que merezca la pena construir? Hablemos.",
+      lead: "Cuéntame qué estás construyendo, dónde se ha atascado o qué quieres mejorar. Leo cada correo y respondo personalmente.",
       downloadCv: "Descargar CV",
       form: {
         name: "Nombre",
@@ -43,10 +59,16 @@ const esCommon = {
         message: "Mensaje",
         messagePlaceholder: "Cuéntame un poco sobre lo que tienes en mente...",
         submit: "Enviar mensaje",
+        submitting: "Enviando...",
+        success: "Mensaje enviado — te responderé pronto.",
+        error: "Ha ocurrido un error. Inténtalo de nuevo.",
       },
       channels: {
         email: { label: "Correo", value: "andres.izbri@gmail.com" },
-        phone: { label: "Hablemos", value: "Disponible para una llamada rápida" },
+        phone: {
+          label: "Hablemos",
+          value: "Disponible para una llamada rápida",
+        },
         linkedin: { label: "LinkedIn", value: "Conecta conmigo" },
       },
       footer: "© {{year}} Andrés Izquierdo. Todos los derechos reservados.",
@@ -111,6 +133,11 @@ const esCommon = {
       cambridgeC1: {
         title: "Inglés — C1",
         issuer: "Cambridge English Qualifications",
+        status: "Obtenido",
+      },
+      awsCloudPractitioner: {
+        title: "AWS Certified Cloud Practitioner",
+        issuer: "Amazon Web Services",
         status: "Obtenido",
       },
     },

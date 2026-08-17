@@ -154,6 +154,8 @@ const Grainient = ({
     canvas.style.width = "100%"
     canvas.style.height = "100%"
     canvas.style.display = "block"
+    canvas.style.opacity = "0"
+    canvas.style.transition = "opacity 180ms ease-out"
     container.appendChild(canvas)
 
     const geometry = new Triangle(gl)
@@ -199,6 +201,7 @@ const Grainient = ({
       res[0] = gl.drawingBufferWidth
       res[1] = gl.drawingBufferHeight
       renderer.render({ scene: mesh })
+      canvas.style.opacity = "1"
     }
 
     const ro = new ResizeObserver(setSize)

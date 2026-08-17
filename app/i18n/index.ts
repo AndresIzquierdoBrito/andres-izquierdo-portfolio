@@ -21,6 +21,16 @@ if (!i18n.isInitialized) {
     },
     returnNull: false,
   })
+} else {
+  for (const language of supportedLanguages) {
+    i18n.addResourceBundle(
+      language,
+      defaultNamespace,
+      resources[language][defaultNamespace],
+      true,
+      true
+    )
+  }
 }
 
 export { i18n }

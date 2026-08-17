@@ -3,13 +3,9 @@ import { useLayoutEffect, useRef, useState } from "react"
 import gsap from "gsap"
 import { useTranslation } from "react-i18next"
 
-import { Avatar, AvatarFallback } from "~/components/ui/avatar"
 import { Badge } from "~/components/ui/badge"
 import { Separator } from "~/components/ui/separator"
 import { cn } from "~/lib/utils"
-import { useThemeMode } from "~/lib/useThemeMode"
-
-import SectionBadge from "~/components/home/SectionBadge"
 
 type PanelKey = "experience" | "education"
 
@@ -18,6 +14,8 @@ type ExperienceEntry = {
   technologies: string[]
   initials: string
   tone: string
+  logoSrc?: string
+  logoFit?: "contain" | "cover-left" | "cover-center"
 }
 
 type EducationEntryMeta = {
@@ -26,10 +24,12 @@ type EducationEntryMeta = {
   status: "completed" | "ongoing"
   initials: string
   tone: string
+  logoSrc?: string
+  logoFit?: "contain" | "cover-left" | "cover-center"
 }
 
 type CertificationMeta = {
-  id: "cambridgeC1"
+  id: "cambridgeC1" | "awsCloudPractitioner"
   /** Path to the issuer's logo image (e.g. "/logos/cambridge-english.svg") */
   logoSrc?: string
 }
@@ -37,15 +37,27 @@ type CertificationMeta = {
 const experienceEntries: ExperienceEntry[] = [
   {
     id: "dst",
-    technologies: ["FastAPI", "Python", "React.js", "TypeScript", "Docker", "Pytest", "Cypress"],
+    technologies: [
+      "FastAPI",
+      "Python",
+      "React.js",
+      "TypeScript",
+      "Docker",
+      "Pytest",
+      "Cypress",
+    ],
     initials: "DST",
     tone: "bg-secondary text-secondary-foreground",
+    logoSrc: "/logos/dst.svg",
+    logoFit: "contain",
   },
   {
     id: "step",
     technologies: ["Next.js", "React.js", "TypeScript", "Figma"],
     initials: "STP",
     tone: "bg-muted text-foreground",
+    logoSrc: "/logos/step.png",
+    logoFit: "contain",
   },
 ]
 
@@ -56,6 +68,8 @@ const educationEntryMeta: EducationEntryMeta[] = [
     status: "ongoing",
     initials: "UOC",
     tone: "bg-muted text-foreground",
+    logoSrc: "/logos/uoc.png",
+    logoFit: "cover-center",
   },
   {
     id: "cifp",
@@ -63,6 +77,8 @@ const educationEntryMeta: EducationEntryMeta[] = [
     status: "completed",
     initials: "CM",
     tone: "bg-secondary text-secondary-foreground",
+    logoSrc: "/logos/cifp-cesar-manrique.png",
+    logoFit: "cover-left",
   },
 ]
 
@@ -71,13 +87,17 @@ const certificationMeta: CertificationMeta[] = [
     id: "cambridgeC1",
     logoSrc: "/logos/cambridge-english.svg",
   },
+  {
+    id: "awsCloudPractitioner",
+    logoSrc: "/logos/aws-cloud-practitioner.png",
+  },
 ]
 
 const inactivePanelState = {
-  opacity: 0.68,
-  scale: 0.975,
-  y: 32,
-  filter: "blur(10px)",
+  opacity: 0.78,
+  scale: 0.985,
+  y: 20,
+  filter: "blur(4px)",
 } as const
 
 const activePanelState = {
@@ -92,16 +112,43 @@ const activePanelState = {
 function ExperienceAvatar({
   initials,
   tone,
-}: Pick<ExperienceEntry, "initials" | "tone">) {
+  logoSrc,
+  logoFit = "contain",
+  accent = "green",
+}: Pick<ExperienceEntry, "initials" | "tone" | "logoSrc" | "logoFit"> & {
+  accent?: "green" | "gold"
+}) {
   return (
-    <Avatar
-      size="lg"
-      className="size-16 rounded-[1.25rem] bg-card shadow-sm after:rounded-[1.25rem]"
+    <div
+      className={cn(
+        "flex size-20 shrink-0 rounded-full border-2 bg-white p-1.5 sm:size-24 md:size-28 dark:bg-slate-950",
+        accent === "green"
+          ? "border-emerald-300/80 dark:border-cyan-400/55"
+          : "border-amber-300/80 dark:border-indigo-400/55"
+      )}
     >
-      <AvatarFallback className={cn("rounded-[1.25rem]", tone)}>
-        {initials}
-      </AvatarFallback>
-    </Avatar>
+      <span
+        className={cn(
+          "flex size-full items-center justify-center overflow-hidden rounded-full text-lg font-medium sm:text-xl md:text-2xl",
+          tone
+        )}
+      >
+        {logoSrc ? (
+          <img
+            src={logoSrc}
+            alt=""
+            className={cn(
+              "size-full rounded-full",
+              logoFit === "cover-left" && "object-cover object-left",
+              logoFit === "cover-center" && "object-cover object-center",
+              logoFit === "contain" && "object-contain p-2"
+            )}
+          />
+        ) : (
+          initials
+        )}
+      </span>
+    </div>
   )
 }
 
@@ -111,7 +158,7 @@ function PanelHeader({ panel }: { panel: PanelKey }) {
   return (
     <div className="relative z-10 flex flex-col gap-3">
       <div className="flex items-center gap-3">
-        <h3 className="font-heading text-4xl font-light tracking-tight text-foreground">
+        <h3 className="font-heading text-4xl font-medium tracking-tight text-foreground">
           {t("title")}
         </h3>
       </div>
@@ -126,7 +173,7 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
   const { t } = useTranslation("common", { keyPrefix: "experience" })
 
   return (
-    <div className="flex flex-col">
+    <div className="relative flex flex-col gap-12">
       {entries.map((entry, index) => {
         const showConnector = index < entries.length - 1
         const highlights = [
@@ -137,13 +184,21 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
         return (
           <article
             key={entry.id}
-            className="grid gap-5 pb-12 last:pb-0 md:grid-cols-[4.5rem_minmax(0,1fr)] md:gap-8"
+            className="relative grid gap-5 md:grid-cols-[7rem_minmax(0,1fr)] md:gap-8"
           >
-            <div className="hidden md:flex md:flex-col md:items-center">
-              <ExperienceAvatar initials={entry.initials} tone={entry.tone} />
-              {showConnector ? (
-                <div className="mt-4 w-px flex-1 bg-border" />
-              ) : null}
+            {showConnector ? (
+              <span
+                aria-hidden="true"
+                className="absolute top-28 -bottom-12 left-14 hidden w-px bg-emerald-300/80 md:block dark:bg-cyan-400/50"
+              />
+            ) : null}
+            <div className="relative z-10 hidden md:flex md:flex-col md:items-center">
+              <ExperienceAvatar
+                initials={entry.initials}
+                tone={entry.tone}
+                logoSrc={entry.logoSrc}
+                logoFit={entry.logoFit}
+              />
             </div>
 
             <div className="flex flex-col gap-5">
@@ -152,6 +207,8 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
                   <ExperienceAvatar
                     initials={entry.initials}
                     tone={entry.tone}
+                    logoSrc={entry.logoSrc}
+                    logoFit={entry.logoFit}
                   />
                 </div>
 
@@ -167,7 +224,7 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
                       {t(`entries.${entry.id}.location`)}
                     </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="font-mono text-xs tracking-tight text-muted-foreground">
                     {t(`entries.${entry.id}.period`)}
                   </p>
                 </div>
@@ -187,7 +244,7 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
                     <Badge
                       key={technology}
                       variant="outline"
-                      className="border-black/10 bg-white/45 dark:border-white/12 dark:bg-white/8"
+                      className="border-emerald-300/70 bg-white font-mono text-[0.7rem] dark:border-cyan-400/35 dark:bg-slate-950"
                     >
                       {technology}
                     </Badge>
@@ -216,20 +273,29 @@ function EducationTimeline({ entries }: { entries: EducationEntryMeta[] }) {
   const { t } = useTranslation("common", { keyPrefix: "education" })
 
   return (
-    <div className="flex flex-col">
+    <div className="relative flex flex-col gap-12">
       {entries.map((entry, index) => {
         const showConnector = index < entries.length - 1
 
         return (
           <article
             key={entry.id}
-            className="grid gap-5 pb-12 last:pb-0 md:grid-cols-[4.5rem_minmax(0,1fr)] md:gap-8"
+            className="relative grid gap-5 md:grid-cols-[7rem_minmax(0,1fr)] md:gap-8"
           >
-            <div className="hidden md:flex md:flex-col md:items-center">
-              <ExperienceAvatar initials={entry.initials} tone={entry.tone} />
-              {showConnector ? (
-                <div className="mt-4 w-px flex-1 bg-border" />
-              ) : null}
+            {showConnector ? (
+              <span
+                aria-hidden="true"
+                className="absolute top-28 -bottom-12 left-14 hidden w-px bg-amber-300/80 md:block dark:bg-indigo-400/50"
+              />
+            ) : null}
+            <div className="relative z-10 hidden md:flex md:flex-col md:items-center">
+              <ExperienceAvatar
+                initials={entry.initials}
+                tone={entry.tone}
+                logoSrc={entry.logoSrc}
+                logoFit={entry.logoFit}
+                accent="gold"
+              />
             </div>
 
             <div className="flex flex-col gap-5">
@@ -238,6 +304,9 @@ function EducationTimeline({ entries }: { entries: EducationEntryMeta[] }) {
                   <ExperienceAvatar
                     initials={entry.initials}
                     tone={entry.tone}
+                    logoSrc={entry.logoSrc}
+                    logoFit={entry.logoFit}
+                    accent="gold"
                   />
                 </div>
 
@@ -254,13 +323,13 @@ function EducationTimeline({ entries }: { entries: EducationEntryMeta[] }) {
                     </p>
                   </div>
                   <div className="flex items-center gap-2">
-                    <p className="text-sm text-muted-foreground">
+                    <p className="font-mono text-xs tracking-tight text-muted-foreground">
                       {entry.period}
                     </p>
                     {entry.status === "ongoing" ? (
                       <Badge
                         variant="outline"
-                        className="border-black/10 bg-white/45 text-[0.65rem] dark:border-white/12 dark:bg-white/8"
+                        className="border-amber-300/70 bg-white font-mono text-[0.65rem] dark:border-indigo-400/35 dark:bg-slate-950"
                       >
                         {t("ongoing")}
                       </Badge>
@@ -291,22 +360,22 @@ function EducationPanel() {
       <Separator className="bg-black/8 dark:bg-white/10" />
       <EducationTimeline entries={educationEntryMeta} />
 
-      <div className="flex flex-col gap-3 rounded-[1.5rem] border border-white/50 bg-white/40 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.35)] backdrop-blur-xl dark:border-white/12 dark:bg-white/6 dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]">
+      <div className="flex flex-col gap-3 border-t border-amber-300/70 pt-5 dark:border-indigo-400/35">
         <h4 className="text-lg font-semibold tracking-tight text-foreground">
           {t("certifications")}
         </h4>
-        <ul className="flex flex-col gap-2.5">
+        <ul className="divide-y divide-amber-300/45 dark:divide-indigo-400/25">
           {certificationMeta.map((cert) => (
             <li
               key={cert.id}
-              className="flex flex-wrap items-center gap-3 text-sm leading-7 text-muted-foreground"
+              className="flex items-center gap-4 py-4 first:pt-1 last:pb-1"
             >
-              <span className="flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-xl border border-white/55 bg-white/55 text-[0.65rem] font-semibold text-foreground/65 shadow-sm dark:border-white/12 dark:bg-white/8 dark:text-foreground/80">
+              <span className="flex size-18 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-amber-300/70 bg-white p-2 dark:border-indigo-400/35 dark:bg-slate-950">
                 {cert.logoSrc ? (
                   <img
                     src={cert.logoSrc}
                     alt={t(`certs.${cert.id}.issuer`)}
-                    className="size-full object-contain p-1"
+                    className="size-full object-contain"
                   />
                 ) : (
                   t(`certs.${cert.id}.title`)
@@ -314,14 +383,17 @@ function EducationPanel() {
                     .slice(0, 3)
                 )}
               </span>
-              <span className="text-foreground/80">
-                {t(`certs.${cert.id}.title`)}
+              <span className="flex min-w-0 flex-1 flex-col gap-1">
+                <span className="text-base font-medium text-foreground sm:text-lg">
+                  {t(`certs.${cert.id}.title`)}
+                </span>
+                <span className="text-sm text-muted-foreground">
+                  {t(`certs.${cert.id}.issuer`)}
+                </span>
               </span>
-              <span aria-hidden="true">·</span>
-              <span>{t(`certs.${cert.id}.issuer`)}</span>
               <Badge
                 variant="outline"
-                className="border-black/10 bg-white/45 text-[0.65rem] dark:border-white/12 dark:bg-white/8"
+                className="shrink-0 border-amber-300/70 bg-white font-mono text-[0.65rem] dark:border-indigo-400/35 dark:bg-slate-950"
               >
                 {t(`certs.${cert.id}.status`)}
               </Badge>
@@ -335,8 +407,9 @@ function EducationPanel() {
 
 export default function ExperienceSection() {
   const [activePanel, setActivePanel] = useState<PanelKey>("experience")
-  const { themeMode } = useThemeMode()
-  const { t: tExperience } = useTranslation("common", { keyPrefix: "experience" })
+  const { t: tExperience } = useTranslation("common", {
+    keyPrefix: "experience",
+  })
   const { t: tEducation } = useTranslation("common", { keyPrefix: "education" })
   const hasMountedRef = useRef(false)
   const experiencePanelRef = useRef<HTMLDivElement>(null)
@@ -354,8 +427,8 @@ export default function ExperienceSection() {
       activePanel === "experience" ? experiencePanel : educationPanel
     const inactiveElement =
       activePanel === "experience" ? educationPanel : experiencePanel
-    const inactiveX = activePanel === "experience" ? -40 : 40
-    const inactiveRotation = activePanel === "experience" ? 1.8 : -1.8
+    const inactiveX = activePanel === "experience" ? -18 : 18
+    const inactiveRotation = activePanel === "experience" ? 0.7 : -0.7
 
     const applyLayout = (animate: boolean) => {
       gsap.killTweensOf([activeElement, inactiveElement])
@@ -400,28 +473,16 @@ export default function ExperienceSection() {
   return (
     <div className="flex flex-col gap-8">
       <div className="flex justify-center">
-        <div className="inline-grid grid-cols-2 gap-1 rounded-full border border-black/8 bg-white p-1.5 shadow-[0_4px_18px_-6px_rgba(15,23,42,0.14)] dark:border-white/12 dark:bg-slate-900/80 dark:shadow-[0_4px_18px_-6px_rgba(2,6,23,0.5)]">
+        <div className="inline-grid grid-cols-2 gap-1 rounded-full border border-emerald-300/60 bg-white p-1.5 dark:border-cyan-400/30 dark:bg-slate-950">
           <button
             id="experience-tab"
             type="button"
             className={cn(
-              "relative flex min-w-37 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-[color,box-shadow] duration-300",
+              "relative flex min-w-37 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-colors duration-300",
               activePanel === "experience"
-                ? "text-slate-900 shadow-[0_14px_30px_-18px_rgba(15,23,42,0.32)] dark:text-white"
+                ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950"
                 : "text-foreground/60 hover:text-foreground/85 dark:text-white/68 dark:hover:text-white"
             )}
-            style={
-              activePanel === "experience"
-                ? {
-                    background:
-                      themeMode === "dark"
-                        ? "linear-gradient(135deg,rgba(34,211,238,0.55),rgba(129,140,248,0.55),rgba(34,211,238,0.55))"
-                        : "linear-gradient(135deg,rgba(39,255,195,0.6),rgba(234,179,8,0.5),rgba(39,255,195,0.6))",
-                    backgroundSize: "250% 250%",
-                    animation: "flow-gradient 9s ease-in-out infinite",
-                  }
-                : undefined
-            }
             onClick={() => setActivePanel("experience")}
           >
             <span className="pointer-events-none">{tExperience("tab")}</span>
@@ -430,23 +491,11 @@ export default function ExperienceSection() {
             id="education-tab"
             type="button"
             className={cn(
-              "relative flex min-w-37 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-[color,box-shadow] duration-300",
+              "relative flex min-w-37 items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-medium transition-colors duration-300",
               activePanel === "education"
-                ? "text-slate-900 shadow-[0_14px_30px_-18px_rgba(15,23,42,0.32)] dark:text-white"
+                ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950"
                 : "text-foreground/60 hover:text-foreground/85 dark:text-white/68 dark:hover:text-white"
             )}
-            style={
-              activePanel === "education"
-                ? {
-                    background:
-                      themeMode === "dark"
-                        ? "linear-gradient(135deg,rgba(34,211,238,0.55),rgba(129,140,248,0.55),rgba(34,211,238,0.55))"
-                        : "linear-gradient(135deg,rgba(39,255,195,0.6),rgba(234,179,8,0.5),rgba(39,255,195,0.6))",
-                    backgroundSize: "250% 250%",
-                    animation: "flow-gradient 9s ease-in-out infinite",
-                  }
-                : undefined
-            }
             onClick={() => setActivePanel("education")}
           >
             <span className="pointer-events-none">{tEducation("tab")}</span>
@@ -454,14 +503,14 @@ export default function ExperienceSection() {
         </div>
       </div>
 
-      <div className="grid pb-6 lg:grid-cols-12 lg:pb-10">
+      <div className="grid px-1 pb-4 sm:px-4 lg:grid-cols-12 lg:px-6 lg:pb-8">
         <section
           ref={experiencePanelRef}
           role="tabpanel"
           aria-hidden={activePanel !== "experience"}
           aria-labelledby="experience-tab"
           className={cn(
-            "glass-gradient-surface glass-card-surface relative col-start-1 row-start-1 overflow-hidden rounded-[2rem] p-8 shadow-[0_28px_90px_-44px_rgba(15,23,42,0.35)] will-change-[transform,filter,opacity] sm:p-10 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:self-start dark:shadow-[0_28px_90px_-44px_rgba(2,6,23,0.8)]",
+            "relative col-start-1 row-start-1 overflow-hidden rounded-[1.75rem] border border-emerald-300/70 bg-white p-7 shadow-[0_24px_64px_-44px_rgba(15,23,42,0.28)] will-change-[transform,filter,opacity] sm:p-9 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:self-start dark:border-cyan-400/35 dark:bg-slate-950 dark:shadow-[0_24px_64px_-44px_rgba(2,6,23,0.72)]",
             activePanel === "experience"
               ? "pointer-events-auto"
               : "glass-anim-paused pointer-events-none"
@@ -469,7 +518,11 @@ export default function ExperienceSection() {
         >
           <div
             aria-hidden="true"
-            className="glass-panel-orb absolute top-0 right-0 size-52 translate-x-18 -translate-y-20 rounded-full"
+            className="absolute inset-0 opacity-70 dark:opacity-35"
+            style={{
+              backgroundImage:
+                "linear-gradient(145deg, rgba(39,255,195,0.09), transparent 42%, rgba(234,179,8,0.045))",
+            }}
           />
           <ExperiencePanel />
         </section>
@@ -480,7 +533,7 @@ export default function ExperienceSection() {
           aria-hidden={activePanel !== "education"}
           aria-labelledby="education-tab"
           className={cn(
-            "glass-gradient-surface glass-card-surface relative col-start-1 row-start-1 overflow-hidden rounded-[2rem] p-8 shadow-[0_28px_90px_-44px_rgba(15,23,42,0.35)] will-change-[transform,filter,opacity] sm:p-10 lg:col-span-8 lg:col-start-5 lg:row-start-1 lg:mt-16 lg:self-start dark:shadow-[0_28px_90px_-44px_rgba(2,6,23,0.8)]",
+            "relative col-start-1 row-start-1 overflow-hidden rounded-[1.75rem] border border-amber-300/75 bg-white p-7 shadow-[0_24px_64px_-44px_rgba(15,23,42,0.28)] will-change-[transform,filter,opacity] sm:p-9 lg:col-span-8 lg:col-start-5 lg:row-start-1 lg:mt-10 lg:self-start dark:border-indigo-400/35 dark:bg-slate-950 dark:shadow-[0_24px_64px_-44px_rgba(2,6,23,0.72)]",
             activePanel === "education"
               ? "pointer-events-auto"
               : "glass-anim-paused pointer-events-none"
@@ -488,7 +541,11 @@ export default function ExperienceSection() {
         >
           <div
             aria-hidden="true"
-            className="glass-panel-orb absolute right-8 bottom-0 size-48 translate-y-12 rounded-full"
+            className="absolute inset-0 opacity-70 dark:opacity-35"
+            style={{
+              backgroundImage:
+                "linear-gradient(145deg, rgba(234,179,8,0.075), transparent 42%, rgba(99,102,241,0.055))",
+            }}
           />
           <EducationPanel />
         </section>

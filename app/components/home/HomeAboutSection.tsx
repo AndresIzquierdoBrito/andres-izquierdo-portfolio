@@ -1,6 +1,5 @@
 import type { PointerEvent } from "react"
 
-import { Route } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
 import ExperienceSection from "~/components/ExperienceSection"
@@ -48,7 +47,7 @@ export default function HomeAboutSection() {
   return (
     <section
       id="background"
-      className="resume-dot-pattern relative scroll-mt-6 overflow-hidden bg-background px-6 pt-16 pb-12 sm:px-12 sm:pb-24 xl:pr-28 xl:pl-44"
+      className="resume-dot-pattern relative scroll-mt-6 overflow-hidden bg-background px-6 pt-16 pb-12 sm:px-12 sm:pb-20 xl:pr-28 xl:pl-44"
       onPointerLeave={handleResumePatternPointerLeave}
       onPointerMove={handleResumePatternPointerMove}
       style={getResumePatternStyle(themeMode)}
@@ -64,10 +63,10 @@ export default function HomeAboutSection() {
         <div className="resume-dot-pattern__layer resume-dot-pattern__layer--inner" />
       </div>
 
-      <div className="relative z-10 mx-auto flex max-w-6xl flex-col gap-14">
+      <div className="relative z-10 mx-auto flex max-w-7xl flex-col gap-12 lg:gap-14">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(18rem,0.85fr)] lg:items-start">
           <div className="flex flex-col gap-4">
-            <SectionBadge icon={Route}>{t("eyebrow")}</SectionBadge>
+            <SectionBadge>{t("eyebrow")}</SectionBadge>
             <h2 className="font-heading text-5xl font-light tracking-tight text-foreground sm:text-6xl">
               {t("title")}
             </h2>
@@ -79,21 +78,33 @@ export default function HomeAboutSection() {
             </p>
           </div>
 
-          <div className="grid gap-4 rounded-[2rem] border border-white/55 bg-white/45 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.42)] backdrop-blur-xl dark:border-white/20 dark:bg-white/8">
-            <p className="text-[0.65rem] font-semibold tracking-[0.28em] text-foreground/45 uppercase">
+          <div className="grid gap-4 rounded-[1.5rem] border border-emerald-300/55 bg-white/85 p-5 dark:border-cyan-400/30 dark:bg-slate-950/72">
+            <p className="font-mono text-[0.65rem] font-semibold tracking-[0.22em] text-foreground/45 uppercase">
               {t("currentFocus")}
             </p>
-            <div className="grid grid-cols-3 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(8.5rem,1fr))] sm:gap-3">
+            <div className="relative grid grid-cols-3">
+              <span
+                aria-hidden="true"
+                className="absolute inset-y-0 left-1/3 w-px bg-black/8 dark:bg-white/10"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-y-0 left-2/3 w-px bg-black/8 dark:bg-white/10"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 top-1/2 h-px bg-black/8 dark:bg-white/10"
+              />
               {currentFocusTools.map((tool) => {
                 const Icon = tool.icon
 
                 return (
                   <div
                     key={tool.label}
-                    className="flex min-h-22 flex-col items-center justify-center gap-2 rounded-[1.1rem] border border-white/60 bg-white/70 px-2 py-3 text-center shadow-sm sm:min-h-32 sm:gap-4 sm:rounded-[1.35rem] sm:px-4 sm:py-5 dark:border-white/18 dark:bg-white/10"
+                    className="relative z-10 flex min-h-24 flex-col items-center justify-center gap-2 px-2 py-4 text-center sm:min-h-32 sm:gap-3 sm:px-4 sm:py-5"
                   >
-                    <Icon className="size-7 text-foreground/85 sm:size-12 dark:text-white" />
-                    <span className="text-[0.55rem] font-semibold tracking-[0.14em] text-foreground/80 uppercase sm:text-[0.68rem] sm:tracking-[0.18em] dark:text-white/88">
+                    <Icon className="size-10 text-foreground/85 sm:size-16 dark:text-white" />
+                    <span className="font-mono text-[0.55rem] font-semibold tracking-[0.12em] text-foreground/70 uppercase sm:text-[0.68rem] dark:text-white/78">
                       {tool.label}
                     </span>
                   </div>
@@ -103,7 +114,7 @@ export default function HomeAboutSection() {
           </div>
         </div>
 
-        <div className="relative z-10 mx-auto max-w-6xl">
+        <div className="relative z-10 mx-auto w-full max-w-7xl">
           <ExperienceSection />
         </div>
       </div>

@@ -36,6 +36,7 @@ export function applyThemeMode(themeMode: ThemeMode) {
   }
 
   document.documentElement.classList.toggle("dark", themeMode === "dark")
+  document.documentElement.style.colorScheme = themeMode
 
   if (typeof window !== "undefined") {
     window.dispatchEvent(

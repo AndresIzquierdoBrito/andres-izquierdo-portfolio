@@ -3,6 +3,7 @@ import HomeAboutSection from "~/components/home/HomeAboutSection"
 import HomeContactSection from "~/components/home/HomeContactSection"
 import HomeHeroSection from "~/components/home/HomeHeroSection"
 import HomeProjectsSection from "~/components/home/HomeProjectsSection"
+import ProjectsDashboardBanner from "~/components/home/ProjectsDashboardBanner"
 import { useActiveHomeSection } from "~/components/home/useActiveHomeSection"
 
 export default function Home() {
@@ -16,6 +17,7 @@ export default function Home() {
         <HomeHeroSection />
         <HomeAboutSection />
         <HomeProjectsSection />
+        <ProjectsDashboardBanner />
         <HomeContactSection />
       </main>
     </div>

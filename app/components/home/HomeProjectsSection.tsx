@@ -1,5 +1,5 @@
 import { useLayoutEffect, useRef, useState } from "react"
-import { ArrowLeft, ArrowRight, Layers } from "lucide-react"
+import { ArrowLeft, ArrowRight } from "lucide-react"
 import gsap from "gsap"
 import { useTranslation } from "react-i18next"
 
@@ -53,7 +53,7 @@ export default function HomeProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative z-0 scroll-mt-6 overflow-hidden px-6 pt-14 pb-10 sm:px-12 sm:pt-24 sm:pb-20 xl:pr-28 xl:pl-44"
+      className="relative z-0 scroll-mt-6 overflow-hidden px-6 pt-14 pb-20 sm:px-12 sm:pt-20 sm:pb-24 xl:pr-28 xl:pl-44"
       style={{
         backgroundImage: `linear-gradient(180deg, ${palette.projects.backgroundFrom}, ${palette.projects.backgroundTo})`,
       }}
@@ -78,22 +78,14 @@ export default function HomeProjectsSection() {
         }}
       />
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-1 lg:gap-2">
-        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-4 px-16 text-center sm:px-24 lg:px-32">
+      <div className="mx-auto flex max-w-7xl flex-col gap-1">
+        <div className="relative mx-auto flex w-full max-w-7xl flex-col items-center gap-3 px-16 text-center sm:px-24 lg:px-28">
           <button
             type="button"
             disabled={animating}
             aria-label="Show previous project"
             onClick={() => navigateCarousel(-1)}
-            className="absolute top-1/2 -left-6 flex h-24 w-12 -translate-y-1/2 items-center justify-center rounded-r-full rounded-l-none text-slate-900 shadow-[0_4px_20px_-4px_rgba(39,255,195,0.55)] transition-[transform,box-shadow,filter] duration-200 hover:translate-x-0.5 hover:shadow-[0_6px_28px_-4px_rgba(39,255,195,0.7)] hover:brightness-105 disabled:pointer-events-none disabled:opacity-40 sm:left-0 sm:size-16 sm:translate-x-0 sm:rounded-full sm:hover:scale-[1.07] sm:hover:translate-x-0 lg:size-20 dark:text-white dark:shadow-[0_4px_20px_-4px_rgba(34,211,238,0.4)] dark:hover:shadow-[0_6px_28px_-4px_rgba(34,211,238,0.55)]"
-            style={{
-              background:
-                themeMode === "dark"
-                  ? "linear-gradient(120deg,#22d3ee,#818cf8,#22d3ee)"
-                  : "linear-gradient(120deg,#27ffc3,#EAB308,#27ffc3)",
-              backgroundSize: "250% 250%",
-              animation: "flow-gradient 4s ease-in-out infinite",
-            }}
+            className="absolute top-1/2 -left-6 flex h-24 w-12 -translate-y-1/2 items-center justify-center rounded-l-none rounded-r-full border border-black/10 bg-white text-slate-900 shadow-[0_12px_36px_-24px_rgba(15,23,42,0.55)] transition-[transform,background-color,border-color] duration-200 hover:translate-x-0.5 hover:border-black/20 hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-40 sm:left-0 sm:size-16 sm:translate-x-0 sm:rounded-full sm:hover:translate-x-0 sm:hover:scale-[1.05] lg:size-14 dark:border-white/16 dark:bg-slate-950 dark:text-white dark:hover:border-white/28 dark:hover:bg-slate-900"
           >
             <ArrowLeft className="size-6 -translate-x-1 sm:size-6 sm:translate-x-0 lg:size-8" />
           </button>
@@ -103,34 +95,26 @@ export default function HomeProjectsSection() {
             disabled={animating}
             aria-label="Show next project"
             onClick={() => navigateCarousel(1)}
-            className="absolute top-1/2 -right-6 flex h-24 w-12 -translate-y-1/2 items-center justify-center rounded-l-full rounded-r-none text-slate-900 shadow-[0_4px_20px_-4px_rgba(39,255,195,0.55)] transition-[transform,box-shadow,filter] duration-200 hover:-translate-x-0.5 hover:shadow-[0_6px_28px_-4px_rgba(39,255,195,0.7)] hover:brightness-105 disabled:pointer-events-none disabled:opacity-40 sm:right-0 sm:size-16 sm:translate-x-0 sm:rounded-full sm:hover:scale-[1.07] sm:hover:translate-x-0 lg:size-20 dark:text-white dark:shadow-[0_4px_20px_-4px_rgba(34,211,238,0.4)] dark:hover:shadow-[0_6px_28px_-4px_rgba(34,211,238,0.55)]"
-            style={{
-              background:
-                themeMode === "dark"
-                  ? "linear-gradient(120deg,#22d3ee,#818cf8,#22d3ee)"
-                  : "linear-gradient(120deg,#27ffc3,#EAB308,#27ffc3)",
-              backgroundSize: "250% 250%",
-              animation: "flow-gradient 4s ease-in-out infinite",
-            }}
+            className="absolute top-1/2 -right-6 flex h-24 w-12 -translate-y-1/2 items-center justify-center rounded-l-full rounded-r-none border border-black/10 bg-white text-slate-900 shadow-[0_12px_36px_-24px_rgba(15,23,42,0.55)] transition-[transform,background-color,border-color] duration-200 hover:-translate-x-0.5 hover:border-black/20 hover:bg-slate-50 disabled:pointer-events-none disabled:opacity-40 sm:right-0 sm:size-16 sm:translate-x-0 sm:rounded-full sm:hover:translate-x-0 sm:hover:scale-[1.05] lg:size-14 dark:border-white/16 dark:bg-slate-950 dark:text-white dark:hover:border-white/28 dark:hover:bg-slate-900"
           >
             <ArrowRight className="size-6 translate-x-1 sm:size-6 sm:translate-x-0 lg:size-8" />
           </button>
 
-          <SectionBadge icon={Layers}>{t("eyebrow")}</SectionBadge>
-          <div className="flex min-h-24 w-full items-center justify-center sm:min-h-40">
+          <SectionBadge>{t("eyebrow")}</SectionBadge>
+          <div className="flex min-h-24 w-full items-center justify-center sm:min-h-32 lg:min-h-28">
             <h2
               ref={taglineRef}
-              className="font-heading text-3xl leading-tight font-light tracking-tight text-slate-950 sm:text-6xl dark:text-white"
+              className="font-heading text-3xl leading-tight font-light tracking-[-0.035em] text-slate-950 sm:text-5xl lg:text-[3.35rem] dark:text-white"
             >
               {projectPreviewCards[activeIndex].tagline}
             </h2>
           </div>
           <p className="max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-white/70">
-            This section is wired into the rail alread.
+            This section is wired into the rail already.
           </p>
         </div>
 
-        <div className="lg:-mt-8">
+        <div className="mt-8 sm:mt-10 lg:mt-12">
           <ProjectCarousel
             cards={projectPreviewCards}
             activeIndex={activeIndex}

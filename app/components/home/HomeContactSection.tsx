@@ -1,149 +1,270 @@
-import { Download, Mail, MessageCircle, Phone, Send } from "lucide-react"
+import { type FormEvent, useLayoutEffect, useRef, useState } from "react"
+
+import gsap from "gsap"
+import { ArrowUpRight, Download } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-import { LinkedInIcon } from "~/components/icons"
 import { useThemeMode } from "~/lib/useThemeMode"
 
 import { getHomeGradientPalette } from "./home-content"
 import SectionBadge from "./SectionBadge"
+import SiteBrandMark from "./SiteBrandMark"
 
 const contactChannels = [
-  { id: "email", icon: Mail, href: "mailto:andres.izbri@gmail.com", external: true },
-  { id: "phone", icon: Phone, href: "tel:+34616428219", external: false },
-  { id: "linkedin", icon: LinkedInIcon, href: "https://www.linkedin.com/in/andres-izquierdo/", external: true },
+  { id: "phone", href: "tel:+34616428219", external: false },
+  {
+    id: "linkedin",
+    href: "https://www.linkedin.com/in/andres-izquierdo/",
+    external: true,
+  },
 ] as const
 
+type FormStatus = "idle" | "submitting" | "success" | "error"
+
+const contactEmail = "andres.izbri@gmail.com"
+const contactEndpoint = `https://formsubmit.co/ajax/${contactEmail}`
+
 export default function HomeContactSection() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const [formStatus, setFormStatus] = useState<FormStatus>("idle")
   const { themeMode } = useThemeMode()
   const { t } = useTranslation("common", { keyPrefix: "sections.contact" })
   const palette = getHomeGradientPalette(themeMode)
 
-  const accentGradient =
-    themeMode === "dark"
-      ? "linear-gradient(135deg,#22d3ee,#818cf8)"
-      : "linear-gradient(135deg,#27ffc3,#EAB308)"
+  useLayoutEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const elements = section.querySelectorAll<HTMLElement>(
+      "[data-contact-reveal]"
+    )
+    const reduceMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches
+
+    if (reduceMotion) return
+
+    gsap.set(elements, { autoAlpha: 0, y: 28 })
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry?.isIntersecting) return
+
+        gsap.to(elements, {
+          autoAlpha: 1,
+          y: 0,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
+        })
+        observer.disconnect()
+      },
+      { threshold: 0.2 }
+    )
+
+    observer.observe(section)
+
+    return () => {
+      observer.disconnect()
+      gsap.killTweensOf(elements)
+    }
+  }, [])
+
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    const form = event.currentTarget
+    const formData = new FormData(form)
+
+    setFormStatus("submitting")
+
+    try {
+      const response = await fetch(contactEndpoint, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          email: formData.get("email"),
+          message: formData.get("message"),
+          _subject: "New portfolio message",
+          _template: "table",
+          _honey: formData.get("_honey"),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error("Contact form request failed")
+      }
+
+      form.reset()
+      setFormStatus("success")
+    } catch {
+      setFormStatus("error")
+    }
+  }
 
   return (
     <section
+      ref={sectionRef}
       id="contact"
-      className="relative z-10 -mt-8 scroll-mt-6 overflow-hidden rounded-t-[2.5rem] px-6 pt-14 pb-10 text-white shadow-[0_-32px_64px_-32px_rgba(2,6,23,0.5)] sm:-mt-12 sm:rounded-t-[3rem] sm:px-12 sm:pt-24 sm:pb-16 xl:pr-28 xl:pl-44"
-      style={{ backgroundImage: palette.contact.backgroundBase }}
+      className="relative z-10 -mt-8 scroll-mt-6 overflow-hidden rounded-t-[2.5rem] px-6 pt-14 pb-28 text-white sm:-mt-12 sm:rounded-t-[3rem] sm:px-12 sm:pt-20 sm:pb-32 xl:pr-28 xl:pl-44"
+      style={{ background: palette.contact.backgroundBase }}
     >
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10"
+        className="absolute inset-0 -z-10 opacity-70"
         style={{
-          backgroundImage: `radial-gradient(circle at top left, ${palette.contact.orbTopLeft}, transparent 22%), radial-gradient(circle at bottom right, ${palette.contact.orbBottomRight}, transparent 30%)`,
+          backgroundImage: `radial-gradient(circle at 8% 8%, ${palette.contact.orbTopLeft}, transparent 30%), radial-gradient(circle at 92% 88%, ${palette.contact.orbBottomRight}, transparent 34%)`,
         }}
       />
 
-      <div className="mx-auto flex max-w-6xl flex-col gap-10">
-        <div className="flex flex-col gap-4">
-          <SectionBadge icon={MessageCircle}>{t("eyebrow")}</SectionBadge>
-          <h2 className="font-heading text-5xl font-light tracking-tight text-white sm:text-6xl">
-            {t("title")}
-          </h2>
-          <p className="max-w-2xl text-base leading-8 text-white/70 sm:text-lg">
-            {t("lead")}
+      <div className="mx-auto flex max-w-7xl flex-col">
+        <div
+          data-contact-reveal
+          className="flex flex-wrap items-center justify-between gap-4"
+        >
+          <SectionBadge className="text-white dark:text-white">
+            {t("eyebrow")}
+          </SectionBadge>
+
+          <p className="flex items-center gap-2.5 font-heading text-[0.68rem] font-medium tracking-[0.17em] text-white/58 uppercase">
+            <span className="contact-status-dot size-2 rounded-full bg-emerald-300" />
+            {t("status")}
           </p>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(18rem,0.95fr)] lg:items-stretch">
-          <form
-            onSubmit={(event) => event.preventDefault()}
-            className="flex flex-col gap-5 rounded-[1.75rem] border border-white/12 bg-white/6 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-sm sm:p-8"
+        <div className="grid gap-10 pt-12 pb-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(22rem,0.9fr)] lg:items-start lg:gap-16 lg:pt-18 lg:pb-16">
+          <h2
+            data-contact-reveal
+            className="max-w-4xl font-heading text-5xl leading-[0.96] font-light tracking-[-0.04em] text-white sm:text-7xl lg:text-[5.5rem]"
           >
+            {t("title")}
+          </h2>
+          <form
+            data-contact-reveal
+            className="flex flex-col gap-5 lg:pt-1"
+            onSubmit={handleSubmit}
+          >
+            <input
+              type="text"
+              name="_honey"
+              className="hidden"
+              tabIndex={-1}
+              autoComplete="off"
+            />
+
             <div className="grid gap-5 sm:grid-cols-2">
-              <label className="flex flex-col gap-2 text-sm">
-                <span className="text-[0.65rem] font-semibold tracking-[0.24em] text-white/45 uppercase">
-                  {t("form.name")}
-                </span>
+              <label className="flex flex-col gap-2 font-heading text-[0.68rem] font-medium tracking-[0.12em] text-white/55 uppercase">
+                {t("form.name")}
                 <input
-                  type="text"
+                  required
                   name="name"
+                  autoComplete="name"
                   placeholder={t("form.namePlaceholder")}
-                  className="rounded-2xl border border-white/14 bg-white/6 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none transition-colors focus:border-white/35 focus:bg-white/10"
+                  className="h-11 border-b border-white/30 bg-transparent font-sans text-base tracking-normal text-white normal-case transition-colors outline-none placeholder:text-white/32 focus:border-emerald-300"
                 />
               </label>
-              <label className="flex flex-col gap-2 text-sm">
-                <span className="text-[0.65rem] font-semibold tracking-[0.24em] text-white/45 uppercase">
-                  {t("form.email")}
-                </span>
+
+              <label className="flex flex-col gap-2 font-heading text-[0.68rem] font-medium tracking-[0.12em] text-white/55 uppercase">
+                {t("form.email")}
                 <input
+                  required
                   type="email"
                   name="email"
+                  autoComplete="email"
                   placeholder={t("form.emailPlaceholder")}
-                  className="rounded-2xl border border-white/14 bg-white/6 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none transition-colors focus:border-white/35 focus:bg-white/10"
+                  className="h-11 border-b border-white/30 bg-transparent font-sans text-base tracking-normal text-white normal-case transition-colors outline-none placeholder:text-white/32 focus:border-emerald-300"
                 />
               </label>
             </div>
 
-            <label className="flex flex-1 flex-col gap-2 text-sm">
-              <span className="text-[0.65rem] font-semibold tracking-[0.24em] text-white/45 uppercase">
-                {t("form.message")}
-              </span>
+            <label className="flex flex-col gap-2 font-heading text-[0.68rem] font-medium tracking-[0.12em] text-white/55 uppercase">
+              {t("form.message")}
               <textarea
+                required
                 name="message"
-                rows={5}
+                rows={3}
                 placeholder={t("form.messagePlaceholder")}
-                className="flex-1 resize-none rounded-2xl border border-white/14 bg-white/6 px-4 py-3 text-sm text-white placeholder:text-white/35 outline-none transition-colors focus:border-white/35 focus:bg-white/10"
+                className="min-h-24 resize-y border-b border-white/30 bg-transparent py-2 font-sans text-base leading-6 tracking-normal text-white normal-case transition-colors outline-none placeholder:text-white/32 focus:border-emerald-300"
               />
             </label>
 
-            <button
-              type="submit"
-              className="inline-flex items-center justify-center gap-2 self-start rounded-full px-7 py-3 text-sm font-semibold text-slate-900 transition-all duration-200 hover:-translate-y-px hover:brightness-[1.06] hover:shadow-lg dark:text-white"
-              style={{ background: accentGradient }}
-            >
-              <Send className="size-4" />
-              {t("form.submit")}
-            </button>
-          </form>
+            <div className="flex flex-wrap items-center gap-4">
+              <button
+                type="submit"
+                disabled={formStatus === "submitting"}
+                className="inline-flex h-11 items-center justify-center rounded-full bg-white px-6 text-sm font-medium text-slate-950 transition-transform hover:-translate-y-0.5 disabled:cursor-wait disabled:opacity-60"
+              >
+                {formStatus === "submitting"
+                  ? t("form.submitting")
+                  : t("form.submit")}
+              </button>
 
-          <div className="grid gap-4">
-            {contactChannels.map((channel) => {
-              const Icon = channel.icon
-
-              return (
-                <a
-                  key={channel.id}
-                  href={channel.href}
-                  {...(channel.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                  className="group flex items-center gap-4 rounded-[1.75rem] border border-white/12 bg-white/6 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] backdrop-blur-sm transition-all duration-200 hover:-translate-y-px hover:border-white/24 hover:bg-white/10"
+              {formStatus === "success" || formStatus === "error" ? (
+                <p
+                  role="status"
+                  className={
+                    formStatus === "success"
+                      ? "text-sm text-emerald-200"
+                      : "text-sm text-rose-200"
+                  }
                 >
-                  <span
-                    className="flex size-14 shrink-0 items-center justify-center rounded-2xl text-slate-900 shadow-sm transition-transform duration-200 group-hover:scale-105 dark:text-white"
-                    style={{ background: accentGradient }}
-                  >
-                    <Icon className="size-6" />
-                  </span>
-                  <span className="flex flex-col">
-                    <span className="text-lg font-semibold tracking-tight text-white">
-                      {t(`channels.${channel.id}.label`)}
-                    </span>
-                    <span className="text-sm text-white/55">
-                      {t(`channels.${channel.id}.value`)}
-                    </span>
-                  </span>
-                </a>
-              )
-            })}
-          </div>
+                  {t(`form.${formStatus}`)}
+                </p>
+              ) : null}
+            </div>
+          </form>
         </div>
 
-        <div className="flex flex-col items-center gap-6 border-t border-white/10 pt-8">
+        <a
+          data-contact-reveal
+          href={`mailto:${contactEmail}?subject=Portfolio%20enquiry`}
+          aria-label={`Email ${contactEmail}`}
+          className="contact-signal-line group flex items-center justify-between gap-5 border-y border-white/18 py-7 sm:py-9"
+        >
+          <span className="text-[clamp(1.65rem,5.2vw,4.8rem)] leading-none font-medium tracking-[-0.045em] break-all text-white">
+            andres.izbri@gmail.com
+          </span>
+          <span className="flex size-12 shrink-0 items-center justify-center rounded-full border border-white/24 transition-transform duration-300 group-hover:rotate-12 group-hover:bg-white group-hover:text-slate-950 sm:size-16">
+            <ArrowUpRight className="size-5 sm:size-7" />
+          </span>
+        </a>
+
+        <div
+          data-contact-reveal
+          className="flex flex-col gap-6 pt-8 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-10 sm:gap-y-5"
+        >
+          {contactChannels.map((channel) => (
+            <a
+              key={channel.id}
+              href={channel.href}
+              {...(channel.external
+                ? { target: "_blank", rel: "noopener noreferrer" }
+                : {})}
+              className="group inline-flex items-center gap-2 text-sm font-medium text-white/66 transition-colors hover:text-white"
+            >
+              {t(`channels.${channel.id}.label`)}
+              <ArrowUpRight className="size-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+            </a>
+          ))}
+
           <a
             href="/cv.pdf"
             download
-            className="inline-flex items-center gap-2.5 rounded-full px-8 py-3.5 text-sm font-semibold text-slate-900 transition-all duration-200 hover:-translate-y-px hover:brightness-[1.06] hover:shadow-lg dark:text-white"
-            style={{ background: accentGradient }}
+            className="group inline-flex items-center gap-2 text-sm font-medium text-white/66 transition-colors hover:text-white"
           >
-            <Download className="size-4" />
+            <Download className="size-3.5" />
             {t("downloadCv")}
           </a>
-          <p className="text-center text-xs text-white/40">
-            {t("footer", { year: new Date().getFullYear() })}
-          </p>
+
+          <SiteBrandMark
+            inverted
+            compact
+            showCopyright
+            className="pt-3 sm:ml-auto sm:items-end sm:pt-0"
+          />
         </div>
       </div>
     </section>

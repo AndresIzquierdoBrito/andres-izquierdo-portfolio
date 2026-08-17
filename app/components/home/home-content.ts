@@ -135,10 +135,9 @@ export const homeGradientPalettes: Record<ThemeMode, HomeGradientPalette> = {
       orbBottomLeft: "rgba(234,179,8,0.16)",
     },
     contact: {
-      backgroundBase:
-        "linear-gradient(160deg, #0f3d3a 0%, #134e4a 45%, #1a5c4a 100%)",
-      orbTopLeft: "rgba(234,179,8,0.26)",
-      orbBottomRight: "rgba(39,255,195,0.28)",
+      backgroundBase: "#103f3a",
+      orbTopLeft: "rgba(234,179,8,0.12)",
+      orbBottomRight: "rgba(39,255,195,0.14)",
     },
   },
   dark: {
@@ -162,10 +161,9 @@ export const homeGradientPalettes: Record<ThemeMode, HomeGradientPalette> = {
       orbBottomLeft: "rgba(34,211,238,0.20)",
     },
     contact: {
-      backgroundBase:
-        "linear-gradient(160deg, #0b1224 0%, #111d36 45%, #15203a 100%)",
-      orbTopLeft: "rgba(129,140,248,0.24)",
-      orbBottomRight: "rgba(34,211,238,0.22)",
+      backgroundBase: "#0b1220",
+      orbTopLeft: "rgba(129,140,248,0.12)",
+      orbBottomRight: "rgba(34,211,238,0.12)",
     },
   },
 }

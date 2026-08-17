@@ -20,7 +20,8 @@ const enCommon = {
       eyebrow: "Background",
       title: "Building software with a product and design lens.",
       body: "Product-minded software engineer with experience across full-stack development, SaaS products, and design-driven environments.",
-      body2: "The timeline below is the factual backbone — projects and contact fill in around it.",
+      body2:
+        "The timeline below is the factual backbone — projects and contact fill in around it.",
       currentFocus: "Current focus",
     },
     projects: {
@@ -30,10 +31,25 @@ const enCommon = {
       comingSoon: "Coming soon",
       caseStudy: "Case study",
     },
+    projectDashboard: {
+      eyebrow: "Want the live view?",
+      title: "Want to go a little deeper?",
+      description:
+        "See my apps running, check their uptime, and peek at response times, deployments, and the details behind each build.",
+      cta: "See what’s live",
+      monitor: "Live apps",
+      online: "Online",
+      metrics: {
+        uptime: "Uptime",
+        latency: "Latency",
+        deployments: "Deployments",
+      },
+    },
     contact: {
       eyebrow: "Contact",
-      title: "Make the final step the easiest one.",
-      lead: "Have a project in mind, or just want to say hi? Drop a message below — I read and reply to every one.",
+      status: "Available for the right project",
+      title: "Have something worth building? Let's talk.",
+      lead: "Tell me what you are working on, where it is stuck, or what you want to make better. I read every email and reply personally.",
       downloadCv: "Download CV",
       form: {
         name: "Name",
@@ -43,6 +59,9 @@ const enCommon = {
         message: "Message",
         messagePlaceholder: "Tell me a bit about what you have in mind...",
         submit: "Send message",
+        submitting: "Sending...",
+        success: "Message sent — I’ll get back to you soon.",
+        error: "Something went wrong. Please try again.",
       },
       channels: {
         email: { label: "Email", value: "andres.izbri@gmail.com" },
@@ -111,6 +130,11 @@ const enCommon = {
       cambridgeC1: {
         title: "English — C1",
         issuer: "Cambridge English Qualifications",
+        status: "Obtained",
+      },
+      awsCloudPractitioner: {
+        title: "AWS Certified Cloud Practitioner",
+        issuer: "Amazon Web Services",
         status: "Obtained",
       },
     },
