@@ -31,7 +31,7 @@ type ScreenshotSlot = {
 
 // Three fixed slots that orbit the central icon
 const screenshotSlots: ScreenshotSlot[] = [
-  { top: "3%",    left: "0%",   rotate: -8,  zIndex: 1 },
+  { top: "11%",   left: "0%",   rotate: -8,  zIndex: 1 },
   { top: "1%",    right: "0%",  rotate:  7,  zIndex: 2 },
   { bottom: "2%", right: "4%",  rotate:  10, zIndex: 1 },
 ]
@@ -66,7 +66,7 @@ function ScreenshotWindow({
       </div>
       <div
         className={cn(
-          "min-h-0 flex-1 overflow-auto bg-slate-100/90 dark:bg-slate-900/90",
+          "min-h-0 flex-1 overflow-hidden bg-slate-100/90 dark:bg-slate-900/90",
           expanded && "max-h-[calc(85svh-2.5rem)]",
         )}
       >
@@ -74,7 +74,7 @@ function ScreenshotWindow({
           src={src}
           alt={alt}
           draggable={false}
-          className="block h-auto w-full object-contain object-top"
+          className="block h-full w-full object-contain object-top"
         />
       </div>
     </div>
@@ -200,18 +200,9 @@ function ScreenshotLightbox({
   useEffect(() => {
     if (!closing) return
 
-    const timeline = timelineRef.current
-    if (!timeline || reducedMotionRef.current) {
-      onClosed()
-      return
-    }
-
-    timeline.eventCallback("onReverseComplete", onClosed)
-    timeline.reverse()
-
-    return () => {
-      timeline.eventCallback("onReverseComplete", null)
-    }
+    // Close immediately. The lightbox's opening animation is intentional, but
+    // reversing it on dismissal makes the viewer feel slow to exit.
+    onClosed()
   }, [closing, onClosed])
 
   if (typeof document === "undefined") return null
@@ -450,9 +441,30 @@ export default function ProjectCard({
 
         {/* Name + description */}
         <div className="mt-4 space-y-2">
-          <h3 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white lg:text-[1.55rem]">
-            {content.name}
-          </h3>
+          {card.projectUrl ? (
+            <a
+              href={card.projectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`Open ${content.name} website`}
+              onClick={(event) => event.stopPropagation()}
+              className="group/title inline-block rounded-sm text-slate-950 focus-visible:outline-none dark:text-white"
+            >
+              <h3 className="text-2xl font-semibold tracking-tight lg:text-[1.55rem]">
+                <span className="relative inline-block">
+                  <span
+                    aria-hidden="true"
+                    className="pointer-events-none absolute inset-x-[-0.08em] bottom-[0.08em] h-[0.34em] origin-left scale-x-0 rounded-sm bg-gradient-to-r from-emerald-300/80 via-emerald-200/70 to-cyan-200/70 transition-transform duration-300 ease-out group-hover/title:scale-x-100 group-focus-visible/title:scale-x-100 dark:from-cyan-300/70 dark:via-indigo-300/55 dark:to-cyan-200/50"
+                  />
+                  <span className="relative">{content.name}</span>
+                </span>
+              </h3>
+            </a>
+          ) : (
+            <h3 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white lg:text-[1.55rem]">
+              {content.name}
+            </h3>
+          )}
           <p className="line-clamp-2 text-[0.82rem] leading-6 text-slate-600 dark:text-white/65">
             {content.description}
           </p>
