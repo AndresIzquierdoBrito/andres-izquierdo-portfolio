@@ -6,6 +6,46 @@ import HomeProjectsSection from "~/components/home/HomeProjectsSection"
 import ProjectsDashboardBanner from "~/components/home/ProjectsDashboardBanner"
 import { useActiveHomeSection } from "~/components/home/useActiveHomeSection"
 
+import type { Route } from "./+types/home"
+
+export function meta(_: Route.MetaArgs) {
+  return [
+    {
+      title: "Andrés Izquierdo — Software Engineer",
+    },
+    {
+      name: "description",
+      content:
+        "Portfolio of Andrés Izquierdo, a software engineer building full-stack products, interfaces, and reliable systems.",
+    },
+    {
+      name: "author",
+      content: "Andrés Izquierdo",
+    },
+    {
+      name: "robots",
+      content: "index, follow",
+    },
+    {
+      property: "og:title",
+      content: "Andrés Izquierdo — Software Engineer",
+    },
+    {
+      property: "og:description",
+      content:
+        "Software engineer building full-stack products, interfaces, and reliable systems.",
+    },
+    {
+      property: "og:type",
+      content: "website",
+    },
+    {
+      name: "twitter:card",
+      content: "summary",
+    },
+  ]
+}
+
 export default function Home() {
   const activeSection = useActiveHomeSection()
 

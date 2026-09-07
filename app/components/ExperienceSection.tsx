@@ -29,7 +29,7 @@ type EducationEntryMeta = {
 }
 
 type CertificationMeta = {
-  id: "cambridgeC1" | "awsCloudPractitioner"
+  id: "cambridgeC1"
   /** Path to the issuer's logo image (e.g. "/logos/cambridge-english.svg") */
   logoSrc?: string
 }
@@ -87,10 +87,6 @@ const certificationMeta: CertificationMeta[] = [
     id: "cambridgeC1",
     logoSrc: "/logos/cambridge-english.svg",
   },
-  {
-    id: "awsCloudPractitioner",
-    logoSrc: "/logos/aws-cloud-practitioner.png",
-  },
 ]
 
 const inactivePanelState = {
@@ -130,7 +126,7 @@ function ExperienceAvatar({
       <span
         className={cn(
           "flex size-full items-center justify-center overflow-hidden rounded-full text-lg font-medium sm:text-xl md:text-2xl",
-          tone
+          logoSrc ? "bg-white text-slate-950" : tone
         )}
       >
         {logoSrc ? (
