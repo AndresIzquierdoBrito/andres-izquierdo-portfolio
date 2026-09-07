@@ -30,3 +30,9 @@ COPY --from=production-dependencies-env /app/node_modules ./node_modules
 COPY --from=build-env /app/build ./build
 
 CMD ["node_modules/.bin/react-router-serve", "./build/server/index.js"]
+
+ENV NODE_ENV=production
+ENV HOST=0.0.0.0
+ENV PORT=3000
+
+EXPOSE 3000
