@@ -467,12 +467,19 @@ export default function ProjectCard({
 
           {/* Central app icon — pointer-events-none so it doesn't block screenshot hover */}
           <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-            <div className="flex size-14 items-center justify-center rounded-2xl border border-black/10 bg-white shadow-[0_8px_28px_-6px_rgba(15,23,42,0.28)] ring-4 ring-[rgba(39,255,195,0.32)] sm:size-16 dark:border-white/16 dark:bg-slate-900 dark:ring-[rgba(99,102,241,0.38)]">
+            <div
+              className={cn(
+                "flex items-center justify-center border border-black/10 bg-white shadow-[0_8px_28px_-6px_rgba(15,23,42,0.28)] ring-4 ring-[rgba(39,255,195,0.32)] dark:border-white/16 dark:bg-slate-900 dark:ring-[rgba(99,102,241,0.38)]",
+                card.iconSrc
+                  ? "size-20 rounded-3xl sm:size-24"
+                  : "size-14 rounded-2xl sm:size-16",
+              )}
+            >
               {card.iconSrc ? (
                 <img
                   src={card.iconSrc}
                   alt={card.name}
-                  className="size-9 rounded-xl object-contain sm:size-10"
+                  className="size-14 rounded-2xl object-contain sm:size-18"
                 />
               ) : (
                 <span className="select-none text-xl font-bold text-slate-400 dark:text-white/35">
