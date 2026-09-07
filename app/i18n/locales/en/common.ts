@@ -2,7 +2,7 @@ const enCommon = {
   hero: {
     title: "I'm Andrés Izquierdo",
     description:
-      "I build software and design interfaces. I like understanding the problem before writing the code.",
+      "I'm a software engineer and I design interfaces. I spend my time putting electricity into sand and hoping it listens to me.",
     toolbar: {
       languageHint: "Switch between English and Spanish.",
       themeHint: "Toggle dark mode.",
@@ -56,7 +56,7 @@ const enCommon = {
         email: "Email",
         emailPlaceholder: "you@email.com",
         message: "Message",
-        messagePlaceholder: "What's on your mind?",
+        messagePlaceholder: "Don't be shy! Tell me what's on your mind.",
         submit: "Send it",
         submitting: "Sending...",
         success: "Message sent. I'll get back to you soon.",
@@ -75,7 +75,7 @@ const enCommon = {
     eyebrow: "Career",
     title: "Experience",
     description:
-      "Full-stack engineering across product, SaaS, and design-driven environments.",
+      "Full-stack engineering across product, corporate software, SaaS, and design.",
     entries: {
       dst: {
         company: "Dst · Design Strategy Technology",
@@ -102,11 +102,10 @@ const enCommon = {
     },
   },
   education: {
-    tab: "Studies",
+    tab: "Education",
     eyebrow: "Learning",
-    title: "Studies & Certifications",
-    description:
-      "A record of my studies, certifications, and learning throughout my career—both completed and ongoing.",
+    title: "Education",
+    description: "My degrees, certifications, and ongoing learning.",
     ongoing: "Ongoing",
     present: "Present",
     certifications: "Certifications",

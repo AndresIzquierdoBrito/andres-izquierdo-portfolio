@@ -4,9 +4,10 @@ import { BookOpen, ExternalLink, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import gsap from "gsap"
 
+import { resolveAppLanguage } from "~/i18n/settings"
 import { cn } from "~/lib/utils"
 
-import type { ProjectCardData } from "./home-content"
+import { getProjectContent, type ProjectCardData } from "./home-content"
 
 // Re-export so callers don't need two imports
 export type { ProjectCardData }
@@ -356,7 +357,13 @@ export default function ProjectCard({
   index: number
   className?: string
 }) {
-  const { t } = useTranslation("common", { keyPrefix: "sections.projects" })
+  const { t, i18n } = useTranslation("common", {
+    keyPrefix: "sections.projects",
+  })
+  const content = getProjectContent(
+    card,
+    resolveAppLanguage(i18n.resolvedLanguage ?? i18n.language),
+  )
   const toneClass = toneClasses[index % toneClasses.length]
   const [lightbox, setLightbox] = useState<ScreenshotLightboxState | null>(null)
   const [closing, setClosing] = useState(false)
@@ -424,7 +431,7 @@ export default function ProjectCard({
         {/* Header row */}
         <div className="flex items-start justify-between gap-4">
           <p className="font-mono text-[0.65rem] font-semibold tracking-[0.18em] text-slate-500 uppercase dark:text-white/45">
-            {card.eyebrow}
+            {content.eyebrow}
           </p>
 
           {card.stack?.length ? (
@@ -444,10 +451,10 @@ export default function ProjectCard({
         {/* Name + description */}
         <div className="mt-4 space-y-2">
           <h3 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white lg:text-[1.55rem]">
-            {card.name}
+            {content.name}
           </h3>
           <p className="line-clamp-2 text-[0.82rem] leading-6 text-slate-600 dark:text-white/65">
-            {card.description}
+            {content.description}
           </p>
         </div>
 
@@ -459,7 +466,7 @@ export default function ProjectCard({
               slot={slot}
               src={card.screenshots?.[si]}
               toneClass={toneClass}
-              projectName={card.name}
+              projectName={content.name}
               screenshotIndex={si}
               onOpen={openLightbox}
             />
@@ -483,13 +490,13 @@ export default function ProjectCard({
                   />
                   <img
                     src={card.iconSrc}
-                    alt={card.name}
+                    alt={content.name}
                     className="relative z-10 size-24 object-contain drop-shadow-[0_0_12px_rgba(255,132,97,0.72)] sm:size-32 sm:drop-shadow-[0_0_18px_rgba(255,132,97,0.72)] dark:drop-shadow-[0_0_16px_rgba(45,212,191,0.64)] dark:sm:drop-shadow-[0_0_24px_rgba(45,212,191,0.64)]"
                   />
                 </>
               ) : (
                 <span className="select-none text-xl font-bold text-slate-400 dark:text-white/35">
-                  {card.name.charAt(0)}
+                  {content.name.charAt(0)}
                 </span>
               )}
             </div>

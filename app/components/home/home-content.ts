@@ -9,6 +9,7 @@ import {
   RaspberryIcon,
   TypeScriptIcon,
 } from "~/components/icons"
+import type { AppLanguage } from "~/i18n/settings"
 import type { ThemeMode } from "~/lib/theme"
 
 export type FocusToolIcon = LucideIcon | ComponentType<SVGProps<SVGSVGElement>>
@@ -27,12 +28,17 @@ export const currentFocusTools = [
   { label: "Raspberry", icon: RaspberryIcon },
 ] as const satisfies readonly FocusTool[]
 
-export type ProjectCardData = {
+export type ProjectContent = {
   eyebrow: string
   name: string
   /** Short phrase shown as the section heading when this card is active */
   tagline: string
   description: string
+}
+
+export type ProjectCardData = {
+  /** Every project must provide copy for each supported language. */
+  translations: Record<AppLanguage, ProjectContent>
   /** Path to the app icon image (e.g. "/icons/myapp.png") */
   iconSrc?: string
   /** 1-3 icons representing the project's stack, shown top-right of the card */
@@ -45,13 +51,31 @@ export type ProjectCardData = {
   caseStudyUrl?: string
 }
 
+export function getProjectContent(
+  card: ProjectCardData,
+  language: AppLanguage,
+): ProjectContent {
+  return card.translations[language]
+}
+
 export const projectPreviewCards: readonly ProjectCardData[] = [
   {
-    eyebrow: "Proyecto destacado",
-    name: "ApunteX",
-    tagline: "Tus apuntes, ordenados y listos para estudiar.",
-    description:
-      "Una app para organizar apuntes y estudiar con tus propias fuentes. La IA ayuda, pero tus documentos siguen mandando.",
+    translations: {
+      en: {
+        eyebrow: "Featured project",
+        name: "ApunteX",
+        tagline: "Your notes, organised and ready to study.",
+        description:
+          "An app for organising notes and studying from your own sources. AI lends a hand, but your documents stay in charge.",
+      },
+      es: {
+        eyebrow: "Proyecto destacado",
+        name: "ApunteX",
+        tagline: "Tus apuntes, ordenados y listos para estudiar.",
+        description:
+          "Una app para organizar apuntes y estudiar con tus propias fuentes. La IA ayuda, pero tus documentos siguen mandando.",
+      },
+    },
     iconSrc: "/projects_media/apuntex/apuntex_logo.png",
     screenshots: [
       "/projects_media/apuntex/apuntex_sc1.png",
@@ -61,34 +85,84 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     projectUrl: "https://apuntex.com",
   },
   {
-    eyebrow: "Projects",
-    name: "Coming soon!",
-    tagline: "Coming soon!",
-    description: "Coming soon!",
+    translations: {
+      en: {
+        eyebrow: "Projects",
+        name: "Coming soon!",
+        tagline: "Coming soon!",
+        description: "Coming soon!",
+      },
+      es: {
+        eyebrow: "Proyectos",
+        name: "¡Próximamente!",
+        tagline: "¡Próximamente!",
+        description: "¡Próximamente!",
+      },
+    },
   },
   {
-    eyebrow: "Projects",
-    name: "Coming soon!",
-    tagline: "Coming soon!",
-    description: "Coming soon!",
+    translations: {
+      en: {
+        eyebrow: "Projects",
+        name: "Coming soon!",
+        tagline: "Coming soon!",
+        description: "Coming soon!",
+      },
+      es: {
+        eyebrow: "Proyectos",
+        name: "¡Próximamente!",
+        tagline: "¡Próximamente!",
+        description: "¡Próximamente!",
+      },
+    },
   },
   {
-    eyebrow: "Projects",
-    name: "Coming soon!",
-    tagline: "Coming soon!",
-    description: "Coming soon!",
+    translations: {
+      en: {
+        eyebrow: "Projects",
+        name: "Coming soon!",
+        tagline: "Coming soon!",
+        description: "Coming soon!",
+      },
+      es: {
+        eyebrow: "Proyectos",
+        name: "¡Próximamente!",
+        tagline: "¡Próximamente!",
+        description: "¡Próximamente!",
+      },
+    },
   },
   {
-    eyebrow: "Projects",
-    name: "Coming soon!",
-    tagline: "Coming soon!",
-    description: "Coming soon!",
+    translations: {
+      en: {
+        eyebrow: "Projects",
+        name: "Coming soon!",
+        tagline: "Coming soon!",
+        description: "Coming soon!",
+      },
+      es: {
+        eyebrow: "Proyectos",
+        name: "¡Próximamente!",
+        tagline: "¡Próximamente!",
+        description: "¡Próximamente!",
+      },
+    },
   },
   {
-    eyebrow: "Projects",
-    name: "Coming soon!",
-    tagline: "Coming soon!",
-    description: "Coming soon!",
+    translations: {
+      en: {
+        eyebrow: "Projects",
+        name: "Coming soon!",
+        tagline: "Coming soon!",
+        description: "Coming soon!",
+      },
+      es: {
+        eyebrow: "Proyectos",
+        name: "¡Próximamente!",
+        tagline: "¡Próximamente!",
+        description: "¡Próximamente!",
+      },
+    },
   },
 ]
 

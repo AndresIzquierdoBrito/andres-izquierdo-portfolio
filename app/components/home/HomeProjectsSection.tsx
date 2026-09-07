@@ -3,16 +3,20 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import gsap from "gsap"
 import { useTranslation } from "react-i18next"
 
-import { projectPreviewCards } from "./home-content"
+import { getProjectContent, projectPreviewCards } from "./home-content"
 import ProjectCarousel from "./ProjectCarousel"
 import SectionBadge from "./SectionBadge"
 
 const CAROUSEL_ANIMATION_MS = 1700
 
 export default function HomeProjectsSection() {
-  const { t } = useTranslation("common", { keyPrefix: "sections.projects" })
-  const [activeIndex, setActiveIndex] = useState(() =>
-    0
+  const { t, i18n } = useTranslation("common", {
+    keyPrefix: "sections.projects",
+  })
+  const [activeIndex, setActiveIndex] = useState(0)
+  const activeProject = getProjectContent(
+    projectPreviewCards[activeIndex],
+    i18n.resolvedLanguage === "es" ? "es" : "en",
   )
   const [animating, setAnimating] = useState(false)
   const animatingTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
@@ -103,11 +107,11 @@ export default function HomeProjectsSection() {
               ref={taglineRef}
               className="font-heading text-3xl leading-tight font-light tracking-[-0.035em] text-slate-950 sm:text-5xl lg:text-[3.35rem] dark:text-white"
             >
-              {projectPreviewCards[activeIndex].tagline}
+              {activeProject.tagline}
             </h2>
           </div>
           <p className="max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-white/70">
-            {projectPreviewCards[activeIndex].description}
+            {activeProject.description}
           </p>
         </div>
 

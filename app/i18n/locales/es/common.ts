@@ -56,7 +56,7 @@ const esCommon = {
         email: "Correo",
         emailPlaceholder: "tucorreo@email.com",
         message: "Mensaje",
-        messagePlaceholder: "¿Qué tienes en mente?",
+        messagePlaceholder: "¡No seas tímido! Cuéntame lo que quieras.",
         submit: "Enviar",
         submitting: "Enviando...",
         success: "Mensaje enviado. Te responderé pronto.",
@@ -78,7 +78,7 @@ const esCommon = {
     eyebrow: "Carrera",
     title: "Experiencia",
     description:
-      "Ingeniería full-stack en entornos de producto, SaaS y diseño.",
+      "Ingeniería full-stack en entornos de producto, software corporativo, SaaS y diseño.",
     entries: {
       dst: {
         company: "Dst · Design Strategy Technology",
@@ -105,11 +105,10 @@ const esCommon = {
     },
   },
   education: {
-    tab: "Estudios",
+    tab: "Educación",
     eyebrow: "Aprendizaje",
-    title: "Estudios y certificaciones",
-    description:
-      "Un recorrido por mis estudios, certificaciones y aprendizajes, tanto completados como en curso, a lo largo de mi carrera.",
+    title: "Educación",
+    description: "Mis títulos, certificaciones y aprendizaje continuo.",
     ongoing: "En curso",
     present: "Presente",
     certifications: "Certificaciones",
