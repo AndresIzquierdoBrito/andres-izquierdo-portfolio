@@ -85,7 +85,7 @@ const educationEntryMeta: EducationEntryMeta[] = [
 const certificationMeta: CertificationMeta[] = [
   {
     id: "cambridgeC1",
-    logoSrc: "/logos/cambridge-english.svg",
+    logoSrc: "/logos/cambridge-assesment.png",
   },
 ]
 

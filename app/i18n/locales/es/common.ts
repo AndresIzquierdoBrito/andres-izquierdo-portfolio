@@ -2,7 +2,7 @@ const esCommon = {
   hero: {
     title: "Soy Andrés Izquierdo",
     description:
-      "Ingeniero de software, diseñador y creador que da forma a interfaces y sistemas con mentalidad de producto.",
+      "Hago software y diseño interfaces. Me gusta entender bien el problema antes de ponerme a escribir código.",
     toolbar: {
       languageHint: "Alterna entre inglés y español.",
       themeHint: "Alterna el modo oscuro.",
@@ -18,25 +18,25 @@ const esCommon = {
   sections: {
     about: {
       eyebrow: "Trayectoria",
-      title: "Construyo software con mirada de producto y diseño.",
-      body: "Ingeniero de software con mentalidad de producto y experiencia en desarrollo full-stack, productos SaaS y entornos orientados al diseño.",
+      title: "Me gusta hacer cosas que funcionan y se entienden.",
+      body: "Soy ingeniero de software y trabajo entre el código, el diseño y el producto. Me gusta involucrarme en todo el proceso: entender el problema, probar ideas y dejar una solución fácil de usar y mantener.",
       body2:
-        "La trayectoria de abajo es la columna vertebral — los proyectos y el contacto se construyen a su alrededor.",
-      currentFocus: "Enfoque actual",
+        "Aquí puedes ver en qué he trabajado, qué estoy aprendiendo y algunas cosas que he construido por mi cuenta.",
+      currentFocus: "Con lo que estoy trabajando",
     },
     projects: {
       eyebrow: "Proyectos",
-      title: "Los casos de estudio son la siguiente capa por construir.",
+      title: "Algunas cosas que he construido.",
       viewProject: "Ver proyecto",
       comingSoon: "Próximamente",
       caseStudy: "Caso de estudio",
     },
     projectDashboard: {
-      eyebrow: "¿Quieres verlo en vivo?",
-      title: "¿Quieres verlo un poco más a fondo?",
+      eyebrow: "¿Quieres verlo funcionando?",
+      title: "Puedes echarle un vistazo.",
       description:
-        "Mira mis apps en funcionamiento, consulta su uptime y echa un vistazo a los tiempos de respuesta, despliegues y detalles de cada proyecto.",
-      cta: "Ver qué está online",
+        "Aquí puedes ver mis apps en directo, comprobar si están online y curiosear un poco cómo están montadas.",
+      cta: "Ver las apps",
       monitor: "Apps en vivo",
       online: "En línea",
       metrics: {
@@ -47,8 +47,8 @@ const esCommon = {
     },
     contact: {
       eyebrow: "Contacto",
-      title: "¿Tienes algo que merezca la pena construir? Hablemos.",
-      lead: "Cuéntame qué estás construyendo, dónde se ha atascado o qué quieres mejorar. Leo cada correo y respondo personalmente.",
+      title: "¿Tienes algo en mente? Escríbeme.",
+      lead: "Si tienes una idea, algo atascado o simplemente quieres hablar de software, escríbeme. Lo leo todo y respondo yo.",
       downloadCv: "Descargar CV",
       form: {
         name: "Nombre",
@@ -56,11 +56,11 @@ const esCommon = {
         email: "Correo",
         emailPlaceholder: "tucorreo@email.com",
         message: "Mensaje",
-        messagePlaceholder: "Cuéntame un poco sobre lo que tienes en mente...",
-        submit: "Enviar mensaje",
+        messagePlaceholder: "¿Qué tienes en mente?",
+        submit: "Enviar",
         submitting: "Enviando...",
-        success: "Mensaje enviado — te responderé pronto.",
-        error: "Ha ocurrido un error. Inténtalo de nuevo.",
+        success: "Mensaje enviado. Te responderé pronto.",
+        error: "No ha podido enviarse. Prueba otra vez.",
       },
       channels: {
         email: { label: "Correo", value: "andres.izbri@gmail.com" },

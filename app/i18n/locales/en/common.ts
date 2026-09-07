@@ -2,7 +2,7 @@ const enCommon = {
   hero: {
     title: "I'm Andrés Izquierdo",
     description:
-      "Software engineer, designer, and creator shaping product-minded interfaces and systems.",
+      "I build software and design interfaces. I like understanding the problem before writing the code.",
     toolbar: {
       languageHint: "Switch between English and Spanish.",
       themeHint: "Toggle dark mode.",
@@ -18,25 +18,25 @@ const enCommon = {
   sections: {
     about: {
       eyebrow: "Background",
-      title: "Building software with a product and design lens.",
-      body: "Product-minded software engineer with experience across full-stack development, SaaS products, and design-driven environments.",
+      title: "I like making things that work and make sense.",
+      body: "I'm a software engineer working across code, design, and product. I like being involved from the first question to the last detail: understand the problem, try things, and leave behind something that's easy to use and maintain.",
       body2:
-        "The timeline below is the factual backbone — projects and contact fill in around it.",
-      currentFocus: "Current focus",
+        "This is where you can see what I've worked on, what I'm learning, and a few things I've built on my own.",
+      currentFocus: "What I'm working with",
     },
     projects: {
       eyebrow: "Projects",
-      title: "Case studies are the next layer to land here.",
+      title: "A few things I've built.",
       viewProject: "View project",
       comingSoon: "Coming soon",
       caseStudy: "Case study",
     },
     projectDashboard: {
-      eyebrow: "Want the live view?",
-      title: "Want to go a little deeper?",
+      eyebrow: "Want to see it working?",
+      title: "Take a look.",
       description:
-        "See my apps running, check their uptime, and peek at response times, deployments, and the details behind each build.",
-      cta: "See what’s live",
+        "You can see my apps live, check whether they're online, and peek at how they're put together.",
+      cta: "See the apps",
       monitor: "Live apps",
       online: "Online",
       metrics: {
@@ -47,8 +47,8 @@ const enCommon = {
     },
     contact: {
       eyebrow: "Contact",
-      title: "Have something worth building? Let's talk.",
-      lead: "Tell me what you are working on, where it is stuck, or what you want to make better. I read every email and reply personally.",
+      title: "Have something in mind? Drop me a line.",
+      lead: "If you have an idea, something stuck, or just want to talk software, drop me a line. I read everything and reply myself.",
       downloadCv: "Download CV",
       form: {
         name: "Name",
@@ -56,11 +56,11 @@ const enCommon = {
         email: "Email",
         emailPlaceholder: "you@email.com",
         message: "Message",
-        messagePlaceholder: "Tell me a bit about what you have in mind...",
-        submit: "Send message",
+        messagePlaceholder: "What's on your mind?",
+        submit: "Send it",
         submitting: "Sending...",
-        success: "Message sent — I’ll get back to you soon.",
-        error: "Something went wrong. Please try again.",
+        success: "Message sent. I'll get back to you soon.",
+        error: "That didn't go through. Try again.",
       },
       channels: {
         email: { label: "Email", value: "andres.izbri@gmail.com" },

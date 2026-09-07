@@ -49,9 +49,9 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
   {
     eyebrow: "Proyecto destacado",
     name: "ApunteX",
-    tagline: "Tus notas, por fin listas para enseñarte.",
+    tagline: "Tus apuntes, ordenados y listos para estudiar.",
     description:
-      "Organiza tus notas, lee cada fuente y estudia con IA especializada: un espacio tranquilo donde tus archivos son la única fuente de verdad.",
+      "Una app para organizar apuntes y estudiar con tus propias fuentes. La IA ayuda, pero tus documentos siguen mandando.",
     iconSrc: "/projects_media/apuntex/apuntex_logo.png",
     screenshots: [
       "/projects_media/apuntex/apuntex_sc1.png",
