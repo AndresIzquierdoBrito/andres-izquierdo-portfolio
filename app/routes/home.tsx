@@ -5,8 +5,17 @@ import HomeHeroSection from "~/components/home/HomeHeroSection"
 import HomeProjectsSection from "~/components/home/HomeProjectsSection"
 import ProjectsDashboardBanner from "~/components/home/ProjectsDashboardBanner"
 import { useActiveHomeSection } from "~/components/home/useActiveHomeSection"
+import { isAppLanguage } from "~/i18n/settings"
 
 import type { Route } from "./+types/home"
+
+export function loader({ params }: Route.LoaderArgs) {
+  if (!isAppLanguage(params.lang)) {
+    throw new Response("Not Found", { status: 404 })
+  }
+
+  return null
+}
 
 export function meta(_: Route.MetaArgs) {
   return [

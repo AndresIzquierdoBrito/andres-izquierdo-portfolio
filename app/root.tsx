@@ -5,9 +5,11 @@ import {
   Scripts,
   ScrollRestoration,
   isRouteErrorResponse,
+  useParams,
 } from "react-router"
 
 import AppI18nProvider from "~/i18n/provider"
+import { resolveAppLanguage } from "~/i18n/settings"
 
 import type { Route } from "./+types/root"
 import "./app.css"
@@ -22,8 +24,11 @@ const initialThemeScript = `(() => {
 })();`
 
 export function Layout({ children }: { children: React.ReactNode }) {
+  const { lang } = useParams()
+  const documentLanguage = resolveAppLanguage(lang)
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={documentLanguage} suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -33,18 +38,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body className="min-h-svh overflow-x-hidden">
-        <AppI18nProvider>
-          <div className="relative z-10">{children}</div>
-          <ScrollRestoration />
-          <Scripts />
-        </AppI18nProvider>
+        <div className="relative z-10">{children}</div>
+        <ScrollRestoration />
+        <Scripts />
       </body>
     </html>
   )
 }
 
 export default function App() {
-  return <Outlet />
+  const { lang } = useParams()
+  const language = resolveAppLanguage(lang)
+
+  return (
+    <AppI18nProvider language={language}>
+      <Outlet />
+    </AppI18nProvider>
+  )
 }
 
 export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {

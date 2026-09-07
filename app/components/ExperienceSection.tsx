@@ -368,12 +368,12 @@ function EducationPanel() {
               key={cert.id}
               className="flex items-center gap-4 py-4 first:pt-1 last:pb-1"
             >
-              <span className="flex size-18 shrink-0 items-center justify-center overflow-hidden rounded-2xl border border-amber-300/70 bg-white p-2 dark:border-indigo-400/35 dark:bg-slate-950">
+              <span className="flex size-18 shrink-0 items-center justify-center overflow-hidden rounded-full border border-amber-300/70 bg-white p-2 dark:border-indigo-400/35 dark:bg-slate-950">
                 {cert.logoSrc ? (
                   <img
                     src={cert.logoSrc}
                     alt={t(`certs.${cert.id}.issuer`)}
-                    className="size-full object-contain"
+                    className="size-full rounded-full object-contain"
                   />
                 ) : (
                   t(`certs.${cert.id}.title`)

@@ -1,9 +1,10 @@
 import { useEffect } from "react"
 import { Download, MoonStar, Sun } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { useLocation, useNavigate } from "react-router"
 
 import { Button } from "~/components/ui/button"
-import { changeAppLanguage } from "~/i18n/language"
+import { persistLanguagePreference } from "~/i18n/language"
 import { languageOptions, resolveAppLanguage } from "~/i18n/settings"
 import {
   applyThemeMode,
@@ -32,6 +33,8 @@ function CvButton({ label, className }: { label: string; className?: string }) {
 
 export default function HomeHeroToolbar() {
   const { i18n, t } = useTranslation("common", { keyPrefix: "hero.toolbar" })
+  const location = useLocation()
+  const navigate = useNavigate()
 
   useEffect(() => {
     const initialThemeMode = resolveInitialThemeMode()
@@ -71,7 +74,19 @@ export default function HomeHeroToolbar() {
                 aria-pressed={isActive}
                 aria-label={option.description}
                 onClick={() => {
-                  void changeAppLanguage(i18n, option.value)
+                  if (isActive) {
+                    return
+                  }
+
+                  persistLanguagePreference(option.value)
+                  navigate(
+                    {
+                      pathname: `/${option.value}`,
+                      search: location.search,
+                      hash: location.hash,
+                    },
+                    { replace: true, preventScrollReset: true }
+                  )
                 }}
               >
                 {option.label}

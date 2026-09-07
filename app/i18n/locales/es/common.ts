@@ -2,7 +2,7 @@ const esCommon = {
   hero: {
     title: "Soy Andrés Izquierdo",
     description:
-      "Hago software y diseño interfaces. Me gusta entender bien el problema antes de ponerme a escribir código.",
+      "Ingeniero de software y diseño interfaces. Me dedico a meterle electricidad a la arena y esperar que me haga caso.",
     toolbar: {
       languageHint: "Alterna entre inglés y español.",
       themeHint: "Alterna el modo oscuro.",
@@ -105,11 +105,11 @@ const esCommon = {
     },
   },
   education: {
-    tab: "Educación",
+    tab: "Estudios",
     eyebrow: "Aprendizaje",
-    title: "Educación",
+    title: "Estudios y certificaciones",
     description:
-      "Un espacio dedicado a títulos, certificaciones y aprendizaje continuo, separado del historial laboral.",
+      "Un recorrido por mis estudios, certificaciones y aprendizajes, tanto completados como en curso, a lo largo de mi carrera.",
     ongoing: "En curso",
     present: "Presente",
     certifications: "Certificaciones",

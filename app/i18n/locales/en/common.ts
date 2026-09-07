@@ -102,11 +102,11 @@ const enCommon = {
     },
   },
   education: {
-    tab: "Education",
+    tab: "Studies",
     eyebrow: "Learning",
-    title: "Education",
+    title: "Studies & Certifications",
     description:
-      "A dedicated lane for degrees, certifications, and ongoing learning, separate from work so both stories can expand cleanly.",
+      "A record of my studies, certifications, and learning throughout my career—both completed and ongoing.",
     ongoing: "Ongoing",
     present: "Present",
     certifications: "Certifications",

@@ -109,7 +109,7 @@ export default function HomeAboutSection() {
                     key={tool.label}
                     className="relative z-10 flex min-h-32 flex-col items-center justify-center gap-3 px-2 py-5 text-center sm:min-h-32 sm:gap-3 sm:px-2 sm:py-5"
                   >
-                    <Icon className="size-14 text-foreground/85 sm:size-16 dark:text-white" />
+                    <Icon className="size-16 text-foreground/85 dark:text-white" />
                     <span className="font-mono text-[0.55rem] font-semibold tracking-[0.1em] text-foreground/70 uppercase sm:text-[0.62rem] dark:text-white/78">
                       {tool.label}
                     </span>

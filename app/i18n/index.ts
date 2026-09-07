@@ -1,4 +1,4 @@
-import i18n from "i18next"
+import { createInstance, type i18n as I18nInstance } from "i18next"
 import { initReactI18next } from "react-i18next"
 
 import { resources } from "~/i18n/resources"
@@ -6,31 +6,27 @@ import {
   defaultNamespace,
   fallbackLanguage,
   supportedLanguages,
+  type AppLanguage,
 } from "~/i18n/settings"
 
-if (!i18n.isInitialized) {
+export function createAppI18n(
+  language: AppLanguage = fallbackLanguage
+): I18nInstance {
+  const i18n = createInstance()
+
   void i18n.use(initReactI18next).init({
     resources,
     defaultNS: defaultNamespace,
     fallbackLng: fallbackLanguage,
-    lng: fallbackLanguage,
+    lng: language,
     ns: [defaultNamespace],
     supportedLngs: supportedLanguages,
     interpolation: {
       escapeValue: false,
     },
     returnNull: false,
+    initAsync: false,
   })
-} else {
-  for (const language of supportedLanguages) {
-    i18n.addResourceBundle(
-      language,
-      defaultNamespace,
-      resources[language][defaultNamespace],
-      true,
-      true
-    )
-  }
-}
 
-export { i18n }
+  return i18n
+}

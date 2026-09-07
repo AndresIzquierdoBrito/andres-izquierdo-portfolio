@@ -1,43 +1,31 @@
-import { useEffect, type ReactNode } from "react"
-import { I18nextProvider, useTranslation } from "react-i18next"
+import { useEffect, useMemo, type ReactNode } from "react"
+import { I18nextProvider } from "react-i18next"
 
-import { i18n } from "~/i18n"
-import { applyInitialLanguage } from "~/i18n/language"
-import { resolveAppLanguage } from "~/i18n/settings"
+import { createAppI18n } from "~/i18n"
+import { persistLanguagePreference } from "~/i18n/language"
+import type { AppLanguage } from "~/i18n/settings"
 
-function I18nEffects() {
-  const { i18n } = useTranslation()
-  const activeLanguage = resolveAppLanguage(
-    i18n.resolvedLanguage ?? i18n.language
-  )
-
+function I18nEffects({ language }: { language: AppLanguage }) {
   useEffect(() => {
-    document.documentElement.lang = activeLanguage
-  }, [activeLanguage])
-
-  useEffect(() => {
-    const abortController = new AbortController()
-
-    void applyInitialLanguage(i18n, abortController.signal).catch(
-      (error: unknown) => {
-        if (error instanceof DOMException && error.name === "AbortError") {
-          return
-        }
-
-        console.error("Failed to resolve the initial app language.", error)
-      }
-    )
-
-    return () => abortController.abort()
-  }, [i18n])
+    document.documentElement.lang = language
+    persistLanguagePreference(language)
+  }, [language])
 
   return null
 }
 
-export default function AppI18nProvider({ children }: { children: ReactNode }) {
+export default function AppI18nProvider({
+  children,
+  language,
+}: {
+  children: ReactNode
+  language: AppLanguage
+}) {
+  const appI18n = useMemo(() => createAppI18n(language), [language])
+
   return (
-    <I18nextProvider i18n={i18n}>
-      <I18nEffects />
+    <I18nextProvider i18n={appI18n}>
+      <I18nEffects language={language} />
       {children}
     </I18nextProvider>
   )
