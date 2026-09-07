@@ -469,17 +469,17 @@ export default function ProjectCard({
           <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
             <div
               className={cn(
-                "flex items-center justify-center border border-black/10 bg-white shadow-[0_8px_28px_-6px_rgba(15,23,42,0.28)] ring-4 ring-[rgba(39,255,195,0.32)] dark:border-white/16 dark:bg-slate-900 dark:ring-[rgba(99,102,241,0.38)]",
+                "flex items-center justify-center",
                 card.iconSrc
-                  ? "size-20 rounded-3xl sm:size-24"
-                  : "size-14 rounded-2xl sm:size-16",
+                  ? "size-24 rounded-none border-0 bg-transparent shadow-none ring-0 sm:size-32"
+                  : "size-14 rounded-2xl border border-black/10 bg-white shadow-[0_8px_28px_-6px_rgba(15,23,42,0.28)] ring-4 ring-[rgba(39,255,195,0.32)] sm:size-16 dark:border-white/16 dark:bg-slate-900 dark:ring-[rgba(99,102,241,0.38)]",
               )}
             >
               {card.iconSrc ? (
                 <img
                   src={card.iconSrc}
                   alt={card.name}
-                  className="size-14 rounded-2xl object-contain sm:size-18"
+                  className="size-24 object-contain sm:size-32"
                 />
               ) : (
                 <span className="select-none text-xl font-bold text-slate-400 dark:text-white/35">

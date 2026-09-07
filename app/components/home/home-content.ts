@@ -58,7 +58,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       "/projects_media/apuntex/apuntex_sc2.png",
       "/projects_media/apuntex/apuntex_sc3.png",
     ],
-    projectUrl: "https://app.apuntex.com/workspace",
+    projectUrl: "https://apuntex.com",
   },
   {
     eyebrow: "Projects",
