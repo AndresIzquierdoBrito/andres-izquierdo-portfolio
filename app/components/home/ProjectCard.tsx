@@ -71,12 +71,19 @@ function ScreenshotItem({
       }}
     >
       {src ? (
-        <img
-          src={src}
-          alt=""
-          draggable={false}
-          className="h-full w-full rounded-xl object-cover shadow-[0_8px_24px_-6px_rgba(15,23,42,0.28)] dark:shadow-[0_8px_24px_-6px_rgba(2,6,23,0.55)]"
-        />
+        <div className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.28)] dark:border-white/12 dark:bg-slate-800 dark:shadow-[0_8px_24px_-6px_rgba(2,6,23,0.55)]">
+          <div className="flex h-5 shrink-0 items-center gap-[5px] border-b border-black/8 bg-slate-50 px-2.5 dark:border-white/8 dark:bg-slate-700/60">
+            <span className="size-2 rounded-full bg-rose-400" />
+            <span className="size-2 rounded-full bg-amber-400" />
+            <span className="size-2 rounded-full bg-emerald-400" />
+          </div>
+          <img
+            src={src}
+            alt=""
+            draggable={false}
+            className="min-h-0 w-full flex-1 object-cover object-top"
+          />
+        </div>
       ) : (
         // Placeholder: macOS-style window chrome + tone gradient
         <div className="h-full w-full overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.18)] dark:border-white/12 dark:bg-slate-800">

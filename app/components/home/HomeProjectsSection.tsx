@@ -3,25 +3,20 @@ import { ArrowLeft, ArrowRight } from "lucide-react"
 import gsap from "gsap"
 import { useTranslation } from "react-i18next"
 
-import { useThemeMode } from "~/lib/useThemeMode"
-
-import { getHomeGradientPalette, projectPreviewCards } from "./home-content"
+import { projectPreviewCards } from "./home-content"
 import ProjectCarousel from "./ProjectCarousel"
 import SectionBadge from "./SectionBadge"
 
 const CAROUSEL_ANIMATION_MS = 1700
 
 export default function HomeProjectsSection() {
-  const { themeMode } = useThemeMode()
   const { t } = useTranslation("common", { keyPrefix: "sections.projects" })
   const [activeIndex, setActiveIndex] = useState(() =>
-    Math.floor(projectPreviewCards.length / 2)
+    0
   )
   const [animating, setAnimating] = useState(false)
   const animatingTimerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
   const taglineRef = useRef<HTMLHeadingElement>(null)
-  const palette = getHomeGradientPalette(themeMode)
-
   useLayoutEffect(() => {
     const el = taglineRef.current
     if (!el) return
@@ -55,14 +50,16 @@ export default function HomeProjectsSection() {
       id="projects"
       className="relative z-0 scroll-mt-6 overflow-hidden px-6 pt-14 pb-20 sm:px-12 sm:pt-20 sm:pb-24 xl:pr-28 xl:pl-44"
       style={{
-        backgroundImage: `linear-gradient(180deg, ${palette.projects.backgroundFrom}, ${palette.projects.backgroundTo})`,
+        backgroundImage:
+          "linear-gradient(180deg, var(--home-projects-background-from), var(--home-projects-background-to))",
       }}
     >
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10"
         style={{
-          backgroundImage: `radial-gradient(circle at top right, ${palette.projects.orbTopRight}, transparent 28%), radial-gradient(circle at bottom left, ${palette.projects.orbBottomLeft}, transparent 32%)`,
+          backgroundImage:
+            "radial-gradient(circle at top right, var(--home-projects-orb-top-right), transparent 28%), radial-gradient(circle at bottom left, var(--home-projects-orb-bottom-left), transparent 32%)",
         }}
       />
 
@@ -110,7 +107,7 @@ export default function HomeProjectsSection() {
             </h2>
           </div>
           <p className="max-w-2xl text-base leading-8 text-slate-600 sm:text-lg dark:text-white/70">
-            This section is wired into the rail already.
+            {projectPreviewCards[activeIndex].description}
           </p>
         </div>
 

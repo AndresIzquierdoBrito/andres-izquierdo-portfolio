@@ -4,9 +4,6 @@ import gsap from "gsap"
 import { ArrowUpRight, Download } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
-import { useThemeMode } from "~/lib/useThemeMode"
-
-import { getHomeGradientPalette } from "./home-content"
 import SectionBadge from "./SectionBadge"
 import SiteBrandMark from "./SiteBrandMark"
 
@@ -27,9 +24,7 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactEmail}`
 export default function HomeContactSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const [formStatus, setFormStatus] = useState<FormStatus>("idle")
-  const { themeMode } = useThemeMode()
   const { t } = useTranslation("common", { keyPrefix: "sections.contact" })
-  const palette = getHomeGradientPalette(themeMode)
 
   useLayoutEffect(() => {
     const section = sectionRef.current
@@ -110,13 +105,14 @@ export default function HomeContactSection() {
       ref={sectionRef}
       id="contact"
       className="relative z-10 -mt-8 scroll-mt-6 overflow-hidden rounded-t-[2.5rem] px-6 pt-14 pb-28 text-white sm:-mt-12 sm:rounded-t-[3rem] sm:px-12 sm:pt-20 sm:pb-32 xl:pr-28 xl:pl-44"
-      style={{ background: palette.contact.backgroundBase }}
+      style={{ background: "var(--home-contact-background)" }}
     >
       <div
         aria-hidden="true"
         className="absolute inset-0 -z-10 opacity-70"
         style={{
-          backgroundImage: `radial-gradient(circle at 8% 8%, ${palette.contact.orbTopLeft}, transparent 30%), radial-gradient(circle at 92% 88%, ${palette.contact.orbBottomRight}, transparent 34%)`,
+          backgroundImage:
+            "radial-gradient(circle at 8% 8%, var(--home-contact-orb-top-left), transparent 30%), radial-gradient(circle at 92% 88%, var(--home-contact-orb-bottom-right), transparent 34%)",
         }}
       />
 

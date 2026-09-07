@@ -3,7 +3,6 @@ import type { PointerEvent } from "react"
 import { useTranslation } from "react-i18next"
 
 import ExperienceSection from "~/components/ExperienceSection"
-import { useThemeMode } from "~/lib/useThemeMode"
 
 import { currentFocusTools, getResumePatternStyle } from "./home-content"
 import SectionBadge from "./SectionBadge"
@@ -41,7 +40,6 @@ function handleResumePatternPointerLeave(event: PointerEvent<HTMLElement>) {
 }
 
 export default function HomeAboutSection() {
-  const { themeMode } = useThemeMode()
   const { t } = useTranslation("common", { keyPrefix: "sections.about" })
 
   return (
@@ -50,7 +48,7 @@ export default function HomeAboutSection() {
       className="resume-dot-pattern relative scroll-mt-6 overflow-hidden bg-background px-6 pt-16 pb-12 sm:px-12 sm:pb-20 xl:pr-28 xl:pl-44"
       onPointerLeave={handleResumePatternPointerLeave}
       onPointerMove={handleResumePatternPointerMove}
-      style={getResumePatternStyle(themeMode)}
+      style={getResumePatternStyle()}
     >
       <div aria-hidden="true" className="resume-dot-pattern__trace">
         <div className="resume-dot-pattern__layer resume-dot-pattern__layer--outer" />

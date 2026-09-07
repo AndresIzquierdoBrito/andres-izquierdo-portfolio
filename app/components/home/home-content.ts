@@ -47,49 +47,48 @@ export type ProjectCardData = {
 
 export const projectPreviewCards: readonly ProjectCardData[] = [
   {
-    eyebrow: "Case study",
-    name: "Flagship builds",
-    tagline: "The work that best shows how I think and ship.",
+    eyebrow: "Proyecto destacado",
+    name: "ApunteX",
+    tagline: "Tus notas, por fin listas para enseñarte.",
     description:
-      "Add the projects that best show product judgment, technical decisions, and the outcomes that mattered.",
-    stack: [ReactIcon, FastAPIIcon],
+      "Organiza tus notas, lee cada fuente y estudia con IA especializada: un espacio tranquilo donde tus archivos son la única fuente de verdad.",
+    iconSrc: "/projects_media/apuntex/apuntex_logo.png",
+    screenshots: [
+      "/projects_media/apuntex/apuntex_sc1.png",
+      "/projects_media/apuntex/apuntex_sc2.png",
+      "/projects_media/apuntex/apuntex_sc3.png",
+    ],
+    projectUrl: "https://app.apuntex.com/workspace",
   },
   {
-    eyebrow: "Process",
-    name: "From brief to shipped UI",
-    tagline: "From a rough brief to a polished interface.",
-    description:
-      "Use this lane for screenshots, system thinking, iterations, and the tradeoffs behind each release.",
-    stack: [ReactIcon, FastAPIIcon],
+    eyebrow: "Projects",
+    name: "Coming soon!",
+    tagline: "Coming soon!",
+    description: "Coming soon!",
   },
   {
-    eyebrow: "Signal",
-    name: "Results and metrics",
-    tagline: "The numbers behind the product decisions.",
-    description:
-      "Reserve space for adoption numbers, performance wins, or the business impact behind each project.",
+    eyebrow: "Projects",
+    name: "Coming soon!",
+    tagline: "Coming soon!",
+    description: "Coming soon!",
   },
   {
-    eyebrow: "Systems",
-    name: "Scalable foundations",
-    tagline: "Architecture built to grow without breaking.",
-    description:
-      "Use this lane for architecture decisions, reusable primitives, and the systems work that supported faster product delivery.",
-    stack: [ReactIcon, FastAPIIcon],
+    eyebrow: "Projects",
+    name: "Coming soon!",
+    tagline: "Coming soon!",
+    description: "Coming soon!",
   },
   {
-    eyebrow: "Iteration",
-    name: "After launch",
-    tagline: "What happens once real users show up.",
-    description:
-      "Keep one card for follow-up releases, product refinements, and the learning loop that happened once real users arrived.",
+    eyebrow: "Projects",
+    name: "Coming soon!",
+    tagline: "Coming soon!",
+    description: "Coming soon!",
   },
   {
-    eyebrow: "Extra",
-    name: "Side project",
-    tagline: "Experiments built outside the day job.",
-    description:
-      "Reserve this lane for experiments, open-source contributions, or any work that lives outside the main product track.",
+    eyebrow: "Projects",
+    name: "Coming soon!",
+    tagline: "Coming soon!",
+    description: "Coming soon!",
   },
 ]
 
@@ -186,16 +185,8 @@ export const heroGreetings = [
   "Ciao!",
 ] as const
 
-export function getResumePatternStyle(themeMode: ThemeMode): CSSProperties {
-  const palette = getHomeGradientPalette(themeMode)
-
+export function getResumePatternStyle(): CSSProperties {
   return {
-    "--resume-dot-color-1": palette.about.dotColor1,
-    "--resume-dot-color-2": palette.about.dotColor2,
-    "--resume-dot-color-3": palette.about.dotColor3,
-    "--resume-wash-color-1": palette.about.washColor1,
-    "--resume-wash-color-2": palette.about.washColor2,
-    "--resume-wash-color-3": palette.about.washColor3,
     "--resume-mouse-x": "50%",
     "--resume-mouse-y": "12rem",
     "--resume-trace-x": "50%",

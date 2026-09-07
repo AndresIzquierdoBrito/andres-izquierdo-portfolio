@@ -668,6 +668,20 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+
+  --home-projects-background-from: rgb(255 255 255 / 0.98);
+  --home-projects-background-to: rgb(248 250 252 / 0.95);
+  --home-projects-orb-top-right: rgb(39 255 195 / 0.18);
+  --home-projects-orb-bottom-left: rgb(234 179 8 / 0.16);
+  --home-contact-background: #103f3a;
+  --home-contact-orb-top-left: rgb(234 179 8 / 0.12);
+  --home-contact-orb-bottom-right: rgb(39 255 195 / 0.14);
+  --resume-dot-color-1: #eab308;
+  --resume-dot-color-2: #27ffc3;
+  --resume-dot-color-3: #cdfaeb;
+  --resume-wash-color-1: rgb(234 179 8 / 0.1);
+  --resume-wash-color-2: rgb(39 255 195 / 0.1);
+  --resume-wash-color-3: rgb(205 250 235 / 0.35);
 }
 
 .dark {
@@ -702,6 +716,20 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+
+  --home-projects-background-from: rgb(10 15 20 / 0.98);
+  --home-projects-background-to: rgb(6 10 14 / 0.95);
+  --home-projects-orb-top-right: rgb(129 140 248 / 0.22);
+  --home-projects-orb-bottom-left: rgb(34 211 238 / 0.2);
+  --home-contact-background: #0b1220;
+  --home-contact-orb-top-left: rgb(129 140 248 / 0.12);
+  --home-contact-orb-bottom-right: rgb(34 211 238 / 0.12);
+  --resume-dot-color-1: #22d3ee;
+  --resume-dot-color-2: #818cf8;
+  --resume-dot-color-3: #0f172a;
+  --resume-wash-color-1: rgb(34 211 238 / 0.13);
+  --resume-wash-color-2: rgb(129 140 248 / 0.13);
+  --resume-wash-color-3: rgb(15 23 42 / 0.64);
 }
 
 @layer base {
