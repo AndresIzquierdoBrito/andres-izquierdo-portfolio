@@ -31,7 +31,7 @@ type ScreenshotSlot = {
 
 // Three fixed slots that orbit the central icon
 const screenshotSlots: ScreenshotSlot[] = [
-  { top: "11%",   left: "0%",   rotate: -8,  zIndex: 1 },
+  { top: "26%",   left: "0%",   rotate: -8,  zIndex: 1 },
   { top: "1%",    right: "0%",  rotate:  7,  zIndex: 2 },
   { bottom: "2%", right: "4%",  rotate:  10, zIndex: 1 },
 ]

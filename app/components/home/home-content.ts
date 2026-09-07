@@ -3,6 +3,7 @@ import type { LucideIcon } from "lucide-react"
 
 import {
   AmazonWebServicesIcon,
+  DockerIcon,
   FastAPIIcon,
   PythonIcon,
   ReactIcon,
@@ -77,6 +78,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       },
     },
     iconSrc: "/projects_media/apuntex/apuntex_logo.png",
+    stack: [ReactIcon, DockerIcon],
     screenshots: [
       "/projects_media/apuntex/apuntex_sc1.png",
       "/projects_media/apuntex/apuntex_sc2.png",
