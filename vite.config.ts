@@ -3,9 +3,9 @@ import tailwindcss from "@tailwindcss/vite"
 import { defineConfig } from "vite"
 import tsconfigPaths from "vite-tsconfig-paths"
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [tailwindcss(), reactRouter(), tsconfigPaths()],
-  ssr: {
-    noExternal: true,
-  },
-})
+  // The worker build needs bundled server dependencies, while Vite dev must
+  // keep React's SSR runtime external so its ESM/CJS interop stays intact.
+  ssr: command === "build" ? { noExternal: true } : undefined,
+}))
