@@ -20,7 +20,7 @@ export default function ProjectsDashboardBanner() {
         aria-label={`${t("cta")} — projects.izbri.com`}
       >
         <div className="mx-auto grid max-w-7xl lg:grid-cols-[minmax(0,1.15fr)_minmax(22rem,0.85fr)] xl:max-w-none xl:pr-28 xl:pl-72">
-          <div className="relative flex flex-col justify-center gap-4 px-6 py-14 sm:px-12 sm:py-16 lg:-translate-y-4 lg:py-20 lg:pr-14">
+          <div className="relative flex min-h-[22rem] flex-col justify-center gap-4 px-6 py-14 sm:px-12 sm:py-16 lg:min-h-0 lg:-translate-y-4 lg:py-20 lg:pr-14">
             <h2 className="max-w-3xl font-heading text-3xl leading-[1.05] font-medium tracking-[-0.04em] sm:text-4xl lg:text-5xl">
               {t("title")}
             </h2>
