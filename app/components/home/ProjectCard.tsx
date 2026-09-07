@@ -1,6 +1,8 @@
-import { useRef } from "react"
-import { BookOpen, ExternalLink } from "lucide-react"
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
+import { BookOpen, ExternalLink, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import gsap from "gsap"
 
 import { cn } from "~/lib/utils"
 
@@ -28,64 +30,271 @@ type ScreenshotSlot = {
 
 // Three fixed slots that orbit the central icon
 const screenshotSlots: ScreenshotSlot[] = [
-  { top: "4%",    left: "3%",   rotate: -9,  zIndex: 1 },
-  { top: "2%",    right: "3%",  rotate:  8,  zIndex: 2 },
-  { bottom: "3%", right: "7%",  rotate:  12, zIndex: 1 },
+  { top: "3%",    left: "0%",   rotate: -8,  zIndex: 1 },
+  { top: "1%",    right: "0%",  rotate:  7,  zIndex: 2 },
+  { bottom: "2%", right: "4%",  rotate:  10, zIndex: 1 },
 ]
+
+type ScreenshotLightboxState = {
+  src: string
+  label: string
+  originRect: DOMRect
+  originRotation: number
+}
+
+function ScreenshotWindow({
+  src,
+  alt,
+  expanded = false,
+}: {
+  src: string
+  alt: string
+  expanded?: boolean
+}) {
+  return (
+    <div
+      className={cn(
+        "flex h-full w-full flex-col overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.28)] dark:border-white/12 dark:bg-slate-800 dark:shadow-[0_8px_24px_-6px_rgba(2,6,23,0.55)]",
+        expanded && "rounded-2xl shadow-[0_28px_90px_-24px_rgba(2,6,23,0.7)]",
+      )}
+    >
+      <div className="flex h-5 shrink-0 items-center gap-[5px] border-b border-black/8 bg-slate-50 px-2.5 dark:border-white/8 dark:bg-slate-700/60">
+        <span className="size-2 rounded-full bg-rose-400" />
+        <span className="size-2 rounded-full bg-amber-400" />
+        <span className="size-2 rounded-full bg-emerald-400" />
+      </div>
+      <div
+        className={cn(
+          "min-h-0 flex-1 overflow-auto bg-slate-100/90 dark:bg-slate-900/90",
+          expanded && "max-h-[calc(85svh-2.5rem)]",
+        )}
+      >
+        <img
+          src={src}
+          alt={alt}
+          draggable={false}
+          className="block h-auto w-full object-contain object-top"
+        />
+      </div>
+    </div>
+  )
+}
+
+function ScreenshotLightbox({
+  screenshot,
+  closing,
+  onRequestClose,
+  onClosed,
+}: {
+  screenshot: ScreenshotLightboxState
+  closing: boolean
+  onRequestClose: () => void
+  onClosed: () => void
+}) {
+  const backdropRef = useRef<HTMLDivElement>(null)
+  const frameRef = useRef<HTMLDivElement>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const timelineRef = useRef<gsap.core.Timeline | null>(null)
+  const hasAnimatedRef = useRef(false)
+  const reducedMotionRef = useRef(false)
+
+  const animateIn = useCallback(() => {
+    const backdrop = backdropRef.current
+    const frame = frameRef.current
+    if (!backdrop || !frame || hasAnimatedRef.current) return
+
+    hasAnimatedRef.current = true
+    reducedMotionRef.current = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches
+
+    const targetRect = frame.getBoundingClientRect()
+    const originCenterX =
+      screenshot.originRect.left + screenshot.originRect.width / 2
+    const originCenterY =
+      screenshot.originRect.top + screenshot.originRect.height / 2
+    const targetCenterX = targetRect.left + targetRect.width / 2
+    const targetCenterY = targetRect.top + targetRect.height / 2
+    const originScale = Math.min(
+      1,
+      screenshot.originRect.width / Math.max(targetRect.width, 1),
+    )
+
+    const timeline = gsap.timeline({ paused: true })
+    timeline.fromTo(
+      backdrop,
+      { opacity: 0 },
+      {
+        opacity: 1,
+        duration: reducedMotionRef.current ? 0 : 0.32,
+        ease: "power2.out",
+      },
+      0,
+    )
+    timeline.fromTo(
+      frame,
+      {
+        x: originCenterX - targetCenterX,
+        y: originCenterY - targetCenterY,
+        scale: originScale,
+        rotation: screenshot.originRotation,
+      },
+      {
+        x: 0,
+        y: 0,
+        scale: 1,
+        rotation: 0,
+        duration: reducedMotionRef.current ? 0 : 0.72,
+        ease: "elastic.out(1, 0.62)",
+      },
+      0,
+    )
+
+    timelineRef.current = timeline
+    if (reducedMotionRef.current) {
+      timeline.progress(1)
+    } else {
+      timeline.play()
+    }
+
+    requestAnimationFrame(() => closeButtonRef.current?.focus())
+  }, [screenshot])
+
+  useLayoutEffect(() => {
+    animateIn()
+    return () => {
+      timelineRef.current?.kill()
+      timelineRef.current = null
+      hasAnimatedRef.current = false
+    }
+  }, [animateIn])
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [])
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault()
+        if (!closing) onRequestClose()
+        return
+      }
+
+      if (event.key === "Tab") {
+        event.preventDefault()
+        closeButtonRef.current?.focus()
+      }
+    }
+
+    document.addEventListener("keydown", handleKeyDown)
+    return () => document.removeEventListener("keydown", handleKeyDown)
+  }, [closing, onRequestClose])
+
+  useEffect(() => {
+    if (!closing) return
+
+    const timeline = timelineRef.current
+    if (!timeline || reducedMotionRef.current) {
+      onClosed()
+      return
+    }
+
+    timeline.eventCallback("onReverseComplete", onClosed)
+    timeline.reverse()
+
+    return () => {
+      timeline.eventCallback("onReverseComplete", null)
+    }
+  }, [closing, onClosed])
+
+  if (typeof document === "undefined") return null
+
+  return createPortal(
+    <div
+      ref={backdropRef}
+      role="dialog"
+      aria-modal="true"
+      aria-label={screenshot.label}
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/58 p-4 backdrop-blur-md sm:p-8"
+      onClick={(event) => {
+        if (event.target === event.currentTarget) onRequestClose()
+      }}
+    >
+      <div
+        ref={frameRef}
+        className="relative max-h-[85svh] w-[min(90vw,1100px)] origin-center"
+      >
+        <ScreenshotWindow
+          src={screenshot.src}
+          alt={screenshot.label}
+          expanded
+        />
+        <button
+          ref={closeButtonRef}
+          type="button"
+          aria-label="Close screenshot viewer"
+          onClick={onRequestClose}
+          className="absolute top-2 right-2 inline-flex size-9 items-center justify-center rounded-full border border-white/20 bg-slate-950/75 text-white shadow-lg backdrop-blur transition-transform hover:scale-105 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:outline-none"
+        >
+          <X className="size-4" />
+        </button>
+      </div>
+    </div>,
+    document.body,
+  )
+}
 
 function ScreenshotItem({
   slot,
   src,
   toneClass,
+  projectName,
+  screenshotIndex,
+  onOpen,
 }: {
   slot: ScreenshotSlot
   src?: string
   toneClass: string
+  projectName: string
+  screenshotIndex: number
+  onOpen: (
+    src: string,
+    label: string,
+    origin: HTMLButtonElement,
+    rotation: number,
+  ) => void
 }) {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLButtonElement>(null)
+  const label = `${projectName} screenshot ${screenshotIndex + 1}`
 
-  return (
-    <div
-      ref={ref}
-      className="absolute w-[46%] cursor-pointer"
-      style={{
-        top: slot.top,
-        left: slot.left,
-        right: slot.right,
-        bottom: slot.bottom,
-        aspectRatio: "16 / 10",
-        transform: `rotate(${slot.rotate}deg)`,
-        zIndex: slot.zIndex,
-        transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
-        transformOrigin: "center center",
-      }}
-      onMouseEnter={() => {
-        if (!ref.current) return
-        ref.current.style.transform = `rotate(0deg) scale(1.07)`
-        ref.current.style.zIndex = "20"
-      }}
-      onMouseLeave={() => {
-        if (!ref.current) return
-        ref.current.style.transform = `rotate(${slot.rotate}deg) scale(1)`
-        ref.current.style.zIndex = String(slot.zIndex)
-      }}
-    >
-      {src ? (
-        <div className="flex h-full w-full flex-col overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.28)] dark:border-white/12 dark:bg-slate-800 dark:shadow-[0_8px_24px_-6px_rgba(2,6,23,0.55)]">
-          <div className="flex h-5 shrink-0 items-center gap-[5px] border-b border-black/8 bg-slate-50 px-2.5 dark:border-white/8 dark:bg-slate-700/60">
-            <span className="size-2 rounded-full bg-rose-400" />
-            <span className="size-2 rounded-full bg-amber-400" />
-            <span className="size-2 rounded-full bg-emerald-400" />
-          </div>
-          <img
-            src={src}
-            alt=""
-            draggable={false}
-            className="min-h-0 w-full flex-1 object-cover object-top"
-          />
-        </div>
-      ) : (
-        // Placeholder: macOS-style window chrome + tone gradient
+  const setHovered = (hovered: boolean) => {
+    if (!ref.current) return
+    ref.current.style.transform = hovered
+      ? "rotate(0deg) scale(1.07)"
+      : `rotate(${slot.rotate}deg) scale(1)`
+    ref.current.style.zIndex = hovered ? "20" : String(slot.zIndex)
+  }
+
+  if (!src) {
+    return (
+      <div
+        className="absolute w-[52%]"
+        style={{
+          top: slot.top,
+          left: slot.left,
+          right: slot.right,
+          bottom: slot.bottom,
+          aspectRatio: "16 / 10",
+          transform: `rotate(${slot.rotate}deg)`,
+          zIndex: slot.zIndex,
+        }}
+      >
         <div className="h-full w-full overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.18)] dark:border-white/12 dark:bg-slate-800">
           <div className="flex items-center gap-[5px] border-b border-black/8 bg-slate-50 px-2.5 py-2 dark:border-white/8 dark:bg-slate-700/60">
             <span className="size-2 rounded-full bg-rose-400" />
@@ -99,8 +308,42 @@ function ScreenshotItem({
             )}
           />
         </div>
-      )}
-    </div>
+      </div>
+    )
+  }
+
+  return (
+    <button
+      type="button"
+      ref={ref}
+      aria-label={`Open ${label}`}
+      className="absolute w-[52%] cursor-pointer appearance-none border-0 bg-transparent p-0 text-left focus-visible:z-20 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none dark:focus-visible:ring-indigo-300 dark:focus-visible:ring-offset-slate-950"
+      style={{
+        top: slot.top,
+        left: slot.left,
+        right: slot.right,
+        bottom: slot.bottom,
+        aspectRatio: "16 / 10",
+        transform: `rotate(${slot.rotate}deg)`,
+        zIndex: slot.zIndex,
+        transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
+        transformOrigin: "center center",
+      }}
+      onMouseEnter={() => {
+        setHovered(true)
+      }}
+      onMouseLeave={() => {
+        setHovered(false)
+      }}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+      onClick={(event) => {
+        event.stopPropagation()
+        onOpen(src, label, event.currentTarget, slot.rotate)
+      }}
+    >
+      <ScreenshotWindow src={src} alt={label} />
+    </button>
   )
 }
 
@@ -115,6 +358,35 @@ export default function ProjectCard({
 }) {
   const { t } = useTranslation("common", { keyPrefix: "sections.projects" })
   const toneClass = toneClasses[index % toneClasses.length]
+  const [lightbox, setLightbox] = useState<ScreenshotLightboxState | null>(null)
+  const [closing, setClosing] = useState(false)
+  const activeThumbnailRef = useRef<HTMLButtonElement | null>(null)
+
+  const openLightbox = (
+    src: string,
+    label: string,
+    origin: HTMLButtonElement,
+    rotation: number,
+  ) => {
+    activeThumbnailRef.current = origin
+    setClosing(false)
+    setLightbox({
+      src,
+      label,
+      originRect: origin.getBoundingClientRect(),
+      originRotation: rotation,
+    })
+  }
+
+  const requestClose = () => {
+    if (lightbox) setClosing(true)
+  }
+
+  const finishClose = () => {
+    setLightbox(null)
+    setClosing(false)
+    requestAnimationFrame(() => activeThumbnailRef.current?.focus())
+  }
 
   return (
     <article
@@ -187,6 +459,9 @@ export default function ProjectCard({
               slot={slot}
               src={card.screenshots?.[si]}
               toneClass={toneClass}
+              projectName={card.name}
+              screenshotIndex={si}
+              onOpen={openLightbox}
             />
           ))}
 
@@ -244,6 +519,14 @@ export default function ProjectCard({
           )}
         </div>
       </div>
+      {lightbox ? (
+        <ScreenshotLightbox
+          screenshot={lightbox}
+          closing={closing}
+          onRequestClose={requestClose}
+          onClosed={finishClose}
+        />
+      ) : null}
     </article>
   )
 }
