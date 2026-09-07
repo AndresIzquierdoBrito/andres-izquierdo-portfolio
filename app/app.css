@@ -86,19 +86,6 @@
     }
   }
 
-  @keyframes contact-pulse {
-    0%,
-    100% {
-      opacity: 0.45;
-      transform: scale(0.82);
-    }
-
-    50% {
-      opacity: 1;
-      transform: scale(1);
-    }
-  }
-
   @keyframes hero-placeholder-enter {
     from {
       opacity: 0;
@@ -182,10 +169,6 @@
       transparent
     );
     animation: contact-signal 4.8s cubic-bezier(0.65, 0, 0.35, 1) infinite;
-  }
-
-  .contact-status-dot {
-    animation: contact-pulse 2.4s ease-in-out infinite;
   }
 
   .uptime-bar {
@@ -642,7 +625,6 @@
     .resume-dot-pattern__hover,
     .resume-dot-pattern__layer,
     .contact-signal-line::after,
-    .contact-status-dot,
     .uptime-bar,
     .hero-wave-placeholder__figure,
     .hero-wave-placeholder__arm,

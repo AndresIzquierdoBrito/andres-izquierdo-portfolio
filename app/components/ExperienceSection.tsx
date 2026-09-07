@@ -64,7 +64,7 @@ const experienceEntries: ExperienceEntry[] = [
 const educationEntryMeta: EducationEntryMeta[] = [
   {
     id: "uoc",
-    period: "2025 - Present",
+    period: "2025",
     status: "ongoing",
     initials: "UOC",
     tone: "bg-muted text-foreground",
@@ -324,7 +324,9 @@ function EducationTimeline({ entries }: { entries: EducationEntryMeta[] }) {
                   </div>
                   <div className="flex items-center gap-2">
                     <p className="font-mono text-xs tracking-tight text-muted-foreground">
-                      {entry.period}
+                      {entry.status === "ongoing"
+                        ? `${entry.period} - ${t("present")}`
+                        : entry.period}
                     </p>
                     {entry.status === "ongoing" ? (
                       <Badge

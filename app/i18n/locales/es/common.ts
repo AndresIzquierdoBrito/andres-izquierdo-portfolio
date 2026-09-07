@@ -47,7 +47,6 @@ const esCommon = {
     },
     contact: {
       eyebrow: "Contacto",
-      status: "Disponible para el proyecto adecuado",
       title: "¿Tienes algo que merezca la pena construir? Hablemos.",
       lead: "Cuéntame qué estás construyendo, dónde se ha atascado o qué quieres mejorar. Leo cada correo y respondo personalmente.",
       downloadCv: "Descargar CV",
@@ -112,6 +111,7 @@ const esCommon = {
     description:
       "Un espacio dedicado a títulos, certificaciones y aprendizaje continuo, separado del historial laboral.",
     ongoing: "En curso",
+    present: "Presente",
     certifications: "Certificaciones",
     entries: {
       uoc: {

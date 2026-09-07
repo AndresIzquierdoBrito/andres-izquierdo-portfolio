@@ -1,7 +1,14 @@
 import type { ComponentType, CSSProperties, SVGProps } from "react"
-import { Boxes, Cloud, Terminal, Palette, type LucideIcon } from "lucide-react"
+import type { LucideIcon } from "lucide-react"
 
-import { FastAPIIcon, ReactIcon } from "~/components/icons"
+import {
+  AmazonWebServicesIcon,
+  FastAPIIcon,
+  PythonIcon,
+  ReactIcon,
+  RaspberryIcon,
+  TypeScriptIcon,
+} from "~/components/icons"
 import type { ThemeMode } from "~/lib/theme"
 
 export type FocusToolIcon = LucideIcon | ComponentType<SVGProps<SVGSVGElement>>
@@ -14,10 +21,10 @@ export type FocusTool = {
 export const currentFocusTools = [
   { label: "React", icon: ReactIcon },
   { label: "FastAPI", icon: FastAPIIcon },
-  { label: "Design", icon: Palette },
-  { label: "Systems", icon: Boxes },
-  { label: "Cloud", icon: Cloud },
-  { label: "CLI", icon: Terminal },
+  { label: "AWS", icon: AmazonWebServicesIcon },
+  { label: "TypeScript", icon: TypeScriptIcon },
+  { label: "Python", icon: PythonIcon },
+  { label: "Raspberry", icon: RaspberryIcon },
 ] as const satisfies readonly FocusTool[]
 
 export type ProjectCardData = {

@@ -1,3 +1,7 @@
 export { FastAPIIcon } from "./FastAPIIcon"
 export { LinkedInIcon } from "./LinkedInIcon"
 export { ReactIcon } from "./ReactIcon"
+export { TypeScriptIcon } from "./TypeScriptIcon"
+export { AmazonWebServicesIcon } from "./AmazonWebServicesIcon"
+export { PythonIcon } from "./PythonIcon"
+export { RaspberryIcon } from "./RaspberryIcon"

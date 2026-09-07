@@ -82,18 +82,26 @@ export default function HomeAboutSection() {
             <p className="font-mono text-[0.65rem] font-semibold tracking-[0.22em] text-foreground/45 uppercase">
               {t("currentFocus")}
             </p>
-            <div className="relative grid grid-cols-3">
+            <div className="relative grid grid-cols-2 sm:grid-cols-3">
               <span
                 aria-hidden="true"
-                className="absolute inset-y-0 left-1/3 w-px bg-black/8 dark:bg-white/10"
+                className="absolute inset-y-0 left-1/2 w-px bg-black/8 sm:left-[33.333%] dark:bg-white/10"
               />
               <span
                 aria-hidden="true"
-                className="absolute inset-y-0 left-2/3 w-px bg-black/8 dark:bg-white/10"
+                className="absolute inset-y-0 left-[66.666%] hidden w-px bg-black/8 sm:block dark:bg-white/10"
               />
               <span
                 aria-hidden="true"
-                className="absolute inset-x-0 top-1/2 h-px bg-black/8 dark:bg-white/10"
+                className="absolute inset-x-0 top-[33.333%] h-px bg-black/8 sm:hidden dark:bg-white/10"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 top-[66.666%] h-px bg-black/8 sm:hidden dark:bg-white/10"
+              />
+              <span
+                aria-hidden="true"
+                className="absolute inset-x-0 top-1/2 hidden h-px bg-black/8 sm:block dark:bg-white/10"
               />
               {currentFocusTools.map((tool) => {
                 const Icon = tool.icon
@@ -101,10 +109,10 @@ export default function HomeAboutSection() {
                 return (
                   <div
                     key={tool.label}
-                    className="relative z-10 flex min-h-24 flex-col items-center justify-center gap-2 px-2 py-4 text-center sm:min-h-32 sm:gap-3 sm:px-4 sm:py-5"
+                    className="relative z-10 flex min-h-32 flex-col items-center justify-center gap-3 px-2 py-5 text-center sm:min-h-32 sm:gap-3 sm:px-2 sm:py-5"
                   >
-                    <Icon className="size-10 text-foreground/85 sm:size-16 dark:text-white" />
-                    <span className="font-mono text-[0.55rem] font-semibold tracking-[0.12em] text-foreground/70 uppercase sm:text-[0.68rem] dark:text-white/78">
+                    <Icon className="size-14 text-foreground/85 sm:size-16 dark:text-white" />
+                    <span className="font-mono text-[0.55rem] font-semibold tracking-[0.1em] text-foreground/70 uppercase sm:text-[0.62rem] dark:text-white/78">
                       {tool.label}
                     </span>
                   </div>

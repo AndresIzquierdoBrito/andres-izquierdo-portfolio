@@ -128,11 +128,6 @@ export default function HomeContactSection() {
           <SectionBadge className="text-white dark:text-white">
             {t("eyebrow")}
           </SectionBadge>
-
-          <p className="flex items-center gap-2.5 font-heading text-[0.68rem] font-medium tracking-[0.17em] text-white/58 uppercase">
-            <span className="contact-status-dot size-2 rounded-full bg-emerald-300" />
-            {t("status")}
-          </p>
         </div>
 
         <div className="grid gap-10 pt-12 pb-12 lg:grid-cols-[minmax(0,1.1fr)_minmax(22rem,0.9fr)] lg:items-start lg:gap-16 lg:pt-18 lg:pb-16">

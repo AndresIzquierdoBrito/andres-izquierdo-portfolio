@@ -47,7 +47,6 @@ const enCommon = {
     },
     contact: {
       eyebrow: "Contact",
-      status: "Available for the right project",
       title: "Have something worth building? Let's talk.",
       lead: "Tell me what you are working on, where it is stuck, or what you want to make better. I read every email and reply personally.",
       downloadCv: "Download CV",
@@ -109,6 +108,7 @@ const enCommon = {
     description:
       "A dedicated lane for degrees, certifications, and ongoing learning, separate from work so both stories can expand cleanly.",
     ongoing: "Ongoing",
+    present: "Present",
     certifications: "Certifications",
     entries: {
       uoc: {

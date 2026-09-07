@@ -46,13 +46,9 @@ export default function HomeHeroToolbar() {
   const cvLabel = t("downloadCv")
 
   return (
-    <div className="absolute inset-x-6 top-6 z-50 flex items-start justify-between sm:inset-x-12 sm:top-8 xl:right-28 xl:left-44">
-      {/* CV button — left side on mobile/tablet, hidden on desktop (appears in right group) */}
-      <CvButton label={cvLabel} className="lg:hidden" />
-
-      {/* Right group: lang picker + theme toggle + CV button (desktop only) */}
-      <div className="ml-auto flex flex-wrap items-center gap-2">
-        <CvButton label={cvLabel} className="hidden lg:inline-flex" />
+    <div className="fixed top-6 right-6 z-50 flex justify-end sm:top-8 sm:right-12 xl:right-16">
+      <div className="flex flex-wrap items-center justify-end gap-2">
+        <CvButton label={cvLabel} />
 
         <div
           className="inline-flex h-12 items-center gap-1 rounded-full border border-black/10 bg-white/55 p-1 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md lg:h-10 dark:border-white/15 dark:bg-slate-900/45"
