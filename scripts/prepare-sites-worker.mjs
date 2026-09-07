@@ -10,7 +10,8 @@ const distServer = path.join(projectRoot, "dist/server")
 const appBuild = path.join(distServer, "app.js")
 const workerEntry = path.join(distServer, "worker-entry.mjs")
 const workerOutput = path.join(distServer, "index.js")
-// Sites expects the generated server bundle to expose a default fetch handler.
+// Sites expects the generated server bundle to expose a default fetch handler,
+// so keep this adapter separate from React Router's normal Node server build.
 const pnpmStore = path.join(projectRoot, "node_modules/.pnpm")
 const esbuildPackage = (await readdir(pnpmStore)).find((name) =>
   name.startsWith("esbuild@"),
