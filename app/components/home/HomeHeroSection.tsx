@@ -6,7 +6,6 @@ import { resolveAppLanguage } from "~/i18n/settings"
 import { useThemeMode } from "~/lib/useThemeMode"
 
 import { getHomeGradientPalette, heroGreetings } from "./home-content"
-import HeroWavePlaceholder from "./HeroWavePlaceholder"
 import HomeHeroToolbar from "./HomeHeroToolbar"
 import SiteBrandMark from "./SiteBrandMark"
 
@@ -70,10 +69,6 @@ export default function HomeHeroSection() {
               {t("description")}
             </p>
           </div>
-        </div>
-
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 mx-auto h-[56vh] max-h-152 w-[102%] text-slate-950/38 sm:h-[60vh] sm:max-h-176 sm:w-[82%] lg:-right-16 lg:left-auto lg:mx-0 lg:h-[82%] lg:max-h-none lg:w-[46%] xl:-right-28 xl:w-[48%] dark:text-white/42">
-          <HeroWavePlaceholder />
         </div>
       </section>
     </div>
