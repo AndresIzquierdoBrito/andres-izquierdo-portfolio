@@ -39,6 +39,56 @@ type CardSlotState = {
   overlayOpacity: number
 }
 
+type CardDimensions = {
+  width: number
+  height: number
+}
+
+function getCardDimensions(
+  stageWidth: number,
+  stageHeight: number
+): CardDimensions {
+  let maxWidth = 27.3 * 16
+  let maxHeight = 37.7 * 16
+
+  if (stageWidth >= 1536) {
+    maxWidth = 33.8 * 16
+    maxHeight = 46.8 * 16
+  } else if (stageWidth >= 1280) {
+    maxWidth = 32.5 * 16
+    maxHeight = 44.2 * 16
+  } else if (stageWidth >= 1024) {
+    maxWidth = 29.9 * 16
+    maxHeight = 40.3 * 16
+  } else if (stageWidth >= 640) {
+    maxWidth = 28.6 * 16
+    maxHeight = 39 * 16
+  }
+
+  const aspectRatio = maxWidth / maxHeight
+  const widthLimit = stageWidth < 768 ? Math.max(stageWidth - 32, 1) : maxWidth
+  const height = Math.min(
+    maxHeight,
+    Math.max(stageHeight, 1),
+    widthLimit / aspectRatio
+  )
+
+  return {
+    width: height * aspectRatio,
+    height,
+  }
+}
+
+function setCardDimensions(
+  cardEls: readonly HTMLDivElement[],
+  dimensions: CardDimensions
+) {
+  cardEls.forEach((el) => {
+    el.style.width = `${dimensions.width}px`
+    el.style.height = `${dimensions.height}px`
+  })
+}
+
 function getCardMetrics(stageWidth: number): CardSlotMetrics {
   if (stageWidth >= 1280) {
     return {
@@ -284,7 +334,10 @@ export default function ProjectCarousel({
     )
     if (!stage || cardEls.length === 0 || N === 0) return
 
-    const m = getCardMetrics(stage.getBoundingClientRect().width)
+    const stageRect = stage.getBoundingClientRect()
+    const m = getCardMetrics(stageRect.width)
+    const dimensions = getCardDimensions(stageRect.width, stageRect.height)
+    setCardDimensions(cardEls, dimensions)
     const DURATION = 1.5
     const EASE = "power2.inOut"
 
@@ -392,7 +445,13 @@ export default function ProjectCarousel({
         skipInitialCallback = false
         return
       }
-      const fresh = getCardMetrics(stage.getBoundingClientRect().width)
+      const freshRect = stage.getBoundingClientRect()
+      const fresh = getCardMetrics(freshRect.width)
+      const freshDimensions = getCardDimensions(
+        freshRect.width,
+        freshRect.height
+      )
+      setCardDimensions(cardEls, freshDimensions)
       const currentVc = virtualCenterRef.current
       cardEls.forEach((el, vi) => {
         const offset = vi - currentVc
@@ -435,11 +494,11 @@ export default function ProjectCarousel({
   }
 
   return (
-    <div className="w-full">
-      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible xl:left-[calc(50%-2rem)]">
+    <div className="w-full md:h-full md:min-h-0">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible md:h-full md:min-h-0 xl:left-[calc(50%-2rem)]">
         <div
           ref={stageRef}
-          className="relative h-[37.7rem] sm:h-[39rem] lg:h-[40.3rem] xl:h-[44.2rem] 2xl:h-[46.8rem]"
+          className="relative h-[37.7rem] sm:h-[39rem] md:h-full md:min-h-0"
         >
           <CarouselHalo activeIndex={activeIndex} />
           {virtualCards.map((card, vi) => {

@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 import { createPortal } from "react-dom"
 import { BookOpen, ExternalLink, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -31,9 +37,9 @@ type ScreenshotSlot = {
 
 // Three fixed slots that orbit the central icon
 const screenshotSlots: ScreenshotSlot[] = [
-  { top: "26%",   left: "0%",   rotate: -8,  zIndex: 1 },
-  { top: "1%",    right: "0%",  rotate:  7,  zIndex: 2 },
-  { bottom: "2%", right: "4%",  rotate:  10, zIndex: 1 },
+  { top: "26%", left: "0%", rotate: -8, zIndex: 1 },
+  { top: "1%", right: "0%", rotate: 7, zIndex: 2 },
+  { bottom: "2%", right: "4%", rotate: 10, zIndex: 1 },
 ]
 
 type ScreenshotLightboxState = {
@@ -56,7 +62,7 @@ function ScreenshotWindow({
     <div
       className={cn(
         "flex h-full w-full flex-col overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.28)] dark:border-white/12 dark:bg-slate-800 dark:shadow-[0_8px_24px_-6px_rgba(2,6,23,0.55)]",
-        expanded && "rounded-2xl shadow-[0_28px_90px_-24px_rgba(2,6,23,0.7)]",
+        expanded && "rounded-2xl shadow-[0_28px_90px_-24px_rgba(2,6,23,0.7)]"
       )}
     >
       <div className="flex h-5 shrink-0 items-center gap-[5px] border-b border-black/8 bg-slate-50 px-2.5 dark:border-white/8 dark:bg-slate-700/60">
@@ -67,7 +73,7 @@ function ScreenshotWindow({
       <div
         className={cn(
           "min-h-0 flex-1 overflow-hidden bg-slate-100/90 dark:bg-slate-900/90",
-          expanded && "max-h-[calc(85svh-2.5rem)]",
+          expanded && "max-h-[calc(85svh-2.5rem)]"
         )}
       >
         <img
@@ -106,7 +112,7 @@ function ScreenshotLightbox({
 
     hasAnimatedRef.current = true
     reducedMotionRef.current = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
+      "(prefers-reduced-motion: reduce)"
     ).matches
 
     const targetRect = frame.getBoundingClientRect()
@@ -118,7 +124,7 @@ function ScreenshotLightbox({
     const targetCenterY = targetRect.top + targetRect.height / 2
     const originScale = Math.min(
       1,
-      screenshot.originRect.width / Math.max(targetRect.width, 1),
+      screenshot.originRect.width / Math.max(targetRect.width, 1)
     )
 
     const timeline = gsap.timeline({ paused: true })
@@ -130,7 +136,7 @@ function ScreenshotLightbox({
         duration: reducedMotionRef.current ? 0 : 0.32,
         ease: "power2.out",
       },
-      0,
+      0
     )
     timeline.fromTo(
       frame,
@@ -148,7 +154,7 @@ function ScreenshotLightbox({
         duration: reducedMotionRef.current ? 0 : 0.72,
         ease: "elastic.out(1, 0.62)",
       },
-      0,
+      0
     )
 
     timelineRef.current = timeline
@@ -238,7 +244,7 @@ function ScreenshotLightbox({
         </button>
       </div>
     </div>,
-    document.body,
+    document.body
   )
 }
 
@@ -259,7 +265,7 @@ function ScreenshotItem({
     src: string,
     label: string,
     origin: HTMLButtonElement,
-    rotation: number,
+    rotation: number
   ) => void
 }) {
   const ref = useRef<HTMLButtonElement>(null)
@@ -296,7 +302,7 @@ function ScreenshotItem({
           <div
             className={cn(
               "h-full w-full bg-[linear-gradient(135deg,var(--tw-gradient-stops))] opacity-40",
-              toneClass,
+              toneClass
             )}
           />
         </div>
@@ -353,7 +359,7 @@ export default function ProjectCard({
   })
   const content = getProjectContent(
     card,
-    resolveAppLanguage(i18n.resolvedLanguage ?? i18n.language),
+    resolveAppLanguage(i18n.resolvedLanguage ?? i18n.language)
   )
   const toneClass = toneClasses[index % toneClasses.length]
   const [lightbox, setLightbox] = useState<ScreenshotLightboxState | null>(null)
@@ -364,7 +370,7 @@ export default function ProjectCard({
     src: string,
     label: string,
     origin: HTMLButtonElement,
-    rotation: number,
+    rotation: number
   ) => {
     activeThumbnailRef.current = origin
     setClosing(false)
@@ -390,7 +396,7 @@ export default function ProjectCard({
     <article
       className={cn(
         "relative flex h-full w-full flex-col overflow-hidden rounded-[2.25rem] border border-black/8 bg-white/55 text-left shadow-[0_34px_80px_-42px_rgba(15,23,42,0.45)] backdrop-blur-xl dark:border-white/14 dark:bg-slate-950/56 dark:shadow-[0_34px_80px_-42px_rgba(2,6,23,0.75)]",
-        className,
+        className
       )}
     >
       {/* Tone gradient */}
@@ -398,7 +404,7 @@ export default function ProjectCard({
         aria-hidden="true"
         className={cn(
           "absolute inset-0 bg-[linear-gradient(145deg,var(--tw-gradient-stops))] opacity-90",
-          toneClass,
+          toneClass
         )}
       />
       {/* Glass sheen */}
@@ -461,15 +467,13 @@ export default function ProjectCard({
               </h3>
             </a>
           ) : (
-            <h3 className="text-2xl font-semibold tracking-tight text-slate-950 dark:text-white lg:text-[1.55rem]">
+            <h3 className="text-2xl font-semibold tracking-tight text-slate-950 lg:text-[1.55rem] dark:text-white">
               {content.name}
             </h3>
           )}
-          {content.description ? (
-            <p className="line-clamp-2 text-[0.82rem] leading-6 text-slate-600 dark:text-white/65">
-              {content.description}
-            </p>
-          ) : null}
+          <p className="text-[0.82rem] leading-5 text-slate-600 dark:text-white/65">
+            {content.description}
+          </p>
         </div>
 
         {/* Screenshot cluster — grows to fill remaining space */}
@@ -493,7 +497,7 @@ export default function ProjectCard({
                 "relative flex items-center justify-center",
                 card.iconSrc
                   ? "size-24 rounded-none border-0 bg-transparent shadow-none ring-0 sm:size-32"
-                  : "size-14 rounded-2xl border border-black/10 bg-white shadow-[0_8px_28px_-6px_rgba(15,23,42,0.28)] ring-4 ring-[rgba(39,255,195,0.32)] sm:size-16 dark:border-white/16 dark:bg-slate-900 dark:ring-[rgba(99,102,241,0.38)]",
+                  : "size-14 rounded-2xl border border-black/10 bg-white shadow-[0_8px_28px_-6px_rgba(15,23,42,0.28)] ring-4 ring-[rgba(39,255,195,0.32)] sm:size-16 dark:border-white/16 dark:bg-slate-900 dark:ring-[rgba(99,102,241,0.38)]"
               )}
             >
               {card.iconSrc ? (
@@ -509,7 +513,7 @@ export default function ProjectCard({
                   />
                 </>
               ) : (
-                <span className="select-none text-xl font-bold text-slate-400 dark:text-white/35">
+                <span className="text-xl font-bold text-slate-400 select-none dark:text-white/35">
                   {content.name.charAt(0)}
                 </span>
               )}
