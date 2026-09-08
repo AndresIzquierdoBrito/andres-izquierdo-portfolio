@@ -34,7 +34,7 @@ export type ProjectContent = {
   name: string
   /** Short phrase shown as the section heading when this card is active */
   tagline: string
-  description: string
+  description?: string
 }
 
 export type ProjectCardData = {
@@ -66,15 +66,11 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
         eyebrow: "Featured project",
         name: "ApunteX",
         tagline: "Your notes, organised and ready to study.",
-        description:
-          "An app for organising notes and studying from your own sources. AI lends a hand, but your documents stay in charge.",
       },
       es: {
         eyebrow: "Proyecto destacado",
         name: "ApunteX",
         tagline: "Tus apuntes, ordenados y listos para estudiar.",
-        description:
-          "Una app para organizar apuntes y estudiar con tus propias fuentes. La IA ayuda, pero tus documentos siguen mandando.",
       },
     },
     iconSrc: "/projects_media/apuntex/apuntex_logo.png",

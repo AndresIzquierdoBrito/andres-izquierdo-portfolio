@@ -465,9 +465,11 @@ export default function ProjectCard({
               {content.name}
             </h3>
           )}
-          <p className="line-clamp-2 text-[0.82rem] leading-6 text-slate-600 dark:text-white/65">
-            {content.description}
-          </p>
+          {content.description ? (
+            <p className="line-clamp-2 text-[0.82rem] leading-6 text-slate-600 dark:text-white/65">
+              {content.description}
+            </p>
+          ) : null}
         </div>
 
         {/* Screenshot cluster — grows to fill remaining space */}
