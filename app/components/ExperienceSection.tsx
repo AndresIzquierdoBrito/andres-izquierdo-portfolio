@@ -508,7 +508,7 @@ export default function ExperienceSection() {
           aria-hidden={activePanel !== "experience"}
           aria-labelledby="experience-tab"
           className={cn(
-            "relative col-start-1 row-start-1 overflow-hidden rounded-[1.75rem] border border-emerald-300/70 bg-white p-7 shadow-[0_24px_64px_-44px_rgba(15,23,42,0.28)] will-change-[transform,filter,opacity] sm:p-9 lg:col-span-8 lg:col-start-1 lg:row-start-1 lg:self-start dark:border-cyan-400/35 dark:bg-slate-950 dark:shadow-[0_24px_64px_-44px_rgba(2,6,23,0.72)]",
+            "relative col-start-1 row-start-1 self-start overflow-hidden rounded-[1.75rem] border border-emerald-300/70 bg-white p-7 shadow-[0_24px_64px_-44px_rgba(15,23,42,0.28)] will-change-[transform,filter,opacity] sm:p-9 lg:col-span-8 lg:col-start-1 lg:row-start-1 dark:border-cyan-400/35 dark:bg-slate-950 dark:shadow-[0_24px_64px_-44px_rgba(2,6,23,0.72)]",
             activePanel === "experience"
               ? "pointer-events-auto"
               : "glass-anim-paused pointer-events-none"
@@ -531,7 +531,7 @@ export default function ExperienceSection() {
           aria-hidden={activePanel !== "education"}
           aria-labelledby="education-tab"
           className={cn(
-            "relative col-start-1 row-start-1 overflow-hidden rounded-[1.75rem] border border-amber-300/75 bg-white p-7 shadow-[0_24px_64px_-44px_rgba(15,23,42,0.28)] will-change-[transform,filter,opacity] sm:p-9 lg:col-span-8 lg:col-start-5 lg:row-start-1 lg:mt-10 lg:self-start dark:border-indigo-400/35 dark:bg-slate-950 dark:shadow-[0_24px_64px_-44px_rgba(2,6,23,0.72)]",
+            "relative col-start-1 row-start-1 self-start overflow-hidden rounded-[1.75rem] border border-amber-300/75 bg-white p-7 shadow-[0_24px_64px_-44px_rgba(15,23,42,0.28)] will-change-[transform,filter,opacity] sm:p-9 lg:col-span-8 lg:col-start-5 lg:row-start-1 lg:mt-10 dark:border-indigo-400/35 dark:bg-slate-950 dark:shadow-[0_24px_64px_-44px_rgba(2,6,23,0.72)]",
             activePanel === "education"
               ? "pointer-events-auto"
               : "glass-anim-paused pointer-events-none"

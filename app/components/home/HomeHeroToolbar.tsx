@@ -63,70 +63,76 @@ export default function HomeHeroToolbar() {
   const cvLabel = t("downloadCv")
 
   return (
-    <div className="fixed top-6 right-6 z-50 flex justify-end sm:top-8 sm:right-12 xl:right-16">
-      <div className="flex flex-wrap items-center justify-end gap-2">
-        <CvButton label={cvLabel} language={activeLanguage} />
+    <div className="fixed top-4 right-4 left-4 z-50 sm:top-8 sm:right-12 sm:left-auto sm:flex sm:justify-end xl:right-16">
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end">
+        <CvButton
+          label={cvLabel}
+          language={activeLanguage}
+          className="shrink-0"
+        />
 
-        <div
-          className="inline-flex h-12 items-center gap-1 rounded-full border border-black/10 bg-white/55 p-1 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md lg:h-10 dark:border-white/15 dark:bg-slate-900/45"
-          role="group"
-          aria-label={t("languageHint")}
-        >
-          {languageOptions.map((option) => {
-            const isActive = option.value === activeLanguage
+        <div className="flex shrink-0 items-center gap-2">
+          <div
+            className="inline-flex h-12 items-center gap-1 rounded-full border border-black/10 bg-white/55 p-1 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md lg:h-10 dark:border-white/15 dark:bg-slate-900/45"
+            role="group"
+            aria-label={t("languageHint")}
+          >
+            {languageOptions.map((option) => {
+              const isActive = option.value === activeLanguage
 
-            return (
-              <button
-                key={option.value}
-                type="button"
-                className={cn(
-                  "h-10 rounded-full px-4 text-xs font-semibold tracking-[0.28em] uppercase transition-colors duration-200 sm:px-5 lg:h-8 lg:px-3 lg:text-[0.68rem]",
-                  isActive
-                    ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950"
-                    : "text-black/55 hover:text-black dark:text-white/65 dark:hover:text-white"
-                )}
-                aria-pressed={isActive}
-                aria-label={option.description}
-                onClick={() => {
-                  if (isActive) {
-                    return
-                  }
+              return (
+                <button
+                  key={option.value}
+                  type="button"
+                  className={cn(
+                    "h-10 rounded-full px-4 text-xs font-semibold tracking-[0.28em] uppercase transition-colors duration-200 sm:px-5 lg:h-8 lg:px-3 lg:text-[0.68rem]",
+                    isActive
+                      ? "bg-slate-950 text-white dark:bg-white dark:text-slate-950"
+                      : "text-black/55 hover:text-black dark:text-white/65 dark:hover:text-white"
+                  )}
+                  aria-pressed={isActive}
+                  aria-label={option.description}
+                  onClick={() => {
+                    if (isActive) {
+                      return
+                    }
 
-                  persistLanguagePreference(option.value)
-                  navigate(
-                    {
-                      pathname: `/${option.value}`,
-                      search: location.search,
-                      hash: location.hash,
-                    },
-                    { replace: true, preventScrollReset: true }
-                  )
-                }}
-              >
-                {option.label}
-              </button>
-            )
-          })}
+                    persistLanguagePreference(option.value)
+                    navigate(
+                      {
+                        pathname: `/${option.value}`,
+                        search: location.search,
+                        hash: location.hash,
+                      },
+                      { replace: true, preventScrollReset: true }
+                    )
+                  }}
+                >
+                  {option.label}
+                </button>
+              )
+            })}
+          </div>
+
+          <Button
+            type="button"
+            size="icon"
+            variant="outline"
+            className="size-12 rounded-full border-black/10 bg-white/55 text-slate-900 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md hover:bg-white/70 lg:size-10 dark:border-white/15 dark:bg-slate-900/45 dark:text-white dark:hover:bg-slate-900/70"
+            aria-label={t("themeHint")}
+            title={t("themeHint")}
+            onClick={() => {
+              const nextThemeMode: ThemeMode =
+                getCurrentThemeMode() === "dark" ? "light" : "dark"
+
+              applyThemeMode(nextThemeMode)
+              persistThemeMode(nextThemeMode)
+            }}
+          >
+            <MoonStar className="size-4 sm:size-5 lg:size-4 dark:hidden" />
+            <Sun className="hidden size-4 sm:size-5 lg:size-4 dark:block" />
+          </Button>
         </div>
-
-        <Button
-          type="button"
-          size="icon"
-          variant="outline"
-          className="size-12 rounded-full border-black/10 bg-white/55 text-slate-900 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md hover:bg-white/70 lg:size-10 dark:border-white/15 dark:bg-slate-900/45 dark:text-white dark:hover:bg-slate-900/70"
-          aria-label={t("themeHint")}
-          title={t("themeHint")}
-          onClick={() => {
-            const nextThemeMode: ThemeMode =
-              getCurrentThemeMode() === "dark" ? "light" : "dark"
-
-            applyThemeMode(nextThemeMode)
-            persistThemeMode(nextThemeMode)
-          }}
-        >
-          <MoonStar className="size-4 sm:size-5 lg:size-4 dark:hidden" />
-          <Sun className="hidden size-4 sm:size-5 lg:size-4 dark:block" />
-        </Button>
       </div>
     </div>
   )
