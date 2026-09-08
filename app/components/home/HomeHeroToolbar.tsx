@@ -63,8 +63,8 @@ export default function HomeHeroToolbar() {
   const cvLabel = t("downloadCv")
 
   return (
-    <div className="fixed top-4 right-4 left-4 z-50 sm:top-8 sm:right-12 sm:left-auto sm:flex sm:justify-end xl:right-16">
-      <div className="flex flex-wrap items-center justify-between gap-2 sm:justify-end">
+    <div className="fixed top-4 right-4 left-4 z-50 lg:top-8 lg:right-12 lg:left-auto lg:flex lg:justify-end xl:right-16">
+      <div className="flex flex-wrap items-center justify-between gap-2 lg:justify-end">
         <CvButton
           label={cvLabel}
           language={activeLanguage}
