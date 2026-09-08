@@ -3,9 +3,17 @@ import type { LucideIcon } from "lucide-react"
 
 import {
   AmazonWebServicesIcon,
+  CoolifyIcon,
   DockerIcon,
+  DrizzleIcon,
+  ExpressIcon,
+  ExpoIcon,
   FastAPIIcon,
+  GeminiIcon,
+  NestJSIcon,
+  PostgreSQLIcon,
   PythonIcon,
+  RedisIcon,
   ReactIcon,
   RaspberryIcon,
   TypeScriptIcon,
@@ -17,6 +25,11 @@ export type FocusToolIcon = LucideIcon | ComponentType<SVGProps<SVGSVGElement>>
 
 export type FocusTool = {
   label: string
+  icon: FocusToolIcon
+}
+
+export type ProjectStackItem = {
+  title: string
   icon: FocusToolIcon
 }
 
@@ -42,8 +55,8 @@ export type ProjectCardData = {
   translations: Record<AppLanguage, ProjectContent>
   /** Path to the app icon image (e.g. "/icons/myapp.png") */
   iconSrc?: string
-  /** 1-3 icons representing the project's stack, shown top-right of the card */
-  stack?: readonly FocusToolIcon[]
+  /** Up to 4 icons representing the project's stack, shown top-right of the card */
+  stack?: readonly ProjectStackItem[]
   /** Up to 3 screenshot or gif paths shown scattered around the icon */
   screenshots?: readonly string[]
   /** Live project URL */
@@ -78,7 +91,11 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       },
     },
     iconSrc: "/projects_media/apuntex/apuntex_logo.png",
-    stack: [ReactIcon, DockerIcon],
+    stack: [
+      { title: "React", icon: ReactIcon },
+      { title: "Docker", icon: DockerIcon },
+      { title: "Gemini", icon: GeminiIcon },
+    ],
     screenshots: [
       "/projects_media/apuntex/apuntex_sc1.png",
       "/projects_media/apuntex/apuntex_sc2.png",
@@ -103,6 +120,12 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
           "Un dashboard en directo conectado con Coolify para monitorizar servicios autoalojados, su disponibilidad, estado y otros datos operativos.",
       },
     },
+    stack: [
+      { title: "React", icon: ReactIcon },
+      { title: "Coolify", icon: CoolifyIcon },
+      { title: "Drizzle", icon: DrizzleIcon },
+      { title: "Express", icon: ExpressIcon },
+    ],
     projectUrl: "https://projects.izbri.com",
   },
   {
@@ -122,6 +145,12 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
           "Una app inteligente de inventario físico que conecta los contenedores con códigos QR o de barras para poder buscar en almacenamientos segmentados o de larga duración.",
       },
     },
+    stack: [
+      { title: "NestJS", icon: NestJSIcon },
+      { title: "React", icon: ReactIcon },
+      { title: "Redis", icon: RedisIcon },
+      { title: "Expo", icon: ExpoIcon },
+    ],
   },
   {
     translations: {
@@ -140,6 +169,12 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
           "Un juego interactivo en español inspirado en Google Feud en el que completas búsquedas populares y adivinas qué busca más la gente en España.",
       },
     },
+    stack: [
+      { title: "FastAPI", icon: FastAPIIcon },
+      { title: "Expo", icon: ExpoIcon },
+      { title: "React", icon: ReactIcon },
+      { title: "PostgreSQL", icon: PostgreSQLIcon },
+    ],
   },
 ]
 

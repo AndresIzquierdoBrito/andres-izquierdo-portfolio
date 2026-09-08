@@ -433,12 +433,26 @@ export default function ProjectCard({
 
           {card.stack?.length ? (
             <div className="flex items-center gap-1.5">
-              {card.stack.slice(0, 3).map((Icon, si) => (
+              {card.stack.map(({ icon: Icon, title }) => (
                 <span
-                  key={si}
-                  className="flex size-9 items-center justify-center rounded-full border border-black/10 bg-white text-slate-500 shadow-sm dark:border-white/14 dark:bg-slate-900 dark:text-white/70"
+                  key={title}
+                  title={title}
+                  aria-label={title}
+                  role="img"
+                  tabIndex={0}
+                  className={cn(
+                    "group/stack-icon relative flex size-9 shrink-0 cursor-help items-center justify-center rounded-full border border-black/10 bg-white text-slate-500 shadow-sm transition-transform outline-none hover:scale-105 focus-visible:ring-2 focus-visible:ring-cyan-300 dark:border-white/14 dark:bg-slate-900 dark:text-white/70",
+                    title === "Drizzle" &&
+                      "border-black/15 bg-slate-950 text-white dark:border-white/20 dark:bg-slate-950"
+                  )}
                 >
                   <Icon className="size-5" />
+                  <span
+                    role="tooltip"
+                    className="pointer-events-none absolute top-[calc(100%+0.5rem)] right-1/2 z-30 w-max translate-x-1/2 translate-y-1 rounded-md border border-black/10 bg-white/95 px-2.5 py-1.5 font-mono text-[0.6rem] font-semibold tracking-[0.08em] text-slate-800 capitalize opacity-0 shadow-[0_10px_24px_-10px_rgba(15,23,42,0.38)] backdrop-blur transition-all duration-150 group-hover/stack-icon:translate-y-0 group-hover/stack-icon:opacity-100 group-focus-visible/stack-icon:translate-y-0 group-focus-visible/stack-icon:opacity-100 dark:border-white/15 dark:bg-slate-900/95 dark:text-white dark:shadow-[0_10px_24px_-10px_rgba(2,6,23,0.7)]"
+                  >
+                    {title}
+                  </span>
                 </span>
               ))}
             </div>
