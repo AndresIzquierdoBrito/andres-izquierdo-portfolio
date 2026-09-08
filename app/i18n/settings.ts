@@ -6,6 +6,20 @@ export const languageStorageKey = "portfolio-language" as const
 
 export type AppLanguage = (typeof supportedLanguages)[number]
 
+export const cvDocuments = {
+  en: {
+    href: "/CV_Andres_Izquierdo_EN.pdf",
+    filename: "CV_Andres_Izquierdo_EN.pdf",
+  },
+  es: {
+    href: "/CV_Andres_Izquierdo_ES.pdf",
+    filename: "CV_Andres_Izquierdo_ES.pdf",
+  },
+} as const satisfies Record<
+  AppLanguage,
+  { href: string; filename: string }
+>
+
 export const languageOptions = [
   { value: "en", label: "EN", description: "English" },
   { value: "es", label: "ES", description: "Español" },

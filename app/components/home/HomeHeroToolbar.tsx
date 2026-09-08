@@ -5,7 +5,11 @@ import { useLocation, useNavigate } from "react-router"
 
 import { Button } from "~/components/ui/button"
 import { persistLanguagePreference } from "~/i18n/language"
-import { languageOptions, resolveAppLanguage } from "~/i18n/settings"
+import {
+  cvDocuments,
+  languageOptions,
+  resolveAppLanguage,
+} from "~/i18n/settings"
 import {
   applyThemeMode,
   getCurrentThemeMode,
@@ -15,11 +19,21 @@ import {
 } from "~/lib/theme"
 import { cn } from "~/lib/utils"
 
-function CvButton({ label, className }: { label: string; className?: string }) {
+function CvButton({
+  label,
+  language,
+  className,
+}: {
+  label: string
+  language: keyof typeof cvDocuments
+  className?: string
+}) {
+  const cv = cvDocuments[language]
+
   return (
     <a
-      href="/cv.pdf"
-      download
+      href={cv.href}
+      download={cv.filename}
       className={cn(
         "inline-flex h-12 items-center gap-2 rounded-full border border-black/10 bg-white/55 px-4 text-xs font-semibold tracking-[0.18em] whitespace-nowrap text-slate-900 uppercase shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md transition-colors duration-200 hover:bg-white/80 sm:px-5 lg:h-10 lg:px-4 dark:border-white/15 dark:bg-slate-900/45 dark:text-white dark:hover:bg-slate-900/70",
         className
@@ -51,7 +65,7 @@ export default function HomeHeroToolbar() {
   return (
     <div className="fixed top-6 right-6 z-50 flex justify-end sm:top-8 sm:right-12 xl:right-16">
       <div className="flex flex-wrap items-center justify-end gap-2">
-        <CvButton label={cvLabel} />
+        <CvButton label={cvLabel} language={activeLanguage} />
 
         <div
           className="inline-flex h-12 items-center gap-1 rounded-full border border-black/10 bg-white/55 p-1 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md lg:h-10 dark:border-white/15 dark:bg-slate-900/45"

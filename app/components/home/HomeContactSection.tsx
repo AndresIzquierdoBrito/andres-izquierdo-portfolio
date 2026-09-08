@@ -4,6 +4,8 @@ import gsap from "gsap"
 import { ArrowUpRight, Download } from "lucide-react"
 import { useTranslation } from "react-i18next"
 
+import { cvDocuments, resolveAppLanguage } from "~/i18n/settings"
+
 import SectionBadge from "./SectionBadge"
 import SiteBrandMark from "./SiteBrandMark"
 
@@ -24,7 +26,13 @@ const contactEndpoint = `https://formsubmit.co/ajax/${contactEmail}`
 export default function HomeContactSection() {
   const sectionRef = useRef<HTMLElement>(null)
   const [formStatus, setFormStatus] = useState<FormStatus>("idle")
-  const { t } = useTranslation("common", { keyPrefix: "sections.contact" })
+  const { i18n, t } = useTranslation("common", {
+    keyPrefix: "sections.contact",
+  })
+  const activeLanguage = resolveAppLanguage(
+    i18n.resolvedLanguage ?? i18n.language
+  )
+  const cv = cvDocuments[activeLanguage]
 
   useLayoutEffect(() => {
     const section = sectionRef.current
@@ -242,8 +250,8 @@ export default function HomeContactSection() {
           ))}
 
           <a
-            href="/cv.pdf"
-            download
+            href={cv.href}
+            download={cv.filename}
             className="group inline-flex items-center gap-2 text-sm font-medium text-white/66 transition-colors hover:text-white"
           >
             <Download className="size-3.5" />
