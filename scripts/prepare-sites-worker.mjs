@@ -6,7 +6,9 @@ import path from "node:path"
 const execFileAsync = promisify(execFile)
 const projectRoot = path.resolve(new URL("..", import.meta.url).pathname)
 const buildServer = path.join(projectRoot, "build/server/index.js")
+const buildClient = path.join(projectRoot, "build/client")
 const distServer = path.join(projectRoot, "dist/server")
+const distClient = path.join(projectRoot, "dist/client")
 const appBuild = path.join(distServer, "app.js")
 const workerEntry = path.join(distServer, "worker-entry.mjs")
 const workerOutput = path.join(distServer, "index.js")
@@ -28,6 +30,8 @@ const esbuild = path.join(
 )
 
 await mkdir(distServer, { recursive: true })
+await mkdir(distClient, { recursive: true })
+await cp(buildClient, distClient, { recursive: true })
 await cp(buildServer, appBuild)
 await writeFile(
   workerEntry,
