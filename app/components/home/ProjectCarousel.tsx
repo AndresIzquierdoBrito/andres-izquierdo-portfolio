@@ -494,11 +494,11 @@ export default function ProjectCarousel({
   }
 
   return (
-    <div className="w-full md:h-full md:min-h-0">
-      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible md:h-full md:min-h-0 xl:left-[calc(50%-2rem)]">
+    <div className="w-full xl:h-full xl:min-h-0">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible xl:h-full xl:min-h-0 xl:left-[calc(50%-2rem)]">
         <div
           ref={stageRef}
-          className="relative h-[37.7rem] sm:h-[39rem] md:h-full md:min-h-0"
+          className="relative h-[37.7rem] sm:h-[39rem] xl:h-full xl:min-h-0"
         >
           <CarouselHalo activeIndex={activeIndex} />
           {virtualCards.map((card, vi) => {

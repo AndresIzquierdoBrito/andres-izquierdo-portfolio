@@ -90,15 +90,36 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     translations: {
       en: {
         eyebrow: "Projects",
-        name: "Coming soon!",
-        tagline: "Coming soon!",
-        description: "Coming soon!",
+        name: "IzbriProjects",
+        tagline: "My self-hosted services, live and in view.",
+        description:
+          "A live dashboard connected to Coolify for monitoring self-hosted services, uptime, health, and operational data.",
       },
       es: {
         eyebrow: "Proyectos",
-        name: "¡Próximamente!",
-        tagline: "¡Próximamente!",
-        description: "¡Próximamente!",
+        name: "IzbriProjects",
+        tagline: "Mis servicios autoalojados, en directo y bajo control.",
+        description:
+          "Un dashboard en directo conectado con Coolify para monitorizar servicios autoalojados, su disponibilidad, estado y otros datos operativos.",
+      },
+    },
+    projectUrl: "https://projects.izbri.com",
+  },
+  {
+    translations: {
+      en: {
+        eyebrow: "Projects",
+        name: "StorageApp",
+        tagline: "Know exactly what is inside every box.",
+        description:
+          "A smart physical inventory app connecting containers to QR codes or barcodes, making long-term and segmented storage searchable.",
+      },
+      es: {
+        eyebrow: "Proyectos",
+        name: "StorageApp",
+        tagline: "Sabe exactamente qué hay dentro de cada caja.",
+        description:
+          "Una app inteligente de inventario físico que conecta los contenedores con códigos QR o de barras para poder buscar en almacenamientos segmentados o de larga duración.",
       },
     },
   },
@@ -106,63 +127,17 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     translations: {
       en: {
         eyebrow: "Projects",
-        name: "Coming soon!",
-        tagline: "Coming soon!",
-        description: "Coming soon!",
+        name: "Google Autocompleta",
+        tagline: "Can you predict what Spain searches for?",
+        description:
+          "An interactive Spanish-language game inspired by Google Feud where players complete popular searches and guess what people in Spain search for most.",
       },
       es: {
         eyebrow: "Proyectos",
-        name: "¡Próximamente!",
-        tagline: "¡Próximamente!",
-        description: "¡Próximamente!",
-      },
-    },
-  },
-  {
-    translations: {
-      en: {
-        eyebrow: "Projects",
-        name: "Coming soon!",
-        tagline: "Coming soon!",
-        description: "Coming soon!",
-      },
-      es: {
-        eyebrow: "Proyectos",
-        name: "¡Próximamente!",
-        tagline: "¡Próximamente!",
-        description: "¡Próximamente!",
-      },
-    },
-  },
-  {
-    translations: {
-      en: {
-        eyebrow: "Projects",
-        name: "Coming soon!",
-        tagline: "Coming soon!",
-        description: "Coming soon!",
-      },
-      es: {
-        eyebrow: "Proyectos",
-        name: "¡Próximamente!",
-        tagline: "¡Próximamente!",
-        description: "¡Próximamente!",
-      },
-    },
-  },
-  {
-    translations: {
-      en: {
-        eyebrow: "Projects",
-        name: "Coming soon!",
-        tagline: "Coming soon!",
-        description: "Coming soon!",
-      },
-      es: {
-        eyebrow: "Proyectos",
-        name: "¡Próximamente!",
-        tagline: "¡Próximamente!",
-        description: "¡Próximamente!",
+        name: "Google Autocompleta",
+        tagline: "¿Puedes adivinar qué busca España?",
+        description:
+          "Un juego interactivo en español inspirado en Google Feud en el que completas búsquedas populares y adivinas qué busca más la gente en España.",
       },
     },
   },

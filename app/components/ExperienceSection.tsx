@@ -209,11 +209,11 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <h3 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+                  <h3 className="text-xl font-semibold tracking-tight text-foreground">
                     {t(`entries.${entry.id}.company`)}
                   </h3>
                   <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-3">
-                    <p className="text-base text-foreground/80 sm:text-xl">
+                    <p className="text-base text-foreground/80">
                       {t(`entries.${entry.id}.role`)}
                     </p>
                     <p className="text-sm text-muted-foreground italic">
@@ -307,11 +307,11 @@ function EducationTimeline({ entries }: { entries: EducationEntryMeta[] }) {
                 </div>
 
                 <div className="flex flex-col gap-1">
-                  <h3 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+                  <h3 className="text-xl font-semibold tracking-tight text-foreground">
                     {t(`entries.${entry.id}.institution`)}
                   </h3>
                   <div className="flex flex-col gap-1 md:flex-row md:items-baseline md:gap-3">
-                    <p className="text-base text-foreground/80 sm:text-xl">
+                    <p className="text-base text-foreground/80">
                       {t(`entries.${entry.id}.degree`)}
                     </p>
                     <p className="text-sm text-muted-foreground italic">

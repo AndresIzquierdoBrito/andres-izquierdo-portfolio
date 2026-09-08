@@ -52,7 +52,7 @@ export default function HomeProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative z-0 scroll-mt-6 overflow-hidden px-6 pt-14 pb-20 sm:px-12 sm:pt-20 sm:pb-24 md:h-svh md:min-h-0 md:py-6 xl:pr-28 xl:pl-44"
+      className="relative z-0 scroll-mt-6 overflow-hidden px-6 pt-14 pb-20 sm:px-12 sm:pt-20 sm:pb-24 xl:h-svh xl:min-h-0 xl:py-6 xl:pr-28 xl:pl-44"
       style={{
         backgroundImage:
           "linear-gradient(180deg, var(--home-projects-background-from), var(--home-projects-background-to))",
@@ -79,7 +79,7 @@ export default function HomeProjectsSection() {
         }}
       />
 
-      <div className="mx-auto flex max-w-7xl flex-col gap-1 md:h-full md:min-h-0 md:gap-0">
+      <div className="mx-auto flex max-w-7xl flex-col gap-1 xl:h-full xl:min-h-0 xl:gap-0">
         <div className="relative mx-auto flex w-full max-w-7xl shrink-0 flex-col items-center gap-3 px-16 text-center sm:px-24 md:gap-2 lg:px-28">
           <button
             type="button"
@@ -102,7 +102,7 @@ export default function HomeProjectsSection() {
           </button>
 
           <SectionBadge>{t("eyebrow")}</SectionBadge>
-          <div className="flex min-h-24 w-full items-center justify-center sm:min-h-32 md:h-[clamp(5rem,12svh,8rem)] md:min-h-0">
+          <div className="flex min-h-24 w-full items-center justify-center sm:min-h-32 xl:h-[clamp(5rem,12svh,8rem)] xl:min-h-0">
             <h2
               ref={taglineRef}
               className="font-heading text-3xl leading-tight font-light tracking-[-0.035em] text-slate-950 sm:text-5xl md:text-[clamp(2rem,4vw,3.35rem)] dark:text-white"
@@ -112,7 +112,7 @@ export default function HomeProjectsSection() {
           </div>
         </div>
 
-        <div className="mt-8 sm:mt-10 md:mt-2 md:min-h-0 md:flex-1 lg:mt-12">
+        <div className="mt-8 sm:mt-10 xl:mt-2 xl:min-h-0 xl:flex-1">
           <ProjectCarousel
             cards={projectPreviewCards}
             activeIndex={activeIndex}
