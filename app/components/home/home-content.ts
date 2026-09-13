@@ -60,6 +60,8 @@ export type ProjectCardData = {
   translations: Record<AppLanguage, ProjectContent>
   /** Path to the app icon image (e.g. "/icons/myapp.png") */
   iconSrc?: string
+  /** Optional icon glow treatment */
+  iconGlow?: "spectrum"
   /** Up to 4 icons representing the project's stack, shown top-right of the card */
   stack?: readonly ProjectStackItem[]
   /** Up to 3 screenshots shown scattered around the icon */
@@ -125,7 +127,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
           "Un dashboard en directo conectado con Coolify para monitorizar servicios autoalojados, su disponibilidad, estado y otros datos operativos.",
       },
     },
-    iconSrc: "/izbri-projects-icon.webp",
+    iconSrc: "/izbri_logo_nobg.png",
     stack: [
       { title: "React", icon: ReactIcon },
       { title: "Coolify", icon: CoolifyIcon },
@@ -176,6 +178,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       },
     },
     iconSrc: "/projects_media/google_autocompleta/googleautocompleta_logo.png",
+    iconGlow: "spectrum",
     stack: [
       { title: "FastAPI", icon: FastAPIIcon },
       { title: "Expo", icon: ExpoIcon },

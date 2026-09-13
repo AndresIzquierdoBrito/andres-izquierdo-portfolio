@@ -104,9 +104,9 @@ function ScreenshotPhone({
   return (
     <div
       className={cn(
-        "relative flex h-full w-full overflow-hidden rounded-[2rem] border-[6px] border-slate-950 bg-slate-950 p-1 shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)] dark:border-slate-700 dark:bg-slate-950 dark:shadow-[0_12px_28px_-8px_rgba(2,6,23,0.8)]",
+        "relative flex h-full w-full overflow-hidden rounded-[2rem] border-[6px] border-white bg-white p-1 shadow-[0_12px_28px_-8px_rgba(15,23,42,0.32)] ring-1 ring-black/10 dark:border-white dark:bg-white dark:shadow-[0_12px_28px_-8px_rgba(2,6,23,0.56)]",
         expanded &&
-          "rounded-[2.5rem] border-[8px] shadow-[0_28px_90px_-24px_rgba(2,6,23,0.78)]"
+          "rounded-[2.5rem] border-[8px] shadow-[0_28px_90px_-24px_rgba(2,6,23,0.58)]"
       )}
     >
       <div className="relative min-h-0 flex-1 overflow-hidden rounded-[1.55rem] bg-black">
@@ -121,7 +121,7 @@ function ScreenshotPhone({
           src={src}
           alt={alt}
           draggable={false}
-          className="block h-full w-full object-contain object-top"
+          className="block h-full w-full object-cover object-top"
         />
       </div>
     </div>
@@ -592,12 +592,30 @@ export default function ProjectCard({
                 <>
                   <span
                     aria-hidden="true"
-                    className="absolute size-20 rounded-full bg-amber-300/45 blur-2xl sm:size-28 dark:bg-cyan-300/35"
+                    className={cn(
+                      "absolute size-20 rounded-full sm:size-28",
+                      card.iconGlow === "spectrum"
+                        ? "opacity-95 blur-xl"
+                        : "bg-amber-300/45 blur-2xl dark:bg-cyan-300/35"
+                    )}
+                    style={
+                      card.iconGlow === "spectrum"
+                        ? {
+                            background:
+                              "radial-gradient(circle at 22% 50%, rgba(239,68,68,0.88), transparent 52%), radial-gradient(circle at 78% 50%, rgba(59,130,246,0.88), transparent 52%), radial-gradient(circle at 50% 22%, rgba(234,179,8,0.88), transparent 52%), radial-gradient(circle at 50% 78%, rgba(34,197,94,0.88), transparent 52%)",
+                          }
+                        : undefined
+                    }
                   />
                   <img
                     src={card.iconSrc}
                     alt={content.name}
-                    className="relative z-10 size-24 object-contain drop-shadow-[0_0_12px_rgba(255,132,97,0.72)] sm:size-32 sm:drop-shadow-[0_0_18px_rgba(255,132,97,0.72)] dark:drop-shadow-[0_0_16px_rgba(45,212,191,0.64)] dark:sm:drop-shadow-[0_0_24px_rgba(45,212,191,0.64)]"
+                    className={cn(
+                      "relative z-10 size-24 object-contain sm:size-32",
+                      card.iconGlow === "spectrum"
+                        ? "drop-shadow-[0_0_10px_rgba(255,255,255,0.72)] sm:drop-shadow-[0_0_16px_rgba(255,255,255,0.72)]"
+                        : "drop-shadow-[0_0_12px_rgba(255,132,97,0.72)] sm:drop-shadow-[0_0_18px_rgba(255,132,97,0.72)] dark:drop-shadow-[0_0_16px_rgba(45,212,191,0.64)] dark:sm:drop-shadow-[0_0_24px_rgba(45,212,191,0.64)]"
+                    )}
                   />
                 </>
               ) : (

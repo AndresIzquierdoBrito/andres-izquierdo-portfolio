@@ -23,7 +23,7 @@ export default function SiteBrandMark({
       aria-label={showCopyright ? "izbri.com, copyright 2026" : "izbri.com"}
     >
       <img
-        src="/izbri-projects-icon.webp"
+        src="/izbri_logo_nobg.png"
         alt=""
         aria-hidden="true"
         className={cn(
