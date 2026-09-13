@@ -62,7 +62,7 @@ export default function Home() {
     <div className="relative h-full w-full">
       <HomeSectionNav activeSection={activeSection} />
 
-      <main className="relative pb-28 lg:pb-0">
+      <main className="relative pb-28 min-[1050px]:pb-0">
         <HomeHeroSection />
         <HomeAboutSection />
         <HomeProjectsSection />

@@ -13,7 +13,11 @@ import gsap from "gsap"
 import { resolveAppLanguage } from "~/i18n/settings"
 import { cn } from "~/lib/utils"
 
-import { getProjectContent, type ProjectCardData } from "./home-content"
+import {
+  getProjectContent,
+  type ProjectCardData,
+  type ProjectScreenshot,
+} from "./home-content"
 
 // Re-export so callers don't need two imports
 export type { ProjectCardData }
@@ -44,6 +48,7 @@ const screenshotSlots: ScreenshotSlot[] = [
 
 type ScreenshotLightboxState = {
   src: string
+  frame: ProjectScreenshot["frame"]
   label: string
   originRect: DOMRect
   originRotation: number
@@ -85,6 +90,60 @@ function ScreenshotWindow({
       </div>
     </div>
   )
+}
+
+function ScreenshotPhone({
+  src,
+  alt,
+  expanded = false,
+}: {
+  src: string
+  alt: string
+  expanded?: boolean
+}) {
+  return (
+    <div
+      className={cn(
+        "relative flex h-full w-full overflow-hidden rounded-[2rem] border-[6px] border-slate-950 bg-slate-950 p-1 shadow-[0_12px_28px_-8px_rgba(15,23,42,0.5)] dark:border-slate-700 dark:bg-slate-950 dark:shadow-[0_12px_28px_-8px_rgba(2,6,23,0.8)]",
+        expanded &&
+          "rounded-[2.5rem] border-[8px] shadow-[0_28px_90px_-24px_rgba(2,6,23,0.78)]"
+      )}
+    >
+      <div className="relative min-h-0 flex-1 overflow-hidden rounded-[1.55rem] bg-black">
+        <div
+          aria-hidden="true"
+          className={cn(
+            "absolute top-1.5 left-1/2 z-10 h-3 w-14 -translate-x-1/2 rounded-full bg-black/90",
+            expanded && "top-2 h-4 w-20"
+          )}
+        />
+        <img
+          src={src}
+          alt={alt}
+          draggable={false}
+          className="block h-full w-full object-contain object-top"
+        />
+      </div>
+    </div>
+  )
+}
+
+function ScreenshotFrame({
+  screenshot,
+  alt,
+  expanded = false,
+}: {
+  screenshot: ProjectScreenshot
+  alt: string
+  expanded?: boolean
+}) {
+  if (screenshot.frame === "phone") {
+    return (
+      <ScreenshotPhone src={screenshot.src} alt={alt} expanded={expanded} />
+    )
+  }
+
+  return <ScreenshotWindow src={screenshot.src} alt={alt} expanded={expanded} />
 }
 
 function ScreenshotLightbox({
@@ -226,10 +285,21 @@ function ScreenshotLightbox({
     >
       <div
         ref={frameRef}
-        className="relative max-h-[85svh] w-[min(90vw,1100px)] origin-center"
+        data-screenshot-frame={screenshot.frame}
+        className={cn(
+          "relative max-h-[85svh] origin-center",
+          screenshot.frame === "phone"
+            ? "w-[min(82vw,39svh,420px)]"
+            : "w-[min(90vw,1100px)]"
+        )}
+        style={
+          screenshot.frame === "phone"
+            ? { aspectRatio: "650 / 1396" }
+            : undefined
+        }
       >
-        <ScreenshotWindow
-          src={screenshot.src}
+        <ScreenshotFrame
+          screenshot={{ src: screenshot.src, frame: screenshot.frame }}
           alt={screenshot.label}
           expanded
         />
@@ -250,19 +320,19 @@ function ScreenshotLightbox({
 
 function ScreenshotItem({
   slot,
-  src,
+  screenshot,
   toneClass,
   projectName,
   screenshotIndex,
   onOpen,
 }: {
   slot: ScreenshotSlot
-  src?: string
+  screenshot?: ProjectScreenshot
   toneClass: string
   projectName: string
   screenshotIndex: number
   onOpen: (
-    src: string,
+    screenshot: ProjectScreenshot,
     label: string,
     origin: HTMLButtonElement,
     rotation: number
@@ -270,6 +340,7 @@ function ScreenshotItem({
 }) {
   const ref = useRef<HTMLButtonElement>(null)
   const label = `${projectName} screenshot ${screenshotIndex + 1}`
+  const frame = screenshot?.frame ?? "browser"
 
   const setHovered = (hovered: boolean) => {
     if (!ref.current) return
@@ -279,7 +350,7 @@ function ScreenshotItem({
     ref.current.style.zIndex = hovered ? "20" : String(slot.zIndex)
   }
 
-  if (!src) {
+  if (!screenshot) {
     return (
       <div
         className="absolute w-[52%]"
@@ -315,13 +386,15 @@ function ScreenshotItem({
       type="button"
       ref={ref}
       aria-label={`Open ${label}`}
-      className="absolute w-[52%] cursor-pointer appearance-none border-0 bg-transparent p-0 text-left focus-visible:z-20 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none dark:focus-visible:ring-indigo-300 dark:focus-visible:ring-offset-slate-950"
+      data-screenshot-frame={frame}
+      className="absolute cursor-pointer appearance-none border-0 bg-transparent p-0 text-left focus-visible:z-20 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none dark:focus-visible:ring-indigo-300 dark:focus-visible:ring-offset-slate-950"
       style={{
         top: slot.top,
         left: slot.left,
         right: slot.right,
         bottom: slot.bottom,
-        aspectRatio: "16 / 10",
+        width: frame === "phone" ? "30%" : "52%",
+        aspectRatio: frame === "phone" ? "650 / 1396" : "16 / 10",
         transform: `rotate(${slot.rotate}deg)`,
         zIndex: slot.zIndex,
         transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
@@ -337,10 +410,10 @@ function ScreenshotItem({
       onBlur={() => setHovered(false)}
       onClick={(event) => {
         event.stopPropagation()
-        onOpen(src, label, event.currentTarget, slot.rotate)
+        onOpen(screenshot, label, event.currentTarget, slot.rotate)
       }}
     >
-      <ScreenshotWindow src={src} alt={label} />
+      <ScreenshotFrame screenshot={screenshot} alt={label} />
     </button>
   )
 }
@@ -367,7 +440,7 @@ export default function ProjectCard({
   const activeThumbnailRef = useRef<HTMLButtonElement | null>(null)
 
   const openLightbox = (
-    src: string,
+    screenshot: ProjectScreenshot,
     label: string,
     origin: HTMLButtonElement,
     rotation: number
@@ -375,7 +448,8 @@ export default function ProjectCard({
     activeThumbnailRef.current = origin
     setClosing(false)
     setLightbox({
-      src,
+      src: screenshot.src,
+      frame: screenshot.frame,
       label,
       originRect: origin.getBoundingClientRect(),
       originRotation: rotation,
@@ -496,7 +570,7 @@ export default function ProjectCard({
             <ScreenshotItem
               key={si}
               slot={slot}
-              src={card.screenshots?.[si]}
+              screenshot={card.screenshots?.[si]}
               toneClass={toneClass}
               projectName={content.name}
               screenshotIndex={si}

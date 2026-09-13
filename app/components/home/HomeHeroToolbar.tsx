@@ -34,13 +34,14 @@ function CvButton({
     <a
       href={cv.href}
       download={cv.filename}
+      aria-label={label}
       className={cn(
-        "inline-flex h-12 items-center gap-2 rounded-full border border-black/10 bg-white/55 px-4 text-xs font-semibold tracking-[0.18em] whitespace-nowrap text-slate-900 uppercase shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md transition-colors duration-200 hover:bg-white/80 sm:px-5 lg:h-10 lg:px-4 dark:border-white/15 dark:bg-slate-900/45 dark:text-white dark:hover:bg-slate-900/70",
+        "cv-control inline-flex h-12 items-center gap-2 rounded-full border border-black/10 bg-white/55 px-4 text-xs font-semibold tracking-[0.18em] whitespace-nowrap text-slate-900 uppercase shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md transition-colors duration-200 hover:bg-white/80 sm:px-5 lg:h-10 lg:px-4 dark:border-white/15 dark:bg-slate-900/45 dark:text-white dark:hover:bg-slate-900/70",
         className
       )}
     >
       <Download className="size-3.5" />
-      {label}
+      <span className="cv-label">{label}</span>
     </a>
   )
 }
@@ -63,7 +64,10 @@ export default function HomeHeroToolbar() {
   const cvLabel = t("downloadCv")
 
   return (
-    <div className="fixed top-4 right-4 left-4 z-50 lg:top-8 lg:right-12 lg:left-auto lg:flex lg:justify-end xl:right-16">
+    <div
+      data-testid="hero-toolbar"
+      className="fixed top-4 right-4 left-4 z-50 lg:top-8 lg:right-12 lg:left-auto lg:flex lg:justify-end xl:right-16"
+    >
       <div className="flex flex-wrap items-center justify-between gap-2 lg:justify-end">
         <CvButton
           label={cvLabel}
@@ -118,6 +122,7 @@ export default function HomeHeroToolbar() {
             type="button"
             size="icon"
             variant="outline"
+            data-testid="theme-toggle"
             className="size-12 rounded-full border-black/10 bg-white/55 text-slate-900 shadow-[0_18px_60px_rgba(15,23,42,0.08)] backdrop-blur-md hover:bg-white/70 lg:size-10 dark:border-white/15 dark:bg-slate-900/45 dark:text-white dark:hover:bg-slate-900/70"
             aria-label={t("themeHint")}
             title={t("themeHint")}

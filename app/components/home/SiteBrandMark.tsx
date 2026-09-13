@@ -16,31 +16,42 @@ export default function SiteBrandMark({
   return (
     <div
       className={cn(
-        "flex w-fit flex-col items-start",
+        "flex w-fit items-center gap-2.5",
         inverted ? "text-white" : "text-slate-950 dark:text-white",
         className
       )}
       aria-label={showCopyright ? "izbri.com, copyright 2026" : "izbri.com"}
     >
-      <span
+      <img
+        src="/izbri-projects-icon.webp"
+        alt=""
+        aria-hidden="true"
         className={cn(
-          "font-heading leading-none font-[750] tracking-[-0.075em] lowercase",
-          compact ? "text-xl" : "text-2xl sm:text-[1.7rem]"
+          "shrink-0 rounded-[0.35rem] object-contain",
+          compact ? "size-6" : "size-9"
         )}
-      >
-        izbri.com
-      </span>
-      {showCopyright ? (
+      />
+      <div className="flex flex-col items-start">
         <span
           className={cn(
-            "mt-2 font-mono font-medium tracking-[0.08em]",
-            inverted ? "text-white/58" : "text-slate-950/58 dark:text-white/58",
-            compact ? "text-[0.62rem]" : "text-[0.68rem]"
+            "font-heading leading-none font-[750] tracking-[-0.075em] lowercase",
+            compact ? "text-xl" : "text-2xl sm:text-[1.7rem]"
           )}
         >
-          © 2026
+          izbri.com
         </span>
-      ) : null}
+        {showCopyright ? (
+          <span
+            className={cn(
+              "mt-2 font-mono font-medium tracking-[0.08em]",
+              inverted ? "text-white/58" : "text-slate-950/58 dark:text-white/58",
+              compact ? "text-[0.62rem]" : "text-[0.68rem]"
+            )}
+          >
+            © 2026
+          </span>
+        ) : null}
+      </div>
     </div>
   )
 }

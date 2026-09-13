@@ -28,16 +28,23 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const documentLanguage = resolveAppLanguage(lang)
 
   return (
-    <html lang={documentLanguage} suppressHydrationWarning>
+    <html
+      lang={documentLanguage}
+      className="overflow-x-clip"
+      suppressHydrationWarning
+    >
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="color-scheme" content="light dark" />
+        <link rel="icon" href="/izbri-projects-icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/izbri-projects-icon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/izbri-projects-icon.png" />
         <script dangerouslySetInnerHTML={{ __html: initialThemeScript }} />
         <Meta />
         <Links />
       </head>
-      <body className="min-h-svh overflow-x-hidden">
+      <body className="min-h-svh overflow-x-clip">
         <div className="relative z-10">{children}</div>
         <ScrollRestoration />
         <Scripts />

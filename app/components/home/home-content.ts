@@ -33,6 +33,11 @@ export type ProjectStackItem = {
   icon: FocusToolIcon
 }
 
+export type ProjectScreenshot = {
+  src: string
+  frame: "browser" | "phone"
+}
+
 export const currentFocusTools = [
   { label: "React", icon: ReactIcon },
   { label: "FastAPI", icon: FastAPIIcon },
@@ -57,8 +62,8 @@ export type ProjectCardData = {
   iconSrc?: string
   /** Up to 4 icons representing the project's stack, shown top-right of the card */
   stack?: readonly ProjectStackItem[]
-  /** Up to 3 screenshot or gif paths shown scattered around the icon */
-  screenshots?: readonly string[]
+  /** Up to 3 screenshots shown scattered around the icon */
+  screenshots?: readonly ProjectScreenshot[]
   /** Live project URL */
   projectUrl?: string
   /** Case study or demo site URL */
@@ -97,9 +102,9 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       { title: "Gemini", icon: GeminiIcon },
     ],
     screenshots: [
-      "/projects_media/apuntex/apuntex_sc1.png",
-      "/projects_media/apuntex/apuntex_sc2.png",
-      "/projects_media/apuntex/apuntex_sc3.png",
+      { src: "/projects_media/apuntex/apuntex_sc1.png", frame: "browser" },
+      { src: "/projects_media/apuntex/apuntex_sc2.png", frame: "browser" },
+      { src: "/projects_media/apuntex/apuntex_sc3.png", frame: "browser" },
     ],
     projectUrl: "https://apuntex.com",
   },
@@ -120,6 +125,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
           "Un dashboard en directo conectado con Coolify para monitorizar servicios autoalojados, su disponibilidad, estado y otros datos operativos.",
       },
     },
+    iconSrc: "/izbri-projects-icon.webp",
     stack: [
       { title: "React", icon: ReactIcon },
       { title: "Coolify", icon: CoolifyIcon },
@@ -159,22 +165,38 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
         name: "Google Autocompleta",
         tagline: "Can you predict what Spain searches for?",
         description:
-          "An interactive Spanish-language game inspired by Google Feud where players complete popular searches and guess what people in Spain search for most.",
+          "A game where you guess how other people complete Spanish searches. Play daily, historical, or random category challenges, share results, and play with previously collected answers rather than live searches.",
       },
       es: {
         eyebrow: "Proyectos",
         name: "Google Autocompleta",
         tagline: "¿Puedes adivinar qué busca España?",
         description:
-          "Un juego interactivo en español inspirado en Google Feud en el que completas búsquedas populares y adivinas qué busca más la gente en España.",
+          "Un juego para adivinar cómo completan otras personas búsquedas en español. Incluye retos diarios, históricos y aleatorios por categorías, con resultados compartibles y respuestas recopiladas previamente, no en tiempo real.",
       },
     },
+    iconSrc: "/projects_media/google_autocompleta/googleautocompleta_logo.png",
     stack: [
       { title: "FastAPI", icon: FastAPIIcon },
       { title: "Expo", icon: ExpoIcon },
       { title: "React", icon: ReactIcon },
       { title: "PostgreSQL", icon: PostgreSQLIcon },
     ],
+    screenshots: [
+      {
+        src: "/projects_media/google_autocompleta/google_autocompleta_sc1.png",
+        frame: "browser",
+      },
+      {
+        src: "/projects_media/google_autocompleta/google_autocompleta_sc2.png",
+        frame: "browser",
+      },
+      {
+        src: "/projects_media/google_autocompleta/google_autocompleta_phone_sc.png",
+        frame: "phone",
+      },
+    ],
+    projectUrl: "https://googleautocompleta.com",
   },
 ]
 

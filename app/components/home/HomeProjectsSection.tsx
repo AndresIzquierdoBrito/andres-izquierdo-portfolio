@@ -52,7 +52,7 @@ export default function HomeProjectsSection() {
   return (
     <section
       id="projects"
-      className="relative z-0 scroll-mt-6 overflow-hidden px-6 pt-14 pb-20 sm:px-12 sm:pt-20 sm:pb-24 xl:h-svh xl:min-h-0 xl:py-6 xl:pr-28 xl:pl-44"
+      className="relative z-0 scroll-mt-6 overflow-hidden px-6 pt-14 pb-20 min-[1050px]:scroll-mt-48 sm:px-12 sm:pt-20 sm:pb-24 xl:h-svh xl:min-h-0 xl:py-6 2xl:scroll-mt-6 2xl:pr-28 2xl:pl-72"
       style={{
         backgroundImage:
           "linear-gradient(180deg, var(--home-projects-background-from), var(--home-projects-background-to))",
