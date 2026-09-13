@@ -5,6 +5,8 @@ import RotatingGreeting from "~/components/RotatingGreeting"
 import { resolveAppLanguage } from "~/i18n/settings"
 import { useThemeMode } from "~/lib/useThemeMode"
 
+import TransparentVideo from "../TransparentVideo"
+
 import { getHomeGradientPalette, heroGreetings } from "./home-content"
 import HomeHeroToolbar from "./HomeHeroToolbar"
 import SiteBrandMark from "./SiteBrandMark"
@@ -50,7 +52,7 @@ export default function HomeHeroSection() {
 
       <section
         id="home"
-        className="relative mx-auto min-h-screen max-w-7xl scroll-mt-6 overflow-hidden px-6 sm:px-12 xl:pr-28 xl:pl-44"
+        className="relative mx-auto min-h-screen max-w-7xl scroll-mt-6 overflow-hidden px-6 sm:px-12 lg:overflow-visible xl:pr-28 xl:pl-44"
       >
         <HomeHeroToolbar />
 
@@ -70,6 +72,11 @@ export default function HomeHeroSection() {
             </p>
           </div>
         </div>
+
+        <TransparentVideo
+          aria-hidden="true"
+          className="pointer-events-none absolute bottom-0 left-1/2 z-0 h-[62vh] w-auto max-w-none -translate-x-1/2 translate-y-[10%] object-contain object-bottom sm:h-[74vh] sm:translate-y-[8%] lg:right-0 lg:left-auto lg:h-[106vh] lg:translate-x-[26%] lg:translate-y-[8%] xl:h-[110vh]"
+        />
       </section>
     </div>
   )

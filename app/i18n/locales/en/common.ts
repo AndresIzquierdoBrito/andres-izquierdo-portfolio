@@ -120,7 +120,7 @@ const enCommon = {
       cifp: {
         institution: "CIFP César Manrique",
         degree: "Higher Technician in Web Application Development",
-        location: "Las Palmas de Gran Canaria, Spain",
+        location: "Santa Cruz de Tenerife, Spain",
         description:
           "Ciclo de Formación Profesional Superior en Desarrollo de Aplicaciones Web — a two-year vocational program covering full-stack web development, databases, and deployment.",
       },

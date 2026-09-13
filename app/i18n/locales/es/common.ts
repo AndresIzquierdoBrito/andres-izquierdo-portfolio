@@ -123,7 +123,7 @@ const esCommon = {
       cifp: {
         institution: "CIFP César Manrique",
         degree: "Técnico Superior en Desarrollo de Aplicaciones Web",
-        location: "Las Palmas de Gran Canaria, España",
+        location: "Santa Cruz de Tenerife, España",
         description:
           "Ciclo de Formación Profesional Superior en Desarrollo de Aplicaciones Web — un programa de dos años centrado en desarrollo web full-stack, bases de datos y despliegue.",
       },
