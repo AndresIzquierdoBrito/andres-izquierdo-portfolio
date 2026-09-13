@@ -262,7 +262,7 @@ export default function HomeContactSection() {
             inverted
             compact
             showCopyright
-            className="pt-3 sm:ml-auto sm:items-end sm:pt-0"
+            className="pt-3 sm:ml-auto sm:items-center sm:pt-0"
           />
         </div>
       </div>

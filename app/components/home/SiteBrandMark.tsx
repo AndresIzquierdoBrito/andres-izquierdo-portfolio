@@ -16,7 +16,7 @@ export default function SiteBrandMark({
   return (
     <div
       className={cn(
-        "flex w-fit items-center gap-2.5",
+        "flex w-fit items-center gap-1",
         inverted ? "text-white" : "text-slate-950 dark:text-white",
         className
       )}
@@ -28,7 +28,7 @@ export default function SiteBrandMark({
         aria-hidden="true"
         className={cn(
           "shrink-0 rounded-[0.35rem] object-contain",
-          compact ? "size-6" : "size-9"
+          compact ? "size-10" : "size-9"
         )}
       />
       <div className="flex flex-col items-start">
@@ -38,7 +38,7 @@ export default function SiteBrandMark({
             compact ? "text-xl" : "text-2xl sm:text-[1.7rem]"
           )}
         >
-          izbri.com
+          zbri.com
         </span>
         {showCopyright ? (
           <span
