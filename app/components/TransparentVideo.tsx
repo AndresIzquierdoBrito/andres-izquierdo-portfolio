@@ -25,6 +25,7 @@ export interface TransparentVideoProps extends NativeVideoProps {
 export default function TransparentVideo({
   className,
   height = 638,
+  onError,
   onLoadedData,
   pointerEvents = "none",
   style,
@@ -34,6 +35,7 @@ export default function TransparentVideo({
   const videoRef = useRef<HTMLVideoElement>(null)
   const [shouldLoad, setShouldLoad] = useState(false)
   const [isReady, setIsReady] = useState(false)
+  const [useWebmFallback, setUseWebmFallback] = useState(false)
   const { isDarkMode } = useThemeMode()
 
   useEffect(() => {
@@ -77,13 +79,56 @@ export default function TransparentVideo({
     }
 
     setIsReady(false)
-    video.load()
-    void video.play().catch(() => undefined)
+    setUseWebmFallback(false)
+
+    // Wait for React to commit the new <source> elements before asking the
+    // media element to reload. Safari can otherwise retain the previous
+    // source (or an empty source list) when the video is loaded lazily.
+    const frameId = window.requestAnimationFrame(() => {
+      video.load()
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
   }, [isDarkMode, shouldLoad])
+
+  useEffect(() => {
+    if (!shouldLoad || !useWebmFallback) {
+      return
+    }
+
+    const video = videoRef.current
+
+    if (!video) {
+      return
+    }
+
+    const frameId = window.requestAnimationFrame(() => {
+      video.load()
+    })
+
+    return () => window.cancelAnimationFrame(frameId)
+  }, [shouldLoad, useWebmFallback])
+
+  const handleCanPlay = (event: SyntheticEvent<HTMLVideoElement>) => {
+    setIsReady(true)
+    void event.currentTarget.play().catch(() => undefined)
+  }
 
   const handleLoadedData = (event: SyntheticEvent<HTMLVideoElement>) => {
     setIsReady(true)
     onLoadedData?.(event)
+  }
+
+  const handleError = (event: SyntheticEvent<HTMLVideoElement>) => {
+    onError?.(event)
+
+    // If Safari cannot decode or fetch the HEVC alpha stream, remove that
+    // source and retry the unchanged WebM asset instead of leaving the video
+    // permanently transparent (opacity: 0).
+    if (!useWebmFallback && event.currentTarget.currentSrc.endsWith(".mp4")) {
+      setIsReady(false)
+      setUseWebmFallback(true)
+    }
   }
 
   return (
@@ -97,8 +142,10 @@ export default function TransparentVideo({
       loop
       muted
       playsInline
-      preload="none"
+      preload={shouldLoad ? "auto" : "none"}
       onLoadedData={handleLoadedData}
+      onCanPlay={handleCanPlay}
+      onError={handleError}
       style={{
         background: "transparent",
         aspectRatio: "72 / 85",
@@ -111,14 +158,16 @@ export default function TransparentVideo({
     >
       {shouldLoad ? (
         <>
-          <source
-            src={
-              isDarkMode
-                ? "/videos/izbri_safari_dark_v2.mp4"
-                : "/videos/izbri_safari_v2.mp4"
-            }
-            type={'video/mp4; codecs="hvc1"'}
-          />
+          {!useWebmFallback ? (
+            <source
+              src={
+                isDarkMode
+                  ? "/videos/izbri_safari_dark_v2.mp4"
+                  : "/videos/izbri_safari_v2.mp4"
+              }
+              type={'video/mp4; codecs="hvc1"'}
+            />
+          ) : null}
           <source
             src={
               isDarkMode
