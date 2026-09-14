@@ -20,7 +20,7 @@ export default function ProjectsDashboardBanner() {
         aria-label={`${t("cta")} — projects.izbri.com`}
       >
         <div className="mx-auto grid max-w-7xl lg:grid-cols-[minmax(0,1.15fr)_minmax(22rem,0.85fr)] 2xl:max-w-none 2xl:pr-28 2xl:pl-72">
-          <div className="relative flex min-h-48 flex-col justify-center gap-4 px-6 py-14 sm:px-12 sm:py-16 lg:min-h-0 lg:-translate-y-4 lg:py-20 lg:pr-14">
+          <div className="relative flex min-h-48 flex-col justify-center gap-4 px-6 py-14 sm:px-12 sm:py-16 lg:min-h-0 lg:-translate-y-2 lg:py-20 lg:pr-14">
             <h2 className="max-w-3xl font-heading text-3xl leading-[1.05] font-medium tracking-[-0.04em] sm:text-4xl lg:text-5xl">
               {t("title")}
             </h2>
@@ -36,7 +36,7 @@ export default function ProjectsDashboardBanner() {
           </div>
 
           <div className="relative hidden min-h-52 items-center gap-5 border-t border-[#071127]/20 px-6 py-14 sm:px-12 sm:py-16 lg:flex lg:border-t-0 lg:border-l lg:px-10 lg:py-20">
-            <div className="flex min-w-0 flex-1 flex-col gap-5">
+            <div className="flex min-w-0 flex-1 flex-col justify-center gap-5">
               <div className="flex items-center justify-between gap-3 font-mono text-[0.6rem] font-semibold tracking-[0.1em] uppercase">
                 <span>{t("monitor")}</span>
                 <span className="border border-[#071127]/25 bg-white/30 px-2.5 py-1">
@@ -45,7 +45,7 @@ export default function ProjectsDashboardBanner() {
               </div>
 
               <div className="grid grid-cols-[auto_minmax(0,1fr)] items-end gap-5">
-                <div className="flex flex-col">
+                <div className="flex flex-col justify-center">
                   <strong className="font-mono text-2xl leading-none tracking-[-0.06em] sm:text-3xl">
                     99.98%
                   </strong>
@@ -56,7 +56,7 @@ export default function ProjectsDashboardBanner() {
 
                 <div
                   aria-hidden="true"
-                  className="flex h-20 items-end gap-1 border-b-2 border-[#071127]/35 bg-[repeating-linear-gradient(to_top,transparent_0,transparent_19px,rgba(7,17,39,0.10)_20px)] pb-1 sm:gap-1.5"
+                  className="flex h-20 items-end gap-1 self-center border-b-2 border-[#071127]/35 bg-[repeating-linear-gradient(to_top,transparent_0,transparent_19px,rgba(7,17,39,0.10)_20px)] pb-1 sm:gap-1.5"
                 >
                   {uptimeBars.map((height, index) => (
                     <span
