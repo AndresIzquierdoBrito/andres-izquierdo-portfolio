@@ -52,7 +52,7 @@ export default function HomeHeroSection() {
 
       <section
         id="home"
-        className="relative mx-auto min-h-screen max-w-7xl scroll-mt-6 overflow-hidden px-6 min-[1050px]:scroll-mt-48 sm:px-12 lg:overflow-visible 2xl:scroll-mt-6 2xl:pr-28 2xl:pl-44"
+        className="relative mx-auto min-h-screen max-w-7xl scroll-mt-6 overflow-hidden px-6 sm:px-12 lg:overflow-visible 2xl:pr-28 2xl:pl-44"
       >
         <HomeHeroToolbar />
 

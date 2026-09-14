@@ -26,7 +26,7 @@ export default function HomeSectionNav({ activeSection }: HomeSectionNavProps) {
     <nav
       aria-label="Section navigation"
       data-testid="home-section-nav"
-      className="home-section-nav fixed inset-x-3 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-50 mx-auto max-w-md min-[1050px]:top-24 min-[1050px]:right-3 min-[1050px]:bottom-auto min-[1050px]:left-3 min-[1050px]:max-w-md 2xl:top-1/2 2xl:right-auto 2xl:bottom-auto 2xl:left-3 2xl:mx-0 2xl:max-w-none 2xl:-translate-y-1/2"
+      className="home-section-nav fixed inset-x-3 bottom-[max(0.5rem,env(safe-area-inset-bottom))] z-50 mx-auto max-w-md 2xl:top-1/2 2xl:right-auto 2xl:bottom-auto 2xl:left-3 2xl:mx-0 2xl:max-w-none 2xl:-translate-y-1/2"
     >
       <div className="pointer-events-auto rounded-[2rem] border border-black/10 bg-white/70 p-1.5 text-slate-900 shadow-[0_24px_64px_-30px_rgba(15,23,42,0.45)] backdrop-blur-2xl 2xl:w-60 2xl:p-3 dark:border-white/15 dark:bg-slate-900/45 dark:text-white">
         <ol className="grid grid-cols-4 gap-1 2xl:flex 2xl:flex-col 2xl:gap-0">

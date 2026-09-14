@@ -45,7 +45,7 @@ export default function HomeAboutSection() {
   return (
     <section
       id="background"
-      className="resume-dot-pattern relative scroll-mt-6 overflow-hidden bg-background px-6 pt-16 pb-12 min-[1050px]:scroll-mt-48 sm:px-12 sm:pb-20 2xl:scroll-mt-6 2xl:pr-28 2xl:pl-72"
+      className="resume-dot-pattern relative scroll-mt-6 overflow-hidden bg-background px-6 pt-16 pb-12 sm:px-12 sm:pb-20 2xl:pr-28 2xl:pl-72"
       onPointerLeave={handleResumePatternPointerLeave}
       onPointerMove={handleResumePatternPointerMove}
       style={getResumePatternStyle()}

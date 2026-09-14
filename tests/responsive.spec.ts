@@ -155,9 +155,7 @@ function expectNavigationMode(snapshot: LayoutSnapshot, width: number) {
     expect(snapshot.nav.bottom).toBeGreaterThan(snapshot.viewport.height - 110)
   } else if (width < 1536) {
     expect(snapshot.navDisplay).toBe("grid")
-    expect(snapshot.nav.y).toBeGreaterThanOrEqual(90)
-    expect(snapshot.nav.y).toBeLessThan(120)
-    expect(snapshot.nav.bottom).toBeLessThan(snapshot.viewport.height)
+    expect(snapshot.nav.bottom).toBeGreaterThan(snapshot.viewport.height - 110)
   } else {
     expect(snapshot.navDisplay).toBe("flex")
     expect(snapshot.nav.width).toBeGreaterThanOrEqual(230)
@@ -252,9 +250,9 @@ test.describe("responsive interactions", () => {
         expect(headingRect).not.toBeNull()
         expect(navRect).not.toBeNull()
 
-        if (viewport.width >= 1050 && viewport.width < 1536) {
-          expect(headingRect!.y).toBeGreaterThanOrEqual(
-            navRect!.y + navRect!.height - 1
+        if (viewport.width < 1536) {
+          expect(headingRect!.y + headingRect!.height).toBeLessThanOrEqual(
+            navRect!.y + 1
           )
         } else if (viewport.width >= 1536) {
           expect(headingRect!.x).toBeGreaterThanOrEqual(navRect!.width - 1)

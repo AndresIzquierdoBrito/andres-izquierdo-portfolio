@@ -112,7 +112,7 @@ export default function HomeContactSection() {
     <section
       ref={sectionRef}
       id="contact"
-      className="relative z-10 -mt-8 scroll-mt-6 overflow-hidden rounded-t-[2.5rem] px-6 pt-14 pb-28 text-white min-[1050px]:scroll-mt-48 sm:-mt-12 sm:rounded-t-[3rem] sm:px-12 sm:pt-20 sm:pb-32 2xl:scroll-mt-6 2xl:pr-28 2xl:pl-72"
+      className="relative z-10 -mt-8 scroll-mt-6 overflow-hidden rounded-t-[2.5rem] px-6 pt-14 pb-28 text-white sm:-mt-12 sm:rounded-t-[3rem] sm:px-12 sm:pt-20 sm:pb-32 2xl:pr-28 2xl:pl-72"
       style={{ background: "var(--home-contact-background)" }}
     >
       <div

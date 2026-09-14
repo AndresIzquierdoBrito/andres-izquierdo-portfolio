@@ -61,7 +61,9 @@ export type ProjectCardData = {
   /** Path to the app icon image (e.g. "/icons/myapp.png") */
   iconSrc?: string
   /** Optional icon glow treatment */
-  iconGlow?: "spectrum"
+  iconGlow?: "lime" | "spectrum"
+  /** Optional screenshot arrangement for cards with project previews. */
+  screenshotLayout?: "default" | "staggered"
   /** Up to 4 icons representing the project's stack, shown top-right of the card */
   stack?: readonly ProjectStackItem[]
   /** Up to 3 screenshots shown scattered around the icon */
@@ -128,6 +130,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       },
     },
     iconSrc: "/izbri_logo_nobg.png",
+    iconGlow: "lime",
     stack: [
       { title: "React", icon: ReactIcon },
       { title: "Coolify", icon: CoolifyIcon },
@@ -179,6 +182,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     },
     iconSrc: "/projects_media/google_autocompleta/googleautocompleta_logo.png",
     iconGlow: "spectrum",
+    screenshotLayout: "staggered",
     stack: [
       { title: "FastAPI", icon: FastAPIIcon },
       { title: "Expo", icon: ExpoIcon },
@@ -195,8 +199,8 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
         frame: "browser",
       },
       {
-        src: "/projects_media/google_autocompleta/google_autocompleta_phone_sc.png",
-        frame: "phone",
+        src: "/projects_media/google_autocompleta/googleautocompleta_sc3.png",
+        frame: "browser",
       },
     ],
     projectUrl: "https://googleautocompleta.com",

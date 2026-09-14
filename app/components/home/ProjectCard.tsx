@@ -39,11 +39,18 @@ type ScreenshotSlot = {
   zIndex: number
 }
 
-// Three fixed slots that orbit the central icon
-const screenshotSlots: ScreenshotSlot[] = [
+// ApunteX keeps the original composition; other projects can opt into a
+// different arrangement so every project preview does not feel duplicated.
+const defaultScreenshotSlots: ScreenshotSlot[] = [
   { top: "26%", left: "0%", rotate: -8, zIndex: 1 },
   { top: "1%", right: "0%", rotate: 7, zIndex: 2 },
   { bottom: "2%", right: "4%", rotate: 10, zIndex: 1 },
+]
+
+const staggeredScreenshotSlots: ScreenshotSlot[] = [
+  { top: "3%", right: "2%", rotate: 6, zIndex: 2 },
+  { top: "25%", left: "-2%", rotate: -10, zIndex: 1 },
+  { bottom: "1%", left: "17%", rotate: -3, zIndex: 2 },
 ]
 
 type ScreenshotLightboxState = {
@@ -438,6 +445,10 @@ export default function ProjectCard({
   const [lightbox, setLightbox] = useState<ScreenshotLightboxState | null>(null)
   const [closing, setClosing] = useState(false)
   const activeThumbnailRef = useRef<HTMLButtonElement | null>(null)
+  const screenshotSlots =
+    card.screenshotLayout === "staggered"
+      ? staggeredScreenshotSlots
+      : defaultScreenshotSlots
 
   const openLightbox = (
     screenshot: ProjectScreenshot,
@@ -579,7 +590,7 @@ export default function ProjectCard({
           ))}
 
           {/* Central app icon — pointer-events-none so it doesn't block screenshot hover */}
-          <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
+          <div className="pointer-events-none absolute inset-0 z-30 flex items-center justify-center">
             <div
               className={cn(
                 "relative flex items-center justify-center",
@@ -596,7 +607,9 @@ export default function ProjectCard({
                       "absolute size-20 rounded-full sm:size-28",
                       card.iconGlow === "spectrum"
                         ? "opacity-95 blur-xl"
-                        : "bg-amber-300/45 blur-2xl dark:bg-cyan-300/35"
+                        : card.iconGlow === "lime"
+                          ? "bg-lime-300/70 blur-2xl dark:bg-lime-400/60"
+                          : "bg-amber-300/45 blur-2xl dark:bg-cyan-300/35"
                     )}
                     style={
                       card.iconGlow === "spectrum"
@@ -604,7 +617,12 @@ export default function ProjectCard({
                             background:
                               "radial-gradient(circle at 22% 50%, rgba(239,68,68,0.88), transparent 52%), radial-gradient(circle at 78% 50%, rgba(59,130,246,0.88), transparent 52%), radial-gradient(circle at 50% 22%, rgba(234,179,8,0.88), transparent 52%), radial-gradient(circle at 50% 78%, rgba(34,197,94,0.88), transparent 52%)",
                           }
-                        : undefined
+                        : card.iconGlow === "lime"
+                          ? {
+                              background:
+                                "radial-gradient(circle, rgba(190,242,100,0.98) 0%, rgba(163,230,53,0.78) 38%, transparent 74%)",
+                            }
+                          : undefined
                     }
                   />
                   <img
@@ -614,7 +632,9 @@ export default function ProjectCard({
                       "relative z-10 size-24 object-contain sm:size-32",
                       card.iconGlow === "spectrum"
                         ? "drop-shadow-[0_0_10px_rgba(255,255,255,0.72)] sm:drop-shadow-[0_0_16px_rgba(255,255,255,0.72)]"
-                        : "drop-shadow-[0_0_12px_rgba(255,132,97,0.72)] sm:drop-shadow-[0_0_18px_rgba(255,132,97,0.72)] dark:drop-shadow-[0_0_16px_rgba(45,212,191,0.64)] dark:sm:drop-shadow-[0_0_24px_rgba(45,212,191,0.64)]"
+                        : card.iconGlow === "lime"
+                          ? "drop-shadow-[0_0_12px_rgba(163,230,53,0.9)] sm:drop-shadow-[0_0_20px_rgba(163,230,53,0.9)] dark:drop-shadow-[0_0_16px_rgba(190,242,100,0.9)] dark:sm:drop-shadow-[0_0_26px_rgba(190,242,100,0.9)]"
+                          : "drop-shadow-[0_0_12px_rgba(255,132,97,0.72)] sm:drop-shadow-[0_0_18px_rgba(255,132,97,0.72)] dark:drop-shadow-[0_0_16px_rgba(45,212,191,0.64)] dark:sm:drop-shadow-[0_0_24px_rgba(45,212,191,0.64)]"
                     )}
                   />
                 </>
