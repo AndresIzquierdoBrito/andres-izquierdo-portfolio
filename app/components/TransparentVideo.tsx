@@ -114,8 +114,8 @@ export default function TransparentVideo({
           <source
             src={
               isDarkMode
-                ? "/videos/izbri_safari_dark.mp4"
-                : "/videos/izbri_safari.mp4"
+                ? "/videos/izbri_safari_dark_v2.mp4"
+                : "/videos/izbri_safari_v2.mp4"
             }
             type={'video/mp4; codecs="hvc1"'}
           />
