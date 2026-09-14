@@ -131,6 +131,8 @@ export default function TransparentVideo({
     }
   }
 
+  // The versioned Safari MP4s use the QuickTime `qt  ` brand so Safari
+  // selects HEVC-with-alpha instead of exposing only the base layer.
   return (
     <video
       {...videoProps}
@@ -162,8 +164,8 @@ export default function TransparentVideo({
             <source
               src={
                 isDarkMode
-                  ? "/videos/izbri_safari_dark_v3.mp4"
-                  : "/videos/izbri_safari_v3.mp4"
+                  ? "/videos/izbri_safari_dark_v4.mp4"
+                  : "/videos/izbri_safari_v4.mp4"
               }
               type={'video/mp4; codecs="hvc1"'}
             />
