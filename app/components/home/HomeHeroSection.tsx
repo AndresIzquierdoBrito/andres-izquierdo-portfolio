@@ -21,7 +21,7 @@ export default function HomeHeroSection() {
 
   return (
     <div className="relative overflow-x-clip bg-transparent">
-      <SiteBrandMark className="pointer-events-none absolute top-8 left-8 z-40 hidden lg:flex" />
+      <SiteBrandMark className="pointer-events-none absolute top-8 left-8 z-40 hidden gap-0 lg:flex" />
 
       <div className="absolute inset-0 -z-10 h-[calc(100vh+10rem)] md:h-[calc(100vh+12rem)] lg:h-[calc(100vh+16rem)]">
         <Grainient

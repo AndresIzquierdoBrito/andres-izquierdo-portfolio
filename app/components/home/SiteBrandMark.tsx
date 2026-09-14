@@ -28,7 +28,7 @@ export default function SiteBrandMark({
         aria-hidden="true"
         className={cn(
           "shrink-0 rounded-[0.35rem] object-contain",
-          compact ? "size-10" : "size-9"
+          compact ? "size-10" : "-mr-2 size-9"
         )}
       />
       <div className="flex flex-col items-start">
