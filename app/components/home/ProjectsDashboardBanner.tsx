@@ -16,11 +16,11 @@ export default function ProjectsDashboardBanner() {
         href="https://projects.izbri.com"
         target="_blank"
         rel="noopener noreferrer"
-        className="group relative block w-full border-y border-[#071127]/20 bg-[#caff4a] text-[#071127] transition-colors duration-300 hover:bg-[#d7ff73] dark:border-white/18 dark:bg-[#86f7ca] dark:text-[#071127] dark:hover:bg-[#a2ffdb]"
+        className="group relative block w-full border-y border-[#071127]/20 bg-[#caff4a] pb-8 text-[#071127] transition-colors duration-300 hover:bg-[#d7ff73] sm:pb-12 dark:border-white/18 dark:bg-[#86f7ca] dark:text-[#071127] dark:hover:bg-[#a2ffdb]"
         aria-label={`${t("cta")} — projects.izbri.com`}
       >
         <div className="mx-auto grid max-w-7xl lg:grid-cols-[minmax(0,1.15fr)_minmax(22rem,0.85fr)] 2xl:max-w-none 2xl:pr-28 2xl:pl-72">
-          <div className="relative flex min-h-48 flex-col justify-center gap-4 px-6 py-14 sm:px-12 sm:py-16 lg:min-h-0 lg:justify-end lg:py-20 lg:pr-14">
+          <div className="relative flex min-h-48 flex-col justify-center gap-4 px-6 py-10 sm:px-12 sm:py-10 lg:min-h-0 lg:py-14 lg:pr-14">
             <h2 className="max-w-3xl font-heading text-3xl leading-[1.05] font-medium tracking-[-0.04em] sm:text-4xl lg:text-5xl">
               {t("title")}
             </h2>
@@ -35,7 +35,7 @@ export default function ProjectsDashboardBanner() {
             </span>
           </div>
 
-          <div className="relative hidden min-h-52 items-center gap-5 border-t border-[#071127]/20 px-6 py-14 sm:px-12 sm:py-16 lg:flex lg:border-t-0 lg:border-l lg:px-10 lg:py-20">
+          <div className="relative hidden min-h-52 items-center gap-5 border-t border-[#071127]/20 px-6 py-10 sm:px-12 sm:py-10 lg:flex lg:border-t-0 lg:border-l lg:px-10 lg:py-14">
             <div className="flex min-w-0 flex-1 flex-col justify-center gap-5">
               <div className="flex items-center justify-between gap-3 font-mono text-[0.6rem] font-semibold tracking-[0.1em] uppercase">
                 <span>{t("monitor")}</span>

@@ -147,19 +147,21 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     translations: {
       en: {
         eyebrow: "Projects",
-        name: "StorageApp",
+        name: "Cratalog",
         tagline: "Know exactly what is inside every box.",
         description:
           "A smart physical inventory app connecting containers to QR codes or barcodes, making long-term and segmented storage searchable.",
       },
       es: {
         eyebrow: "Proyectos",
-        name: "StorageApp",
+        name: "Cratalog",
         tagline: "Sabe exactamente qué hay dentro de cada caja.",
         description:
           "Una app inteligente de inventario físico que conecta los contenedores con códigos QR o de barras para poder buscar en almacenamientos segmentados o de larga duración.",
       },
     },
+    iconSrc: "/projects_media/cratalog/cratalog_wip.svg",
+    iconGlow: "lime",
     stack: [
       { title: "NestJS", icon: NestJSIcon },
       { title: "React", icon: ReactIcon },
