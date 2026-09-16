@@ -70,6 +70,8 @@ export type ProjectCardData = {
   screenshots?: readonly ProjectScreenshot[]
   /** Live project URL */
   projectUrl?: string
+  /** Case study or demo site URL */
+  caseStudyUrl?: string
   /** Source code repository URL */
   githubUrl?: string
 }

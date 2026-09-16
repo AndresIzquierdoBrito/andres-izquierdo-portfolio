@@ -6,7 +6,7 @@ import {
   useState,
 } from "react"
 import { createPortal } from "react-dom"
-import { ArrowUpRight, ExternalLink, X } from "lucide-react"
+import { ArrowUpRight, BookOpen, ExternalLink, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import gsap from "gsap"
 
@@ -671,54 +671,65 @@ export default function ProjectCard({
         </div>
 
         {/* Footer links */}
-        <div className="mt-5 flex items-center gap-2.5">
-          {card.projectUrl && isActive ? (
-            <a
-              href={card.projectUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full bg-slate-950 px-4 py-2 text-[0.68rem] font-semibold text-white transition-colors duration-200 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-white/84"
-            >
-              <ExternalLink className="size-3" />
-              {t("viewProject")}
-            </a>
-          ) : card.projectUrl ? (
-            <span className="inline-flex cursor-default items-center gap-1.5 rounded-full bg-slate-950/45 px-4 py-2 text-[0.68rem] font-semibold text-white/70 dark:bg-white/25 dark:text-white/65">
-              <ExternalLink className="size-3" />
-              {t("viewProject")}
-            </span>
-          ) : (
-            <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/10 dark:text-white/30">
-              <ExternalLink className="size-3" />
-              {t("comingSoon")}
-            </span>
-          )}
+        <div className="mt-5 flex items-center justify-between gap-2.5">
+          <div className="flex min-w-0 items-center gap-2.5">
+            {card.projectUrl && isActive ? (
+              <a
+                href={card.projectUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full bg-slate-950 px-4 py-2 text-[0.68rem] font-semibold text-white transition-colors duration-200 hover:bg-slate-800 dark:bg-white dark:text-slate-950 dark:hover:bg-white/84"
+              >
+                <ExternalLink className="size-3" />
+                {t("viewProject")}
+              </a>
+            ) : card.projectUrl ? (
+              <span className="inline-flex cursor-default items-center gap-1.5 rounded-full bg-slate-950/45 px-4 py-2 text-[0.68rem] font-semibold text-white/70 dark:bg-white/25 dark:text-white/65">
+                <ExternalLink className="size-3" />
+                {t("viewProject")}
+              </span>
+            ) : (
+              <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/10 dark:text-white/30">
+                <ExternalLink className="size-3" />
+                {t("comingSoon")}
+              </span>
+            )}
+            {card.caseStudyUrl && isActive ? (
+              <a
+                href={card.caseStudyUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/70 bg-white px-4 py-2 text-[0.68rem] font-semibold text-slate-800 transition-colors duration-200 hover:border-emerald-400 dark:border-cyan-400/35 dark:bg-slate-950 dark:text-white/85 dark:hover:border-cyan-300/60"
+              >
+                <BookOpen className="size-3" />
+                {t("caseStudy")}
+              </a>
+            ) : card.caseStudyUrl ? (
+              <span className="inline-flex cursor-default items-center gap-1.5 rounded-full border border-emerald-300/35 bg-white/55 px-4 py-2 text-[0.68rem] font-semibold text-slate-500 dark:border-cyan-400/20 dark:bg-slate-950/35 dark:text-white/45">
+                <BookOpen className="size-3" />
+                {t("caseStudy")}
+              </span>
+            ) : (
+              <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30">
+                <BookOpen className="size-3" />
+                {t("caseStudy")}
+              </span>
+            )}
+          </div>
           {card.githubUrl && isActive ? (
             <a
               href={card.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label={`Open ${content.name} source code on GitHub`}
+              title={t("github")}
               onClick={(event) => event.stopPropagation()}
-              className="group/github inline-flex items-center gap-1.5 rounded-full border border-emerald-300/70 bg-white px-4 py-2 text-[0.68rem] font-semibold text-slate-800 transition-colors duration-200 hover:border-emerald-400 dark:border-cyan-400/35 dark:bg-slate-950 dark:text-white/85 dark:hover:border-cyan-300/60"
+              className="group/github inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-300/70 bg-white px-3 py-2 text-slate-800 transition-colors duration-200 hover:border-emerald-400 dark:border-cyan-400/35 dark:bg-slate-950 dark:text-white/85 dark:hover:border-cyan-300/60"
             >
               <GithubIcon className="size-3.5" />
-              {t("github")}
               <ArrowUpRight className="size-3 transition-transform duration-200 group-hover/github:translate-x-0.5 group-hover/github:-translate-y-0.5" />
             </a>
-          ) : card.githubUrl ? (
-            <span className="inline-flex cursor-default items-center gap-1.5 rounded-full border border-emerald-300/35 bg-white/55 px-4 py-2 text-[0.68rem] font-semibold text-slate-500 dark:border-cyan-400/20 dark:bg-slate-950/35 dark:text-white/45">
-              <GithubIcon className="size-3.5" />
-              {t("github")}
-              <ArrowUpRight className="size-3" />
-            </span>
-          ) : (
-            <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30">
-              <GithubIcon className="size-3.5" />
-              {t("github")}
-              <ArrowUpRight className="size-3" />
-            </span>
-          )}
+          ) : null}
         </div>
       </div>
       {lightbox ? (
