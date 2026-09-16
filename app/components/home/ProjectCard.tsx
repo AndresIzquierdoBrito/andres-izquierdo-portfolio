@@ -332,18 +332,20 @@ function ScreenshotItem({
   projectName,
   screenshotIndex,
   onOpen,
+  interactive = true,
 }: {
   slot: ScreenshotSlot
   screenshot?: ProjectScreenshot
   toneClass: string
   projectName: string
   screenshotIndex: number
-  onOpen: (
+  onOpen?: (
     screenshot: ProjectScreenshot,
     label: string,
     origin: HTMLButtonElement,
     rotation: number
   ) => void
+  interactive?: boolean
 }) {
   const ref = useRef<HTMLButtonElement>(null)
   const label = `${projectName} screenshot ${screenshotIndex + 1}`
@@ -388,6 +390,31 @@ function ScreenshotItem({
     )
   }
 
+  const frameStyle = {
+    top: slot.top,
+    left: slot.left,
+    right: slot.right,
+    bottom: slot.bottom,
+    width: frame === "phone" ? "30%" : "52%",
+    aspectRatio: frame === "phone" ? "650 / 1396" : "16 / 10",
+    transform: `rotate(${slot.rotate}deg)`,
+    zIndex: slot.zIndex,
+    transformOrigin: "center center",
+  }
+
+  if (!interactive) {
+    return (
+      <div
+        aria-hidden="true"
+        data-screenshot-frame={frame}
+        className="pointer-events-none absolute"
+        style={frameStyle}
+      >
+        <ScreenshotFrame screenshot={screenshot} alt="" />
+      </div>
+    )
+  }
+
   return (
     <button
       type="button"
@@ -396,16 +423,8 @@ function ScreenshotItem({
       data-screenshot-frame={frame}
       className="absolute cursor-pointer appearance-none border-0 bg-transparent p-0 text-left focus-visible:z-20 focus-visible:ring-2 focus-visible:ring-cyan-300 focus-visible:ring-offset-2 focus-visible:outline-none dark:focus-visible:ring-indigo-300 dark:focus-visible:ring-offset-slate-950"
       style={{
-        top: slot.top,
-        left: slot.left,
-        right: slot.right,
-        bottom: slot.bottom,
-        width: frame === "phone" ? "30%" : "52%",
-        aspectRatio: frame === "phone" ? "650 / 1396" : "16 / 10",
-        transform: `rotate(${slot.rotate}deg)`,
-        zIndex: slot.zIndex,
+        ...frameStyle,
         transition: "transform 0.35s cubic-bezier(0.34,1.56,0.64,1)",
-        transformOrigin: "center center",
       }}
       onMouseEnter={() => {
         setHovered(true)
@@ -417,7 +436,7 @@ function ScreenshotItem({
       onBlur={() => setHovered(false)}
       onClick={(event) => {
         event.stopPropagation()
-        onOpen(screenshot, label, event.currentTarget, slot.rotate)
+        onOpen?.(screenshot, label, event.currentTarget, slot.rotate)
       }}
     >
       <ScreenshotFrame screenshot={screenshot} alt={label} />
@@ -429,10 +448,12 @@ export default function ProjectCard({
   card,
   index,
   className,
+  isActive = true,
 }: {
   card: ProjectCardData
   index: number
   className?: string
+  isActive?: boolean
 }) {
   const { t, i18n } = useTranslation("common", {
     keyPrefix: "sections.projects",
@@ -546,7 +567,7 @@ export default function ProjectCard({
 
         {/* Name + description */}
         <div className="mt-4 space-y-2">
-          {card.projectUrl ? (
+          {card.projectUrl && isActive ? (
             <a
               href={card.projectUrl}
               target="_blank"
@@ -585,7 +606,8 @@ export default function ProjectCard({
               toneClass={toneClass}
               projectName={content.name}
               screenshotIndex={si}
-              onOpen={openLightbox}
+              onOpen={isActive ? openLightbox : undefined}
+              interactive={isActive}
             />
           ))}
 
@@ -649,7 +671,7 @@ export default function ProjectCard({
 
         {/* Footer links */}
         <div className="mt-5 flex items-center gap-2.5">
-          {card.projectUrl ? (
+          {card.projectUrl && isActive ? (
             <a
               href={card.projectUrl}
               target="_blank"
@@ -659,13 +681,18 @@ export default function ProjectCard({
               <ExternalLink className="size-3" />
               {t("viewProject")}
             </a>
+          ) : card.projectUrl ? (
+            <span className="inline-flex cursor-default items-center gap-1.5 rounded-full bg-slate-950/45 px-4 py-2 text-[0.68rem] font-semibold text-white/70 dark:bg-white/25 dark:text-white/65">
+              <ExternalLink className="size-3" />
+              {t("viewProject")}
+            </span>
           ) : (
             <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/10 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/10 dark:text-white/30">
               <ExternalLink className="size-3" />
               {t("comingSoon")}
             </span>
           )}
-          {card.caseStudyUrl ? (
+          {card.caseStudyUrl && isActive ? (
             <a
               href={card.caseStudyUrl}
               target="_blank"
@@ -675,6 +702,11 @@ export default function ProjectCard({
               <BookOpen className="size-3" />
               {t("caseStudy")}
             </a>
+          ) : card.caseStudyUrl ? (
+            <span className="inline-flex cursor-default items-center gap-1.5 rounded-full border border-emerald-300/35 bg-white/55 px-4 py-2 text-[0.68rem] font-semibold text-slate-500 dark:border-cyan-400/20 dark:bg-slate-950/35 dark:text-white/45">
+              <BookOpen className="size-3" />
+              {t("caseStudy")}
+            </span>
           ) : (
             <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30">
               <BookOpen className="size-3" />

@@ -49,6 +49,17 @@ export default function HomeProjectsSection() {
     })
   }
 
+  const navigateCarouselTo = (index: number) => {
+    if (animating || index === activeIndex) return
+    setAnimating(true)
+    clearTimeout(animatingTimerRef.current)
+    animatingTimerRef.current = setTimeout(
+      () => setAnimating(false),
+      CAROUSEL_ANIMATION_MS
+    )
+    setActiveIndex(index)
+  }
+
   return (
     <section
       id="projects"
@@ -117,6 +128,8 @@ export default function HomeProjectsSection() {
             cards={projectPreviewCards}
             activeIndex={activeIndex}
             onNavigate={navigateCarousel}
+            onNavigateTo={navigateCarouselTo}
+            isAnimating={animating}
           />
         </div>
       </div>

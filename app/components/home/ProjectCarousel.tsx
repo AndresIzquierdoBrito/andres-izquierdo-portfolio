@@ -1,8 +1,9 @@
-import { useEffect, useLayoutEffect, useRef } from "react"
+import { useEffect, useLayoutEffect, useRef, useState } from "react"
 
 import gsap from "gsap"
 
 import { useThemeMode } from "~/lib/useThemeMode"
+import { cn } from "~/lib/utils"
 
 import ProjectCard, { type ProjectCardData } from "./ProjectCard"
 
@@ -17,6 +18,8 @@ type ProjectCarouselProps = {
   cards: readonly ProjectCardData[]
   activeIndex: number
   onNavigate?: (direction: 1 | -1) => void
+  onNavigateTo?: (index: number) => void
+  isAnimating?: boolean
 }
 
 type CardSlotMetrics = {
@@ -308,12 +311,16 @@ export default function ProjectCarousel({
   cards,
   activeIndex,
   onNavigate,
+  onNavigateTo,
+  isAnimating = false,
 }: ProjectCarouselProps) {
   const N = cards.length
   const hasMountedRef = useRef(false)
   const stageRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<Array<HTMLDivElement | null>>([])
   const overlayRefs = useRef<Array<HTMLDivElement | null>>([])
+  const pendingTargetVirtualRef = useRef<number | null>(null)
+  const [displayedCenter, setDisplayedCenter] = useState(BUFFER + activeIndex)
 
   // Absolute position of the centre card within virtualCards.
   // Starts at BUFFER + activeIndex (the corresponding real-zone slot).
@@ -356,12 +363,20 @@ export default function ProjectCarousel({
     }
 
     let vc = virtualCenterRef.current
+    let targetVc = vc
 
-    // Before animating, check whether we need an invisible snap back into the
-    // real zone.  The snap is safe because the visible cards are identical at
-    // the snap source and destination — same card objects in the same visual
-    // slots — so gsap.set produces no perceptible change.
-    if (hasMountedRef.current && direction !== 0) {
+    // A card click stores the exact virtual slot that was clicked. This means
+    // clicking either visible side card moves that card directly into the
+    // centre, even when it is two slots away.
+    const pendingTargetVc = pendingTargetVirtualRef.current
+    pendingTargetVirtualRef.current = null
+
+    if (pendingTargetVc !== null) {
+      targetVc = pendingTargetVc
+    } else if (hasMountedRef.current && direction !== 0) {
+      // Before animating an arrow navigation, check whether we need an
+      // invisible snap back into the real zone. The snap is safe because the
+      // visible cards are identical at the snap source and destination.
       const realEnd = BUFFER + N - 1 // last real-zone index
       const realStart = BUFFER // first real-zone index
 
@@ -393,15 +408,17 @@ export default function ProjectCarousel({
           if (overlay) gsap.set(overlay, { opacity: state.overlayOpacity })
         })
       }
+
+      targetVc = vc + direction
     }
 
-    // Apply the navigation step to get the new virtual centre.
-    vc += direction
-    virtualCenterRef.current = vc
+    const distance = targetVc - vc
+    virtualCenterRef.current = targetVc
+    setDisplayedCenter(targetVc)
 
     // Animate (or instantly position on first mount) all elements.
     cardEls.forEach((el, vi) => {
-      const offset = vi - vc
+      const offset = vi - targetVc
       const target = getSlotState(offset, m)
       const overlay = overlayRefs.current[vi]
 
@@ -419,7 +436,7 @@ export default function ProjectCarousel({
         overwrite: "auto" as const,
       }
 
-      if (hasMountedRef.current && direction !== 0) {
+      if (hasMountedRef.current && distance !== 0) {
         gsap.to(el, { ...tweenProps, duration: DURATION, ease: EASE })
         if (overlay) {
           gsap.to(overlay, {
@@ -495,7 +512,7 @@ export default function ProjectCarousel({
 
   return (
     <div className="w-full xl:h-full xl:min-h-0">
-      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible xl:h-full xl:min-h-0 xl:left-[calc(50%-2rem)]">
+      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible xl:left-[calc(50%-2rem)] xl:h-full xl:min-h-0">
         <div
           ref={stageRef}
           className="relative h-[37.7rem] sm:h-[39rem] xl:h-full xl:min-h-0"
@@ -510,12 +527,45 @@ export default function ProjectCarousel({
                 ref={(node) => {
                   cardRefs.current[vi] = node
                 }}
-                className="absolute top-1/2 left-1/2 h-[37.7rem] w-[27.3rem] cursor-pointer will-change-[transform,opacity,filter] sm:h-[39rem] sm:w-[28.6rem] lg:h-[40.3rem] lg:w-[29.9rem] xl:h-[44.2rem] xl:w-[32.5rem] 2xl:h-[46.8rem] 2xl:w-[33.8rem]"
+                className={cn(
+                  "absolute top-1/2 left-1/2 h-[37.7rem] w-[27.3rem] will-change-[transform,opacity,filter] sm:h-[39rem] sm:w-[28.6rem] lg:h-[40.3rem] lg:w-[29.9rem] xl:h-[44.2rem] xl:w-[32.5rem] 2xl:h-[46.8rem] 2xl:w-[33.8rem]",
+                  vi !== displayedCenter && "cursor-pointer"
+                )}
                 onClick={() => {
+                  if (isAnimating) return
                   const offset = vi - virtualCenterRef.current
-                  if (offset === 0 || !onNavigate) return
-                  onNavigate(Math.sign(offset) as 1 | -1)
+                  if (offset === 0 || (!onNavigate && !onNavigateTo)) return
+                  const realIndex = (((vi - BUFFER) % N) + N) % N
+                  if (realIndex === activeIndex) return
+                  if (onNavigateTo) {
+                    pendingTargetVirtualRef.current = vi
+                    onNavigateTo(realIndex)
+                  } else if (onNavigate) {
+                    onNavigate(Math.sign(offset) as 1 | -1)
+                  }
                 }}
+                onKeyDown={(event) => {
+                  if (isAnimating || vi === virtualCenterRef.current) return
+                  if (event.key !== "Enter" && event.key !== " ") return
+                  event.preventDefault()
+                  const realIndex = (((vi - BUFFER) % N) + N) % N
+                  if (realIndex === activeIndex) return
+                  if (onNavigateTo) {
+                    pendingTargetVirtualRef.current = vi
+                    onNavigateTo(realIndex)
+                  } else if (onNavigate) {
+                    onNavigate(
+                      Math.sign(vi - virtualCenterRef.current) as 1 | -1
+                    )
+                  }
+                }}
+                role={vi === displayedCenter ? undefined : "button"}
+                tabIndex={vi === displayedCenter ? -1 : 0}
+                aria-label={
+                  vi === displayedCenter
+                    ? undefined
+                    : `Focus project ${((((vi - BUFFER) % N) + N) % N) + 1}`
+                }
                 onMouseEnter={() => {
                   const el = cardRefs.current[vi]
                   if (!el || vi !== virtualCenterRef.current) return
@@ -537,7 +587,11 @@ export default function ProjectCarousel({
                   })
                 }}
               >
-                <ProjectCard card={card} index={realIndex} />
+                <ProjectCard
+                  card={card}
+                  index={realIndex}
+                  isActive={vi === displayedCenter}
+                />
                 <div
                   ref={(node) => {
                     overlayRefs.current[vi] = node
