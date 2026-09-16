@@ -29,7 +29,7 @@ const esCommon = {
       title: "Algunas cosas que he construido.",
       viewProject: "Ver proyecto",
       comingSoon: "Próximamente",
-      caseStudy: "Caso de estudio",
+      github: "GitHub",
     },
     projectDashboard: {
       eyebrow: "¿Quieres verlo funcionando?",

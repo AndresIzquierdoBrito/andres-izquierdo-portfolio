@@ -29,7 +29,7 @@ const enCommon = {
       title: "A few things I've built.",
       viewProject: "View project",
       comingSoon: "Coming soon",
-      caseStudy: "Case study",
+      github: "GitHub",
     },
     projectDashboard: {
       eyebrow: "Want to see it working?",

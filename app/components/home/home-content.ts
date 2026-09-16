@@ -70,8 +70,8 @@ export type ProjectCardData = {
   screenshots?: readonly ProjectScreenshot[]
   /** Live project URL */
   projectUrl?: string
-  /** Case study or demo site URL */
-  caseStudyUrl?: string
+  /** Source code repository URL */
+  githubUrl?: string
 }
 
 export function getProjectContent(
@@ -138,6 +138,8 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       { title: "Express", icon: ExpressIcon },
     ],
     projectUrl: "https://projects.izbri.com",
+    githubUrl:
+      "https://github.com/AndresIzquierdoBrito/izbri-projects",
   },
   {
     translations: {
@@ -162,6 +164,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       { title: "Redis", icon: RedisIcon },
       { title: "Expo", icon: ExpoIcon },
     ],
+    githubUrl: "https://github.com/AndresIzquierdoBrito/storage-app",
   },
   {
     translations: {
@@ -204,6 +207,8 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       },
     ],
     projectUrl: "https://googleautocompleta.com",
+    githubUrl:
+      "https://github.com/AndresIzquierdoBrito/google-autocompleta",
   },
 ]
 

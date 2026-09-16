@@ -1,5 +1,6 @@
 export { FastAPIIcon } from "./FastAPIIcon"
 export { LinkedInIcon } from "./LinkedInIcon"
+export { GithubIcon } from "./GithubIcon"
 export { ReactIcon } from "./ReactIcon"
 export { TypeScriptIcon } from "./TypeScriptIcon"
 export { AmazonWebServicesIcon } from "./AmazonWebServicesIcon"

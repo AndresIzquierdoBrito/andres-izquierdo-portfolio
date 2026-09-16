@@ -6,12 +6,13 @@ import {
   useState,
 } from "react"
 import { createPortal } from "react-dom"
-import { BookOpen, ExternalLink, X } from "lucide-react"
+import { ArrowUpRight, ExternalLink, X } from "lucide-react"
 import { useTranslation } from "react-i18next"
 import gsap from "gsap"
 
 import { resolveAppLanguage } from "~/i18n/settings"
 import { cn } from "~/lib/utils"
+import { GithubIcon } from "~/components/icons"
 
 import {
   getProjectContent,
@@ -692,25 +693,30 @@ export default function ProjectCard({
               {t("comingSoon")}
             </span>
           )}
-          {card.caseStudyUrl && isActive ? (
+          {card.githubUrl && isActive ? (
             <a
-              href={card.caseStudyUrl}
+              href={card.githubUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300/70 bg-white px-4 py-2 text-[0.68rem] font-semibold text-slate-800 transition-colors duration-200 hover:border-emerald-400 dark:border-cyan-400/35 dark:bg-slate-950 dark:text-white/85 dark:hover:border-cyan-300/60"
+              aria-label={`Open ${content.name} source code on GitHub`}
+              onClick={(event) => event.stopPropagation()}
+              className="group/github inline-flex items-center gap-1.5 rounded-full border border-emerald-300/70 bg-white px-4 py-2 text-[0.68rem] font-semibold text-slate-800 transition-colors duration-200 hover:border-emerald-400 dark:border-cyan-400/35 dark:bg-slate-950 dark:text-white/85 dark:hover:border-cyan-300/60"
             >
-              <BookOpen className="size-3" />
-              {t("caseStudy")}
+              <GithubIcon className="size-3.5" />
+              {t("github")}
+              <ArrowUpRight className="size-3 transition-transform duration-200 group-hover/github:translate-x-0.5 group-hover/github:-translate-y-0.5" />
             </a>
-          ) : card.caseStudyUrl ? (
+          ) : card.githubUrl ? (
             <span className="inline-flex cursor-default items-center gap-1.5 rounded-full border border-emerald-300/35 bg-white/55 px-4 py-2 text-[0.68rem] font-semibold text-slate-500 dark:border-cyan-400/20 dark:bg-slate-950/35 dark:text-white/45">
-              <BookOpen className="size-3" />
-              {t("caseStudy")}
+              <GithubIcon className="size-3.5" />
+              {t("github")}
+              <ArrowUpRight className="size-3" />
             </span>
           ) : (
             <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30">
-              <BookOpen className="size-3" />
-              {t("caseStudy")}
+              <GithubIcon className="size-3.5" />
+              {t("github")}
+              <ArrowUpRight className="size-3" />
             </span>
           )}
         </div>
