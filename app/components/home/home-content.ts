@@ -36,6 +36,8 @@ export type ProjectStackItem = {
 export type ProjectScreenshot = {
   src: string
   frame: "browser" | "phone"
+  /** Natural screenshot ratio, used to avoid letterboxing in its frame. */
+  aspectRatio?: number
 }
 
 export const currentFocusTools = [
@@ -62,6 +64,10 @@ export type ProjectCardData = {
   iconSrc?: string
   /** Optional icon glow treatment */
   iconGlow?: "lime" | "spectrum"
+  /** Adds the animated warning-tape accent used for unfinished work. */
+  workInProgress?: boolean
+  /** Optional card ratio for projects whose preview media is landscape. */
+  cardAspectRatio?: number
   /** Optional screenshot arrangement for cards with project previews. */
   screenshotLayout?: "default" | "staggered"
   /** Up to 4 icons representing the project's stack, shown top-right of the card */
@@ -133,15 +139,32 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     },
     iconSrc: "/izbri_logo_nobg.png",
     iconGlow: "lime",
+    cardAspectRatio: 1.86,
     stack: [
       { title: "React", icon: ReactIcon },
       { title: "Coolify", icon: CoolifyIcon },
       { title: "Drizzle", icon: DrizzleIcon },
       { title: "Express", icon: ExpressIcon },
     ],
+    screenshots: [
+      {
+        src: "/projects_media/izbri-projects/izbri-projects-overview.png",
+        frame: "browser",
+        aspectRatio: 3428 / 1822,
+      },
+      {
+        src: "/projects_media/izbri-projects/izbri-projects-detail.png",
+        frame: "browser",
+        aspectRatio: 3418 / 1740,
+      },
+      {
+        src: "/projects_media/izbri-projects/izbri-projects-control-room.png",
+        frame: "browser",
+        aspectRatio: 3212 / 1776,
+      },
+    ],
     projectUrl: "https://projects.izbri.com",
-    githubUrl:
-      "https://github.com/AndresIzquierdoBrito/izbri-projects",
+    githubUrl: "https://github.com/AndresIzquierdoBrito/izbri-projects",
   },
   {
     translations: {
@@ -162,6 +185,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     },
     iconSrc: "/projects_media/cratalog/cratalog_wip.svg",
     iconGlow: "lime",
+    workInProgress: true,
     stack: [
       { title: "NestJS", icon: NestJSIcon },
       { title: "React", icon: ReactIcon },
@@ -211,8 +235,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       },
     ],
     projectUrl: "https://googleautocompleta.com",
-    githubUrl:
-      "https://github.com/AndresIzquierdoBrito/google-autocompleta",
+    githubUrl: "https://github.com/AndresIzquierdoBrito/google-autocompleta",
   },
 ]
 

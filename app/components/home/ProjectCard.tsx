@@ -57,6 +57,7 @@ const staggeredScreenshotSlots: ScreenshotSlot[] = [
 type ScreenshotLightboxState = {
   src: string
   frame: ProjectScreenshot["frame"]
+  aspectRatio?: number
   label: string
   originRect: DOMRect
   originRotation: number
@@ -303,7 +304,7 @@ function ScreenshotLightbox({
         style={
           screenshot.frame === "phone"
             ? { aspectRatio: "650 / 1396" }
-            : undefined
+            : { aspectRatio: screenshot.aspectRatio ?? "16 / 10" }
         }
       >
         <ScreenshotFrame
@@ -368,7 +369,8 @@ function ScreenshotItem({
     right: slot.right,
     bottom: slot.bottom,
     width: frame === "phone" ? "30%" : "52%",
-    aspectRatio: frame === "phone" ? "650 / 1396" : "16 / 10",
+    aspectRatio:
+      frame === "phone" ? "650 / 1396" : (screenshot?.aspectRatio ?? "16 / 10"),
     transform: `rotate(${slot.rotate}deg)`,
     zIndex: slot.zIndex,
     transformOrigin: "center center",
@@ -454,6 +456,7 @@ export default function ProjectCard({
     setLightbox({
       src: screenshot.src,
       frame: screenshot.frame,
+      aspectRatio: screenshot.aspectRatio,
       label,
       originRect: origin.getBoundingClientRect(),
       originRotation: rotation,
@@ -560,7 +563,15 @@ export default function ProjectCard({
             </a>
           ) : (
             <h3 className="text-2xl font-semibold tracking-tight text-slate-950 lg:text-[1.55rem] dark:text-white">
-              {content.name}
+              <span className="relative isolate inline-block">
+                {card.workInProgress ? (
+                  <span
+                    aria-hidden="true"
+                    className="warning-stripe pointer-events-none absolute inset-x-[-0.06em] bottom-[0.04em] z-0 h-[0.3em] rounded-[0.08em]"
+                  />
+                ) : null}
+                <span className="relative z-10">{content.name}</span>
+              </span>
             </h3>
           )}
           <p className="text-[0.82rem] leading-5 text-slate-600 dark:text-white/65">
