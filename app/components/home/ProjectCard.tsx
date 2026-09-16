@@ -329,7 +329,6 @@ function ScreenshotLightbox({
 function ScreenshotItem({
   slot,
   screenshot,
-  toneClass,
   projectName,
   screenshotIndex,
   onOpen,
@@ -337,7 +336,6 @@ function ScreenshotItem({
 }: {
   slot: ScreenshotSlot
   screenshot?: ProjectScreenshot
-  toneClass: string
   projectName: string
   screenshotIndex: number
   onOpen?: (
@@ -361,34 +359,7 @@ function ScreenshotItem({
   }
 
   if (!screenshot) {
-    return (
-      <div
-        className="absolute w-[52%]"
-        style={{
-          top: slot.top,
-          left: slot.left,
-          right: slot.right,
-          bottom: slot.bottom,
-          aspectRatio: "16 / 10",
-          transform: `rotate(${slot.rotate}deg)`,
-          zIndex: slot.zIndex,
-        }}
-      >
-        <div className="h-full w-full overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.18)] dark:border-white/12 dark:bg-slate-800">
-          <div className="flex items-center gap-[5px] border-b border-black/8 bg-slate-50 px-2.5 py-2 dark:border-white/8 dark:bg-slate-700/60">
-            <span className="size-2 rounded-full bg-rose-400" />
-            <span className="size-2 rounded-full bg-amber-400" />
-            <span className="size-2 rounded-full bg-emerald-400" />
-          </div>
-          <div
-            className={cn(
-              "h-full w-full bg-[linear-gradient(135deg,var(--tw-gradient-stops))] opacity-40",
-              toneClass
-            )}
-          />
-        </div>
-      </div>
-    )
+    return null
   }
 
   const frameStyle = {
@@ -604,7 +575,6 @@ export default function ProjectCard({
               key={si}
               slot={slot}
               screenshot={card.screenshots?.[si]}
-              toneClass={toneClass}
               projectName={content.name}
               screenshotIndex={si}
               onOpen={isActive ? openLightbox : undefined}
@@ -705,12 +675,18 @@ export default function ProjectCard({
                 {t("caseStudy")}
               </a>
             ) : card.caseStudyUrl ? (
-              <span className="inline-flex cursor-default items-center gap-1.5 rounded-full border border-emerald-300/35 bg-white/55 px-4 py-2 text-[0.68rem] font-semibold text-slate-500 dark:border-cyan-400/20 dark:bg-slate-950/35 dark:text-white/45">
+              <span
+                title={t("caseStudyComingSoon")}
+                className="inline-flex cursor-default items-center gap-1.5 rounded-full border border-emerald-300/35 bg-white/55 px-4 py-2 text-[0.68rem] font-semibold text-slate-500 dark:border-cyan-400/20 dark:bg-slate-950/35 dark:text-white/45"
+              >
                 <BookOpen className="size-3" />
                 {t("caseStudy")}
               </span>
             ) : (
-              <span className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30">
+              <span
+                title={t("caseStudyComingSoon")}
+                className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-full border border-black/8 px-4 py-2 text-[0.68rem] font-semibold text-slate-400 dark:border-white/8 dark:text-white/30"
+              >
                 <BookOpen className="size-3" />
                 {t("caseStudy")}
               </span>
@@ -724,7 +700,7 @@ export default function ProjectCard({
               aria-label={`Open ${content.name} source code on GitHub`}
               title={t("github")}
               onClick={(event) => event.stopPropagation()}
-              className="group/github inline-flex shrink-0 items-center gap-1.5 rounded-full border border-emerald-300/70 bg-white px-3 py-2 text-slate-800 transition-colors duration-200 hover:border-emerald-400 dark:border-cyan-400/35 dark:bg-slate-950 dark:text-white/85 dark:hover:border-cyan-300/60"
+              className="group/github inline-flex shrink-0 items-center gap-1.5 rounded-full bg-black px-3 py-2 text-white transition-colors duration-200 hover:bg-slate-900"
             >
               <GithubIcon className="size-3.5" />
               <ArrowUpRight className="size-3 transition-transform duration-200 group-hover/github:translate-x-0.5 group-hover/github:-translate-y-0.5" />

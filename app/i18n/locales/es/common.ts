@@ -30,6 +30,7 @@ const esCommon = {
       viewProject: "Ver proyecto",
       comingSoon: "Próximamente",
       caseStudy: "Caso de estudio",
+      caseStudyComingSoon: "Próximamente — estoy desarrollando un blog para esto.",
       github: "GitHub",
     },
     projectDashboard: {

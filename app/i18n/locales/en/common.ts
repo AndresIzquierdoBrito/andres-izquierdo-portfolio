@@ -30,6 +30,7 @@ const enCommon = {
       viewProject: "View project",
       comingSoon: "Coming soon",
       caseStudy: "Case study",
+      caseStudyComingSoon: "Coming soon — I'm developing a blog for this.",
       github: "GitHub",
     },
     projectDashboard: {
