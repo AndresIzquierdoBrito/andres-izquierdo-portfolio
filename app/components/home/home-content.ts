@@ -33,12 +33,17 @@ export type ProjectStackItem = {
   icon: FocusToolIcon
 }
 
-export type ProjectScreenshot = {
-  src: string
-  frame: "browser" | "phone"
-  /** Natural screenshot ratio, used to avoid letterboxing in its frame. */
-  aspectRatio?: number
-}
+export type ProjectScreenshot =
+  | {
+      src: string
+      frame: "browser"
+      /** Natural screenshot ratio, used to avoid letterboxing in its frame. */
+      aspectRatio: number
+    }
+  | {
+      src: string
+      frame: "phone"
+    }
 
 export const currentFocusTools = [
   { label: "React", icon: ReactIcon },
@@ -112,9 +117,21 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       { title: "Gemini", icon: GeminiIcon },
     ],
     screenshots: [
-      { src: "/projects_media/apuntex/apuntex_sc1.png", frame: "browser" },
-      { src: "/projects_media/apuntex/apuntex_sc2.png", frame: "browser" },
-      { src: "/projects_media/apuntex/apuntex_sc3.png", frame: "browser" },
+      {
+        src: "/projects_media/apuntex/apuntex_sc1.png",
+        frame: "browser",
+        aspectRatio: 2738 / 1662,
+      },
+      {
+        src: "/projects_media/apuntex/apuntex_sc2.png",
+        frame: "browser",
+        aspectRatio: 2700 / 1678,
+      },
+      {
+        src: "/projects_media/apuntex/apuntex_sc3.png",
+        frame: "browser",
+        aspectRatio: 2696 / 1634,
+      },
     ],
     projectUrl: "https://apuntex.com",
   },
@@ -221,14 +238,17 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
       {
         src: "/projects_media/google_autocompleta/google_autocompleta_sc1.png",
         frame: "browser",
+        aspectRatio: 2278 / 1204,
       },
       {
         src: "/projects_media/google_autocompleta/google_autocompleta_sc2.png",
         frame: "browser",
+        aspectRatio: 2612 / 1580,
       },
       {
         src: "/projects_media/google_autocompleta/googleautocompleta_sc3.png",
         frame: "browser",
+        aspectRatio: 2198 / 1316,
       },
     ],
     projectUrl: "https://googleautocompleta.com",

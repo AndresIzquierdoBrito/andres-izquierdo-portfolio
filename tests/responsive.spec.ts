@@ -1,4 +1,4 @@
-import { expect, test, type Page } from "@playwright/test"
+import { expect, test, type Locator, type Page } from "@playwright/test"
 
 type ViewportCase = {
   name: string
@@ -164,6 +164,53 @@ function expectNavigationMode(snapshot: LayoutSnapshot, width: number) {
   }
 }
 
+async function expectScreenshotMediaRatio(frame: Locator) {
+  const image = frame.locator("img")
+  await image.evaluate((element) => {
+    const image = element as HTMLImageElement
+    if (image.complete && image.naturalWidth > 0) return
+
+    return new Promise<void>((resolve, reject) => {
+      image.addEventListener("load", () => resolve(), { once: true })
+      image.addEventListener(
+        "error",
+        () => reject(new Error("Image failed to load")),
+        { once: true }
+      )
+    })
+  })
+
+  const ratio = await frame.evaluate((element) => {
+    const media = element.querySelector<HTMLElement>(
+      '[data-screenshot-media="true"]'
+    )
+    const image = element.querySelector<HTMLImageElement>("img")
+    if (!media || !image || image.naturalHeight === 0) {
+      throw new Error("Screenshot media frame is not measurable")
+    }
+
+    const mediaStyles = getComputedStyle(media)
+    return {
+      rendered:
+        Number.parseFloat(mediaStyles.width) /
+        Number.parseFloat(mediaStyles.height),
+      natural: image.naturalWidth / image.naturalHeight,
+    }
+  })
+
+  expect(ratio.rendered).toBeCloseTo(ratio.natural, 2)
+}
+
+async function expectBrowserScreenshotRatios(card: Locator) {
+  const browserFrames = card.locator('button[data-screenshot-frame="browser"]')
+  const count = await browserFrames.count()
+  expect(count).toBeGreaterThan(0)
+
+  for (let index = 0; index < count; index += 1) {
+    await expectScreenshotMediaRatio(browserFrames.nth(index))
+  }
+}
+
 test.describe("responsive geometry", () => {
   test.describe.configure({ mode: "parallel" })
 
@@ -270,7 +317,7 @@ test.describe("responsive interactions", () => {
       }
 
       const screenshotButtons = page.getByRole("button", {
-        name: /Open ApunteX screenshot 1/i,
+        name: /Open Google Autocompleta screenshot 1/i,
       })
       const activeScreenshotIndex = await screenshotButtons.evaluateAll(
         (buttons) =>
@@ -297,7 +344,9 @@ test.describe("responsive interactions", () => {
       )
 
       expect(activeScreenshotIndex).toBeGreaterThanOrEqual(0)
-      await screenshotButtons.nth(activeScreenshotIndex).click()
+      // Screenshot thumbnails intentionally overlap on compact cards; force the
+      // selected visible thumbnail instead of letting hit-testing pick its top neighbor.
+      await screenshotButtons.nth(activeScreenshotIndex).click({ force: true })
       await expect(
         page.getByRole("button", { name: /Close screenshot viewer/i })
       ).toBeVisible()
@@ -366,6 +415,7 @@ test.describe("Google Autocompleta project media", () => {
         "button[data-screenshot-frame]"
       )
       await expect(screenshotButtons).toHaveCount(3)
+      await expectBrowserScreenshotRatios(activeCard)
       await expect(screenshotButtons.nth(0)).toHaveAttribute(
         "data-screenshot-frame",
         "browser"
@@ -376,22 +426,29 @@ test.describe("Google Autocompleta project media", () => {
       )
       await expect(screenshotButtons.nth(2)).toHaveAttribute(
         "data-screenshot-frame",
-        "phone"
+        "browser"
       )
 
-      await screenshotButtons.nth(2).click()
-      const viewer = page.getByRole("dialog")
-      await expect(viewer).toBeVisible()
-      await expect(
-        viewer.locator('[data-screenshot-frame="phone"]')
-      ).toBeVisible()
-      await expect(viewer.locator("img")).toHaveAttribute(
-        "src",
-        /google_autocompleta_phone_sc\.png/
-      )
+      const expectedSources = [
+        /google_autocompleta_sc1\.png/,
+        /google_autocompleta_sc2\.png/,
+        /googleautocompleta_sc3\.png/,
+      ]
+      for (let index = 0; index < expectedSources.length; index += 1) {
+        await screenshotButtons.nth(index).click()
+        const viewer = page.getByRole("dialog")
+        await expect(viewer).toBeVisible()
+        const viewerFrame = viewer.locator('[data-screenshot-frame="browser"]')
+        await expect(viewerFrame).toBeVisible()
+        await expectScreenshotMediaRatio(viewerFrame)
+        await expect(viewer.locator("img")).toHaveAttribute(
+          "src",
+          expectedSources[index]
+        )
 
-      await page.keyboard.press("Escape")
-      await expect(viewer).toHaveCount(0)
+        await page.keyboard.press("Escape")
+        await expect(viewer).toHaveCount(0)
+      }
     })
   }
 })

@@ -54,10 +54,7 @@ const staggeredScreenshotSlots: ScreenshotSlot[] = [
   { bottom: "1%", left: "26%", rotate: -3, zIndex: 2 },
 ]
 
-type ScreenshotLightboxState = {
-  src: string
-  frame: ProjectScreenshot["frame"]
-  aspectRatio?: number
+type ScreenshotLightboxState = ProjectScreenshot & {
   label: string
   originRect: DOMRect
   originRotation: number
@@ -66,18 +63,18 @@ type ScreenshotLightboxState = {
 function ScreenshotWindow({
   src,
   alt,
-  aspectRatio = 16 / 10,
+  aspectRatio,
   expanded = false,
 }: {
   src: string
   alt: string
-  aspectRatio?: number
+  aspectRatio: number
   expanded?: boolean
 }) {
   return (
     <div
       className={cn(
-        "flex h-full w-full flex-col overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.28)] dark:border-white/12 dark:bg-slate-800 dark:shadow-[0_8px_24px_-6px_rgba(2,6,23,0.55)]",
+        "flex w-full flex-col overflow-hidden rounded-xl border border-black/10 bg-white shadow-[0_8px_24px_-6px_rgba(15,23,42,0.28)] dark:border-white/12 dark:bg-slate-800 dark:shadow-[0_8px_24px_-6px_rgba(2,6,23,0.55)]",
         expanded && "rounded-2xl shadow-[0_28px_90px_-24px_rgba(2,6,23,0.7)]"
       )}
     >
@@ -87,6 +84,7 @@ function ScreenshotWindow({
         <span className="size-2 rounded-full bg-emerald-400" />
       </div>
       <div
+        data-screenshot-media="true"
         className="min-h-0 flex-none overflow-hidden bg-slate-100/90 dark:bg-slate-900/90"
         style={{ aspectRatio }}
       >
@@ -179,6 +177,27 @@ function ScreenshotLightbox({
   const timelineRef = useRef<gsap.core.Timeline | null>(null)
   const hasAnimatedRef = useRef(false)
   const reducedMotionRef = useRef(false)
+
+  useLayoutEffect(() => {
+    const frame = frameRef.current
+    if (!frame || screenshot.frame !== "browser") return
+
+    const updateFrameWidth = () => {
+      const maxViewportHeight = window.innerHeight * 0.85
+      const maxContentHeight = Math.max(maxViewportHeight - 24, 1)
+      const maxWidth = Math.min(
+        window.innerWidth * 0.9,
+        1100,
+        maxContentHeight * screenshot.aspectRatio
+      )
+
+      frame.style.width = `${Math.max(maxWidth, 1)}px`
+    }
+
+    updateFrameWidth()
+    window.addEventListener("resize", updateFrameWidth)
+    return () => window.removeEventListener("resize", updateFrameWidth)
+  }, [screenshot])
 
   const animateIn = useCallback(() => {
     const backdrop = backdropRef.current
@@ -460,9 +479,7 @@ export default function ProjectCard({
     activeThumbnailRef.current = origin
     setClosing(false)
     setLightbox({
-      src: screenshot.src,
-      frame: screenshot.frame,
-      aspectRatio: screenshot.aspectRatio,
+      ...screenshot,
       label,
       originRect: origin.getBoundingClientRect(),
       originRotation: rotation,
@@ -516,7 +533,7 @@ export default function ProjectCard({
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden"
         >
-          <span className="-rotate-[14deg] whitespace-nowrap font-mono text-[clamp(6rem,18vw,11rem)] leading-none font-black tracking-[0.14em] text-slate-950/[0.065] uppercase dark:text-white/[0.07]">
+          <span className="-rotate-[14deg] font-mono text-[clamp(6rem,18vw,11rem)] leading-none font-black tracking-[0.14em] whitespace-nowrap text-slate-950/[0.065] uppercase dark:text-white/[0.07]">
             WIP
           </span>
         </div>
