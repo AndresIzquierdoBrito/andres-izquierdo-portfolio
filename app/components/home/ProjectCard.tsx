@@ -516,7 +516,7 @@ export default function ProjectCard({
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden"
         >
-          <span className="-rotate-[14deg] whitespace-nowrap font-mono text-[clamp(6rem,18vw,11rem)] leading-none font-black tracking-[-0.1em] text-slate-950/[0.065] uppercase dark:text-white/[0.07]">
+          <span className="-rotate-[14deg] whitespace-nowrap font-mono text-[clamp(6rem,18vw,11rem)] leading-none font-black tracking-[0.14em] text-slate-950/[0.065] uppercase dark:text-white/[0.07]">
             WIP
           </span>
         </div>
@@ -588,6 +588,11 @@ export default function ProjectCard({
                   />
                 ) : null}
                 <span className="relative z-10">{content.name}</span>
+                {card.workInProgress ? (
+                  <span className="relative z-10 ml-2 align-baseline text-[0.58em] font-medium tracking-normal text-slate-500 dark:text-white/55">
+                    - Work in Progress
+                  </span>
+                ) : null}
               </span>
             </h3>
           )}
