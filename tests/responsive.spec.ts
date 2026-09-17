@@ -211,6 +211,132 @@ async function expectBrowserScreenshotRatios(card: Locator) {
   }
 }
 
+type CarouselCardSnapshot = {
+  index: number
+  name: string
+  x: number
+  right: number
+  width: number
+  opacity: number
+  zIndex: string
+}
+
+async function readCarouselCards(page: Page): Promise<CarouselCardSnapshot[]> {
+  return page.locator("#projects article").evaluateAll((articles) =>
+    articles.map((article, index) => {
+      const wrapper = article.parentElement
+      const bounds = article.getBoundingClientRect()
+      const styles = wrapper ? getComputedStyle(wrapper) : null
+      return {
+        index,
+        name: article.querySelector("h3")?.textContent?.trim() ?? "",
+        x: bounds.x,
+        right: bounds.right,
+        width: bounds.width,
+        opacity: Number.parseFloat(styles?.opacity ?? "0"),
+        zIndex: styles?.zIndex ?? "auto",
+      }
+    })
+  )
+}
+
+async function clickSideCarouselCard(
+  page: Page,
+  direction: "left" | "right",
+  distance: 1 | 2 = 1
+) {
+  const cards = await readCarouselCards(page)
+  const active = cards.find((card) => card.zIndex === "5")
+  if (!active) throw new Error("Active carousel card is missing")
+
+  const targetZIndex = distance === 1 ? "4" : "3"
+  const candidates = cards
+    .filter(
+      (card) =>
+        card.zIndex === targetZIndex &&
+        card.opacity > 0.95 &&
+        (direction === "left" ? card.x < active.x : card.x > active.x)
+    )
+    .sort((a, b) => (direction === "left" ? b.x - a.x : a.x - b.x))
+  const adjacent = candidates[0]
+  if (!adjacent) throw new Error(`No ${direction} carousel card is available`)
+
+  // Dispatch on the wrapper so overlapping visual layers cannot retarget the
+  // click to a different clone.
+  await page
+    .locator("#projects article")
+    .nth(adjacent.index)
+    .evaluate((article) => (article.parentElement as HTMLElement).click())
+  await page.waitForTimeout(1_800)
+}
+
+function expectCarouselHasCardsOnBothSides(cards: CarouselCardSnapshot[]) {
+  const active = cards.find((card) => card.zIndex === "5")
+  expect(active).toBeDefined()
+  const activeCenter = (active!.x + active!.right) / 2
+
+  const visibleSideCards = cards.filter(
+    (card) => card.zIndex === "4" && card.opacity > 0.95 && card.width > 0
+  )
+  expect(
+    visibleSideCards.some((card) => (card.x + card.right) / 2 < activeCenter)
+  ).toBe(true)
+  expect(
+    visibleSideCards.some((card) => (card.x + card.right) / 2 > activeCenter)
+  ).toBe(true)
+}
+
+function expectCarouselNeighborsInsideViewport(
+  cards: CarouselCardSnapshot[],
+  viewportWidth: number
+) {
+  const visibleSideCards = cards.filter(
+    (card) => card.zIndex === "4" && card.opacity > 0.95 && card.width > 0
+  )
+  expect(visibleSideCards).toHaveLength(2)
+  for (const card of visibleSideCards) {
+    expect(card.x).toBeGreaterThanOrEqual(-1)
+    expect(card.right).toBeLessThanOrEqual(viewportWidth + 1)
+  }
+}
+
+async function expectCarouselClipsAtViewportEdge(page: Page) {
+  const geometry = await page.evaluate(() => {
+    const carouselViewport = document.querySelector<HTMLElement>(
+      '[data-testid="project-carousel-viewport"]'
+    )
+    if (!carouselViewport) throw new Error("Carousel viewport is missing")
+
+    const viewportBounds = carouselViewport.getBoundingClientRect()
+    const farCards = [
+      ...document.querySelectorAll<HTMLElement>("#projects article"),
+    ]
+      .map((article) => ({
+        bounds: article.getBoundingClientRect(),
+        wrapper: article.parentElement,
+      }))
+      .filter(({ wrapper }) => {
+        if (!wrapper) return false
+        const styles = getComputedStyle(wrapper)
+        return styles.zIndex === "3" && Number.parseFloat(styles.opacity) > 0.95
+      })
+      .map(({ bounds }) => ({ left: bounds.left, right: bounds.right }))
+
+    return {
+      clientWidth: document.documentElement.clientWidth,
+      viewportLeft: viewportBounds.left,
+      viewportRight: viewportBounds.right,
+      farCards,
+    }
+  })
+
+  expect(geometry.viewportLeft).toBeCloseTo(0, 0)
+  expect(geometry.viewportRight).toBeCloseTo(geometry.clientWidth, 0)
+  expect(
+    geometry.farCards.some((card) => card.left < 0 && card.right > 0)
+  ).toBe(true)
+}
+
 test.describe("responsive geometry", () => {
   test.describe.configure({ mode: "parallel" })
 
@@ -357,6 +483,105 @@ test.describe("responsive interactions", () => {
       await page.getByRole("button", { name: /Español/i }).click()
       await expect(page).toHaveURL(/\/es(?:#.*)?$/)
       await expect(page.getByRole("heading", { level: 1 })).toBeVisible()
+    })
+  }
+})
+
+test.describe("project carousel wrapping", () => {
+  for (const viewport of [
+    { name: "desktop", width: 1536, height: 864 },
+    { name: "mobile", width: 390, height: 844 },
+  ]) {
+    test(`keeps both sides populated after repeated side-card clicks (${viewport.name})`, async ({
+      page,
+    }) => {
+      test.setTimeout(90_000)
+      await page.setViewportSize(viewport)
+      await page.goto("/en", { waitUntil: "domcontentloaded" })
+      await page.locator("#projects").scrollIntoViewIfNeeded()
+      await page.waitForTimeout(700)
+
+      const expectedLeftSequence = [
+        "Google Autocompleta",
+        "Cratalog- Work in Progress",
+        "IzbriProjects",
+        "ApunteX",
+        "Google Autocompleta",
+        "Cratalog- Work in Progress",
+      ]
+
+      await clickSideCarouselCard(page, "left", 2)
+      let cards = await readCarouselCards(page)
+      expect(cards.find((card) => card.zIndex === "5")?.name).toBe(
+        "Cratalog- Work in Progress"
+      )
+      expectCarouselHasCardsOnBothSides(cards)
+
+      await clickSideCarouselCard(page, "right", 2)
+      cards = await readCarouselCards(page)
+      expect(cards.find((card) => card.zIndex === "5")?.name).toBe("ApunteX")
+      expectCarouselHasCardsOnBothSides(cards)
+
+      for (const expectedName of expectedLeftSequence) {
+        await clickSideCarouselCard(page, "left")
+        cards = await readCarouselCards(page)
+        expect(cards.find((card) => card.zIndex === "5")?.name).toBe(
+          expectedName
+        )
+        expectCarouselHasCardsOnBothSides(cards)
+      }
+
+      const expectedRightSequence = [
+        "Google Autocompleta",
+        "ApunteX",
+        "IzbriProjects",
+        "Cratalog- Work in Progress",
+        "Google Autocompleta",
+      ]
+
+      for (const expectedName of expectedRightSequence) {
+        await clickSideCarouselCard(page, "right")
+        cards = await readCarouselCards(page)
+        expect(cards.find((card) => card.zIndex === "5")?.name).toBe(
+          expectedName
+        )
+        expectCarouselHasCardsOnBothSides(cards)
+      }
+
+      const layout = await page.evaluate(() => ({
+        clientWidth: document.documentElement.clientWidth,
+        scrollWidth: document.documentElement.scrollWidth,
+        bodyScrollWidth: document.body.scrollWidth,
+      }))
+      expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1)
+      expect(layout.bodyScrollWidth).toBeLessThanOrEqual(layout.clientWidth + 1)
+    })
+  }
+
+  for (const viewport of [
+    { name: "desktop", width: 1280, height: 900 },
+    { name: "desktop-before-nav", width: 1535, height: 900 },
+    { name: "desktop-nav", width: 1536, height: 864 },
+    { name: "desktop-after-nav", width: 1537, height: 900 },
+    { name: "large-desktop", width: 1920, height: 1080 },
+  ]) {
+    test(`keeps adjacent cards out of the clipping edge (${viewport.name})`, async ({
+      page,
+    }) => {
+      await page.setViewportSize(viewport)
+      await page.goto("/en", { waitUntil: "domcontentloaded" })
+      await page.locator("#projects").scrollIntoViewIfNeeded()
+      await page.waitForTimeout(700)
+
+      let cards = await readCarouselCards(page)
+      await expectCarouselClipsAtViewportEdge(page)
+      expectCarouselNeighborsInsideViewport(cards, viewport.width)
+
+      await page.getByRole("button", { name: "Show previous project" }).click()
+      await page.waitForTimeout(1_800)
+      cards = await readCarouselCards(page)
+      await expectCarouselClipsAtViewportEdge(page)
+      expectCarouselNeighborsInsideViewport(cards, viewport.width)
     })
   }
 })

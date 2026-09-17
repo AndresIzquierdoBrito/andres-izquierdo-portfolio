@@ -9,10 +9,29 @@ import ProjectCard, { type ProjectCardData } from "./ProjectCard"
 
 // Clone cards placed on each side so the carousel never needs to teleport a
 // visible element: virtualCards = [...lastBUFFER, ...all, ...firstBUFFER].
-// When the virtual centre reaches the boundary of the real zone, we do an
-// invisible snap (gsap.set) back to the equivalent real-zone position — the
-// visible cards are pixel-identical before and after so the user can't tell.
+// When a transition would approach either clone boundary, we do an invisible
+// snap (gsap.set) to an equivalent cycle before animating onward.
 const BUFFER = 3
+const VISIBLE_RADIUS = 2
+
+function getBufferedCards(
+  cards: readonly ProjectCardData[],
+  buffer: number
+): ProjectCardData[] {
+  const count = cards.length
+  if (count === 0) return []
+
+  const previous = Array.from(
+    { length: buffer },
+    (_, index) => cards[(count - buffer + index + count) % count]
+  )
+  const next = Array.from(
+    { length: buffer },
+    (_, index) => cards[index % count]
+  )
+
+  return [...previous, ...cards, ...next]
+}
 
 type ProjectCarouselProps = {
   cards: readonly ProjectCardData[]
@@ -92,9 +111,16 @@ function setCardDimensions(
   })
 }
 
-function getCardMetrics(stageWidth: number): CardSlotMetrics {
+function getCardMetrics(
+  stageWidth: number,
+  dimensions?: CardDimensions,
+  stageLeft = 0,
+  verticalNavRight?: number
+): CardSlotMetrics {
+  let metrics: CardSlotMetrics
+
   if (stageWidth >= 1280) {
-    return {
+    metrics = {
       nearX: stageWidth * 0.26,
       farX: stageWidth * 0.48,
       offscreenX: stageWidth * 0.6,
@@ -103,10 +129,8 @@ function getCardMetrics(stageWidth: number): CardSlotMetrics {
       nearY: 16,
       farY: 38,
     }
-  }
-
-  if (stageWidth >= 1024) {
-    return {
+  } else if (stageWidth >= 1024) {
+    metrics = {
       nearX: stageWidth * 0.4,
       farX: stageWidth * 0.39,
       offscreenX: stageWidth * 0.59,
@@ -115,10 +139,8 @@ function getCardMetrics(stageWidth: number): CardSlotMetrics {
       nearY: 14,
       farY: 34,
     }
-  }
-
-  if (stageWidth >= 640) {
-    return {
+  } else if (stageWidth >= 640) {
+    metrics = {
       nearX: stageWidth * 0.44,
       farX: stageWidth * 0.66,
       offscreenX: stageWidth * 0.84,
@@ -127,17 +149,31 @@ function getCardMetrics(stageWidth: number): CardSlotMetrics {
       nearY: 18,
       farY: 42,
     }
+  } else {
+    metrics = {
+      nearX: stageWidth * 0.74,
+      farX: stageWidth * 1.08,
+      offscreenX: stageWidth * 1.3,
+      nearScale: 0.76,
+      farScale: 0.52,
+      nearY: 20,
+      farY: 46,
+    }
   }
 
-  return {
-    nearX: stageWidth * 0.74,
-    farX: stageWidth * 1.08,
-    offscreenX: stageWidth * 1.3,
-    nearScale: 0.76,
-    farScale: 0.52,
-    nearY: 20,
-    farY: 46,
+  // The z-index 4 cards are the two directly navigable neighbours. At 2xl the
+  // fixed section nav occupies the left edge of the stage, so keep that slot
+  // clear of the nav. The farther, blurred cards retain their edge crop.
+  if (dimensions && verticalNavRight !== undefined) {
+    const halfNearWidth = (dimensions.width * metrics.nearScale) / 2
+    const stageCenter = stageWidth / 2
+    const maxNearX =
+      stageCenter - (verticalNavRight - stageLeft + 16) - halfNearWidth
+
+    metrics.nearX = Math.max(0, Math.min(metrics.nearX, maxNearX))
   }
+
+  return metrics
 }
 
 function getSlotState(offset: number, m: CardSlotMetrics): CardSlotState {
@@ -319,7 +355,7 @@ export default function ProjectCarousel({
   const stageRef = useRef<HTMLDivElement>(null)
   const cardRefs = useRef<Array<HTMLDivElement | null>>([])
   const overlayRefs = useRef<Array<HTMLDivElement | null>>([])
-  const pendingTargetVirtualRef = useRef<number | null>(null)
+  const pendingOffsetRef = useRef<number | null>(null)
   const [displayedCenter, setDisplayedCenter] = useState(BUFFER + activeIndex)
 
   // Absolute position of the centre card within virtualCards.
@@ -331,8 +367,7 @@ export default function ProjectCarousel({
 
   // virtualCards = [last-BUFFER real cards] + [all real cards] + [first-BUFFER real cards]
   // For 5 cards with BUFFER=3: [C,D,E, A,B,C,D,E, A,B,C] — 11 elements
-  const virtualCards: ProjectCardData[] =
-    N > 0 ? [...cards.slice(-BUFFER), ...cards, ...cards.slice(0, BUFFER)] : []
+  const virtualCards = getBufferedCards(cards, BUFFER)
 
   useLayoutEffect(() => {
     const stage = stageRef.current
@@ -342,10 +377,21 @@ export default function ProjectCarousel({
     if (!stage || cardEls.length === 0 || N === 0) return
 
     const stageRect = stage.getBoundingClientRect()
-    const m = getCardMetrics(stageRect.width)
-    setCardDimensions(
-      cardEls,
-      getCardDimensions(stageRect.width, stageRect.height)
+    const dimensions = getCardDimensions(stageRect.width, stageRect.height)
+    setCardDimensions(cardEls, dimensions)
+    const nav = document.querySelector<HTMLElement>(
+      '[data-testid="home-section-nav"]'
+    )
+    const navRect = nav?.getBoundingClientRect()
+    const verticalNavRight =
+      navRect && navRect.width >= 200 && navRect.height >= 250
+        ? navRect.right
+        : undefined
+    const m = getCardMetrics(
+      stageRect.width,
+      dimensions,
+      stageRect.left,
+      verticalNavRight
     )
     const DURATION = 1.5
     const EASE = "power2.inOut"
@@ -367,35 +413,38 @@ export default function ProjectCarousel({
     let vc = virtualCenterRef.current
     let targetVc = vc
 
-    // A card click stores the exact virtual slot that was clicked. This means
-    // clicking either visible side card moves that card directly into the
-    // centre, even when it is two slots away.
-    const pendingTargetVc = pendingTargetVirtualRef.current
-    pendingTargetVirtualRef.current = null
+    // A card click stores its signed distance from the centre. Keeping the
+    // offset (instead of the absolute clone index) lets us normalize the
+    // clone window before a jump without changing the direction of travel.
+    const pendingOffset = pendingOffsetRef.current
+    pendingOffsetRef.current = null
 
-    if (pendingTargetVc !== null) {
-      targetVc = pendingTargetVc
-    } else if (hasMountedRef.current && direction !== 0) {
-      // Before animating an arrow navigation, check whether we need an
-      // invisible snap back into the real zone. The snap is safe because the
-      // visible cards are identical at the snap source and destination.
-      const realEnd = BUFFER + N - 1 // last real-zone index
-      const realStart = BUFFER // first real-zone index
+    const navigationOffset = pendingOffset ?? direction
 
-      const needsSnap =
-        (direction === 1 && vc >= realEnd) ||
-        (direction === -1 && vc <= realStart)
+    if (hasMountedRef.current && navigationOffset !== 0) {
+      // Keep enough clone slots around the destination for both visible side
+      // cards. This also covers two-slot jumps caused by clicking a far card.
+      const minCenter = VISIBLE_RADIUS
+      const maxCenter = virtualCards.length - 1 - VISIBLE_RADIUS
+      let normalizedVc = vc
 
-      if (needsSnap) {
-        const snappedVc = direction === 1 ? vc - N : vc + N
-        vc = snappedVc
-        virtualCenterRef.current = snappedVc
+      while (normalizedVc + navigationOffset < minCenter) {
+        normalizedVc += N
+      }
+      while (normalizedVc + navigationOffset > maxCenter) {
+        normalizedVc -= N
+      }
 
-        // Instantly reposition every element to match the new virtual centre.
+      if (normalizedVc !== vc) {
+        vc = normalizedVc
+        virtualCenterRef.current = normalizedVc
+
+        // Equivalent clones are pixel-identical, so this snap is invisible.
         cardEls.forEach((el, vi) => {
-          const offset = vi - snappedVc
+          const offset = vi - normalizedVc
           const state = getSlotState(offset, m)
           const overlay = overlayRefs.current[vi]
+          gsap.killTweensOf(el)
           gsap.set(el, {
             xPercent: -50,
             yPercent: -50,
@@ -407,11 +456,14 @@ export default function ProjectCarousel({
             zIndex: state.zIndex,
             force3D: true,
           })
-          if (overlay) gsap.set(overlay, { opacity: state.overlayOpacity })
+          if (overlay) {
+            gsap.killTweensOf(overlay)
+            gsap.set(overlay, { opacity: state.overlayOpacity })
+          }
         })
       }
 
-      targetVc = vc + direction
+      targetVc = vc + navigationOffset
     }
 
     const distance = targetVc - vc
@@ -465,12 +517,22 @@ export default function ProjectCarousel({
         return
       }
       const freshRect = stage.getBoundingClientRect()
-      const fresh = getCardMetrics(freshRect.width)
       const freshDimensions = getCardDimensions(
         freshRect.width,
         freshRect.height
       )
       setCardDimensions(cardEls, freshDimensions)
+      const freshNavRect = nav?.getBoundingClientRect()
+      const freshVerticalNavRight =
+        freshNavRect && freshNavRect.width >= 200 && freshNavRect.height >= 250
+          ? freshNavRect.right
+          : undefined
+      const fresh = getCardMetrics(
+        freshRect.width,
+        freshDimensions,
+        freshRect.left,
+        freshVerticalNavRight
+      )
       const currentVc = virtualCenterRef.current
       cardEls.forEach((el, vi) => {
         const offset = vi - currentVc
@@ -514,7 +576,10 @@ export default function ProjectCarousel({
 
   return (
     <div className="w-full xl:h-full xl:min-h-0">
-      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible xl:left-[calc(50%-2rem)] xl:h-full xl:min-h-0">
+      <div
+        data-testid="project-carousel-viewport"
+        className="relative left-1/2 w-screen -translate-x-1/2 overflow-x-clip overflow-y-visible xl:h-full xl:min-h-0 2xl:left-[calc(50%_-_5.5rem)]"
+      >
         <div
           ref={stageRef}
           className="relative h-[37.7rem] sm:h-[39rem] xl:h-full xl:min-h-0"
@@ -540,7 +605,7 @@ export default function ProjectCarousel({
                   const realIndex = (((vi - BUFFER) % N) + N) % N
                   if (realIndex === activeIndex) return
                   if (onNavigateTo) {
-                    pendingTargetVirtualRef.current = vi
+                    pendingOffsetRef.current = offset
                     onNavigateTo(realIndex)
                   } else if (onNavigate) {
                     onNavigate(Math.sign(offset) as 1 | -1)
@@ -553,7 +618,7 @@ export default function ProjectCarousel({
                   const realIndex = (((vi - BUFFER) % N) + N) % N
                   if (realIndex === activeIndex) return
                   if (onNavigateTo) {
-                    pendingTargetVirtualRef.current = vi
+                    pendingOffsetRef.current = vi - virtualCenterRef.current
                     onNavigateTo(realIndex)
                   } else if (onNavigate) {
                     onNavigate(

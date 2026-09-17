@@ -11,6 +11,7 @@ import {
   FastAPIIcon,
   GeminiIcon,
   NestJSIcon,
+  NextJSIcon,
   PostgreSQLIcon,
   PythonIcon,
   RedisIcon,
@@ -155,7 +156,7 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     iconSrc: "/izbri_logo_nobg.png",
     iconGlow: "lime",
     stack: [
-      { title: "React", icon: ReactIcon },
+      { title: "Next.js", icon: NextJSIcon },
       { title: "Coolify", icon: CoolifyIcon },
       { title: "Drizzle", icon: DrizzleIcon },
       { title: "Express", icon: ExpressIcon },
