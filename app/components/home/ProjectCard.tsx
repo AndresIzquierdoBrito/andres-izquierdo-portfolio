@@ -51,7 +51,7 @@ const defaultScreenshotSlots: ScreenshotSlot[] = [
 const staggeredScreenshotSlots: ScreenshotSlot[] = [
   { top: "3%", right: "2%", rotate: 6, zIndex: 2 },
   { top: "25%", left: "-2%", rotate: -10, zIndex: 1 },
-  { bottom: "1%", left: "17%", rotate: -3, zIndex: 2 },
+  { bottom: "1%", left: "26%", rotate: -3, zIndex: 2 },
 ]
 
 type ScreenshotLightboxState = {
@@ -66,10 +66,12 @@ type ScreenshotLightboxState = {
 function ScreenshotWindow({
   src,
   alt,
+  aspectRatio = 16 / 10,
   expanded = false,
 }: {
   src: string
   alt: string
+  aspectRatio?: number
   expanded?: boolean
 }) {
   return (
@@ -85,10 +87,8 @@ function ScreenshotWindow({
         <span className="size-2 rounded-full bg-emerald-400" />
       </div>
       <div
-        className={cn(
-          "min-h-0 flex-1 overflow-hidden bg-slate-100/90 dark:bg-slate-900/90",
-          expanded && "max-h-[calc(85svh-2.5rem)]"
-        )}
+        className="min-h-0 flex-none overflow-hidden bg-slate-100/90 dark:bg-slate-900/90"
+        style={{ aspectRatio }}
       >
         <img
           src={src}
@@ -152,7 +152,14 @@ function ScreenshotFrame({
     )
   }
 
-  return <ScreenshotWindow src={screenshot.src} alt={alt} expanded={expanded} />
+  return (
+    <ScreenshotWindow
+      src={screenshot.src}
+      alt={alt}
+      aspectRatio={screenshot.aspectRatio}
+      expanded={expanded}
+    />
+  )
 }
 
 function ScreenshotLightbox({
@@ -304,11 +311,11 @@ function ScreenshotLightbox({
         style={
           screenshot.frame === "phone"
             ? { aspectRatio: "650 / 1396" }
-            : { aspectRatio: screenshot.aspectRatio ?? "16 / 10" }
+            : undefined
         }
       >
         <ScreenshotFrame
-          screenshot={{ src: screenshot.src, frame: screenshot.frame }}
+          screenshot={screenshot}
           alt={screenshot.label}
           expanded
         />
@@ -369,8 +376,7 @@ function ScreenshotItem({
     right: slot.right,
     bottom: slot.bottom,
     width: frame === "phone" ? "30%" : "52%",
-    aspectRatio:
-      frame === "phone" ? "650 / 1396" : (screenshot?.aspectRatio ?? "16 / 10"),
+    ...(frame === "phone" ? { aspectRatio: "650 / 1396" } : {}),
     transform: `rotate(${slot.rotate}deg)`,
     zIndex: slot.zIndex,
     transformOrigin: "center center",
@@ -504,6 +510,17 @@ export default function ProjectCard({
           backgroundSize: "182px",
         }}
       />
+
+      {card.workInProgress ? (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 z-0 flex items-center justify-center overflow-hidden"
+        >
+          <span className="-rotate-[14deg] whitespace-nowrap font-mono text-[clamp(6rem,18vw,11rem)] leading-none font-black tracking-[-0.1em] text-slate-950/[0.065] uppercase dark:text-white/[0.07]">
+            WIP
+          </span>
+        </div>
+      ) : null}
 
       <div className="relative z-10 flex h-full flex-col p-6 sm:p-7 lg:p-8">
         {/* Header row */}

@@ -66,8 +66,6 @@ export type ProjectCardData = {
   iconGlow?: "lime" | "spectrum"
   /** Adds the animated warning-tape accent used for unfinished work. */
   workInProgress?: boolean
-  /** Optional card ratio for projects whose preview media is landscape. */
-  cardAspectRatio?: number
   /** Optional screenshot arrangement for cards with project previews. */
   screenshotLayout?: "default" | "staggered"
   /** Up to 4 icons representing the project's stack, shown top-right of the card */
@@ -139,7 +137,6 @@ export const projectPreviewCards: readonly ProjectCardData[] = [
     },
     iconSrc: "/izbri_logo_nobg.png",
     iconGlow: "lime",
-    cardAspectRatio: 1.86,
     stack: [
       { title: "React", icon: ReactIcon },
       { title: "Coolify", icon: CoolifyIcon },

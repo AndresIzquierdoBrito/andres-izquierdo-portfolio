@@ -49,8 +49,7 @@ type CardDimensions = {
 
 function getCardDimensions(
   stageWidth: number,
-  stageHeight: number,
-  card: ProjectCardData
+  stageHeight: number
 ): CardDimensions {
   let maxWidth = 27.3 * 16
   let maxHeight = 37.7 * 16
@@ -69,26 +68,27 @@ function getCardDimensions(
     maxHeight = 39 * 16
   }
 
-  const aspectRatio = card.cardAspectRatio ?? maxWidth / maxHeight
+  const aspectRatio = maxWidth / maxHeight
   const widthLimit = stageWidth < 768 ? Math.max(stageWidth - 32, 1) : maxWidth
-  const heightLimit = Math.min(maxHeight, Math.max(stageHeight, 1))
-  const width = Math.min(widthLimit, heightLimit * aspectRatio)
+  const height = Math.min(
+    maxHeight,
+    Math.max(stageHeight, 1),
+    widthLimit / aspectRatio
+  )
 
   return {
-    width,
-    height: width / aspectRatio,
+    width: height * aspectRatio,
+    height,
   }
 }
 
 function setCardDimensions(
   cardEls: readonly HTMLDivElement[],
-  dimensions: readonly CardDimensions[]
+  dimensions: CardDimensions
 ) {
-  cardEls.forEach((el, index) => {
-    const dimension = dimensions[index]
-    if (!dimension) return
-    el.style.width = `${dimension.width}px`
-    el.style.height = `${dimension.height}px`
+  cardEls.forEach((el) => {
+    el.style.width = `${dimensions.width}px`
+    el.style.height = `${dimensions.height}px`
   })
 }
 
@@ -343,11 +343,10 @@ export default function ProjectCarousel({
 
     const stageRect = stage.getBoundingClientRect()
     const m = getCardMetrics(stageRect.width)
-    const getDimensions = (width: number, height: number) =>
-      cardEls.map((_, index) =>
-        getCardDimensions(width, height, virtualCards[index])
-      )
-    setCardDimensions(cardEls, getDimensions(stageRect.width, stageRect.height))
+    setCardDimensions(
+      cardEls,
+      getCardDimensions(stageRect.width, stageRect.height)
+    )
     const DURATION = 1.5
     const EASE = "power2.inOut"
 
@@ -467,7 +466,10 @@ export default function ProjectCarousel({
       }
       const freshRect = stage.getBoundingClientRect()
       const fresh = getCardMetrics(freshRect.width)
-      const freshDimensions = getDimensions(freshRect.width, freshRect.height)
+      const freshDimensions = getCardDimensions(
+        freshRect.width,
+        freshRect.height
+      )
       setCardDimensions(cardEls, freshDimensions)
       const currentVc = virtualCenterRef.current
       cardEls.forEach((el, vi) => {
