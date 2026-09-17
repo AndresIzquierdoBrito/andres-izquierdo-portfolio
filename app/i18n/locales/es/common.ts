@@ -88,10 +88,14 @@ const esCommon = {
         type: "Jornada completa",
         location: "Santa Cruz de Tenerife, Islas Canarias, España · Presencial",
         period: "Jul 2024 – Actualidad",
-        highlights: {
-          h0: "Desarrollé y mantuve múltiples microservicios FastAPI dentro de un proyecto internacional a gran escala, contribuyendo a un frontend en React y configurando entornos Docker para la contenedorización de servicios.",
-          h1: "Desarrollé más de 700 tests en Pytest alcanzando más del 90% de cobertura de código; lideré la implementación de pruebas E2E con Cypress estableciendo guías de calidad a nivel de empresa.",
-        },
+        highlights: [
+          "Desarrollé y mantuve múltiples microservicios FastAPI dentro de un proyecto internacional a gran escala, contribuyendo a un frontend en React y configurando entornos Docker para la contenedorización de servicios.",
+          "Desarrollé más de 1000 tests con Pytest para validar la API y la lógica de negocio, alcanzando una cobertura de código superior al 90% y asegurando la fiabilidad del servicio.",
+          "Lideré la implementación de pruebas E2E con Cypress, estableciendo guías corporativas para estandarizar la cobertura de los flujos críticos y mejorar su mantenibilidad.",
+          "Diseñé un pipeline de extracción de datos (scraping) utilizando Node.js con Puppeteer y Playwright para analizar datos de proyectos públicos italianos.",
+          "Diseñé y desarrollé un sistema de check-in mediante QR para múltiples oficinas, integrando Raspberry Pi vía MQTT, APIs backend, logging centralizado y sincronización con Azure Entra ID para monitorizar la ocupación de los edificios.",
+          "Coordiné procesos de selección y onboarding, realizando entrevistas y gestionando prácticas con centros educativos.",
+        ],
       },
       step: {
         company: "S.T.E.P. S.R.L.",
@@ -99,10 +103,12 @@ const esCommon = {
         type: "Prácticas",
         location: "Sorso, Cerdeña, Italia",
         period: "Mar 2024 – May 2024",
-        highlights: {
-          h0: "Gestioné el rediseño completo del sitio web corporativo con Next.js, desarrollando proyectos de diseño UI/UX en Figma y coordinando un equipo de desarrollo de 5 personas.",
-          h1: "Implementé una API RESTful integrando Modelos de Lenguaje Extenso (LLM) y tecnología de síntesis de voz (TTS).",
-        },
+        highlights: [
+          "Implementé un chatbot con API RESTful utilizando modelos de lenguaje (LLM) y tecnología de conversión de texto a voz.",
+          "Gestioné el rediseño de la web corporativa con Next.js, documentando cada etapa bajo estándares de la industria.",
+          "Desarrollé proyectos integrales de diseño UI/UX en Figma para la planificación de interfaces.",
+          "Coordiné un equipo de desarrollo de 5 personas utilizando Trello y metodologías Agile.",
+        ],
       },
     },
   },

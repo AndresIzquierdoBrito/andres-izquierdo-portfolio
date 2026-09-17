@@ -172,10 +172,14 @@ function ExperienceTimeline({ entries }: { entries: ExperienceEntry[] }) {
     <div className="relative flex flex-col gap-12">
       {entries.map((entry, index) => {
         const showConnector = index < entries.length - 1
-        const highlights = [
-          t(`entries.${entry.id}.highlights.h0`),
-          t(`entries.${entry.id}.highlights.h1`),
-        ]
+        const translatedHighlights = t(`entries.${entry.id}.highlights`, {
+          returnObjects: true,
+        })
+        const highlights = Array.isArray(translatedHighlights)
+          ? translatedHighlights.filter(
+              (highlight): highlight is string => typeof highlight === "string"
+            )
+          : []
 
         return (
           <article
@@ -389,12 +393,6 @@ function EducationPanel() {
                   {t(`certs.${cert.id}.issuer`)}
                 </span>
               </span>
-              <Badge
-                variant="outline"
-                className="shrink-0 border-amber-300/70 bg-white font-mono text-[0.65rem] dark:border-indigo-400/35 dark:bg-slate-950"
-              >
-                {t(`certs.${cert.id}.status`)}
-              </Badge>
             </li>
           ))}
         </ul>

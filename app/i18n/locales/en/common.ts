@@ -85,10 +85,13 @@ const enCommon = {
         type: "Full-time",
         location: "Santa Cruz de Tenerife, Canary Islands, Spain · On-site",
         period: "Jul 2024 – Present",
-        highlights: {
-          h0: "Developed and maintained multiple FastAPI microservices within a large-scale international project, contributing to a React frontend and configuring Docker environments for service containerization.",
-          h1: "Developed 700+ Pytests to validate API and business logic, achieving over 90% code coverage; spearheaded E2E testing with Cypress establishing company-wide guidelines.",
-        },
+        highlights: [
+          "Developed and maintained multiple FastAPI microservices within a large-scale international project, contributing to a React frontend and configuring Docker environments for service containerization.",
+          "Developed 1000+ tests with pytest to validate API and business logic, achieving over 90% code coverage ensuring reliability.",
+          "Designed and developed a multi-office employee QR check-in system, integrating Raspberry Pi devices via MQTT, backend APIs, centralized logging, and external synchronization with the company's Azure EntraID platform to track building occupancy.",
+          "Engineered a data scraping pipeline using Node.js with Puppeteer and Playwright to extract and analyze public project data from Italian government sources.",
+          "Orchestrated the technical recruitment and onboarding process, including interviewing candidates and coordinating internship programs with educational centers.",
+        ],
       },
       step: {
         company: "S.T.E.P. S.R.L.",
@@ -96,10 +99,12 @@ const enCommon = {
         type: "Internship",
         location: "Sorso, Sardinia, Italy",
         period: "Mar 2024 – May 2024",
-        highlights: {
-          h0: "Managed the full redesign of the corporate website using Next.js, developing comprehensive UI/UX design projects in Figma and coordinating a development team of 5 people.",
-          h1: "Implemented a RESTful API integrating Large Language Models (LLM) and Text-to-Speech (TTS) technology.",
-        },
+        highlights: [
+          "Managed the redesign of the corporate website using Next.js, documenting every stage following industry standards.",
+          "Developed comprehensive UI/UX design projects in Figma for interface planning and creation.",
+          "Coordinated a development team of 5 people using Trello and Agile methodologies.",
+          "Implemented a RESTful API utilizing Large Language Models (LLM) and Text-to-Speech (TTS) technology.",
+        ],
       },
     },
   },
